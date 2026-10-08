@@ -4,6 +4,7 @@ import {
   User, Award, FileSpreadsheet, Printer
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.js';
+import { PageHeader } from '../components/PageHeader.js';
 import { generateAccountabilityPdf, exportAccountabilityCsv } from '../utils/pdfGenerators.js';
 
 export const AccountabilityReportPage: React.FC = () => {
@@ -58,38 +59,33 @@ export const AccountabilityReportPage: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto py-6 px-4 space-y-6 animate-fade-in">
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white flex items-center gap-3">
-            <TrendingUp className="w-8 h-8 text-emerald-600" />
-            <span>Public Accountability & Concern Resolution Report</span>
-          </h1>
-          <p className="text-sm text-slate-600 dark:text-slate-400">
-            Transparency audit of all resolved community concerns, assigned handlers, outcomes, and response time metrics.
-          </p>
-        </div>
-
-        {/* Super Admin Full Exports */}
-        {isSuperAdmin && (
-          <div className="flex gap-2">
-            <button
-              onClick={() => exportAccountabilityCsv(items)}
-              className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs flex items-center gap-2 shadow transition min-h-[48px]"
-            >
-              <FileSpreadsheet className="w-4 h-4" />
-              <span>Export Excel / CSV</span>
-            </button>
-            <button
-              onClick={() => generateAccountabilityPdf(items, summary)}
-              className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs flex items-center gap-2 shadow transition min-h-[48px]"
-            >
-              <Download className="w-4 h-4" />
-              <span>Export Official PDF Report</span>
-            </button>
-          </div>
-        )}
-      </div>
+      <PageHeader
+        title="Public Accountability & Resolution Report"
+        subtitle="Transparency audit of resolved citizen concerns, assigned handlers, outcomes, and response time metrics."
+        icon={TrendingUp}
+        badges={[`${items.length} Resolved Concerns`, isSuperAdmin ? 'Super Admin Audit' : 'Staff Transparency']}
+        backTo={isSuperAdmin ? '/super-admin' : '/admin'}
+        actions={
+          isSuperAdmin ? (
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                onClick={() => exportAccountabilityCsv(items)}
+                className="px-3.5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow transition min-h-[44px]"
+              >
+                <FileSpreadsheet className="w-4 h-4" />
+                <span>Export CSV</span>
+              </button>
+              <button
+                onClick={() => generateAccountabilityPdf(items, summary)}
+                className="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow transition min-h-[44px]"
+              >
+                <Download className="w-4 h-4" />
+                <span>Export PDF</span>
+              </button>
+            </div>
+          ) : undefined
+        }
+      />
 
       {/* Metrics Banner */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

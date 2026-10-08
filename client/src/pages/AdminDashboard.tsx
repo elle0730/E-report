@@ -92,7 +92,7 @@ export const AdminDashboard: React.FC = () => {
                 : 'bg-emerald-950/80 text-amber-300 border-emerald-400/40'
             }`}>
               {isSuperAdmin ? <Crown className="w-3.5 h-3.5 text-amber-300" /> : <ShieldCheck className="w-3.5 h-3.5 text-emerald-300" />}
-              {isSuperAdmin ? 'Super Administrator Portal • Full Authority' : 'Barangay Administrator Portal • Operations'}
+              {isSuperAdmin ? t('superAdminPortal') : t('adminPortal')}
             </span>
             <span className="text-xs text-slate-200 hidden sm:inline">
               Barangay Bensican • San Nicolas, Pangasinan
@@ -112,9 +112,9 @@ export const AdminDashboard: React.FC = () => {
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-3 bg-black/40 backdrop-blur-md p-3 rounded-2xl border border-white/20 shadow-inner">
             <div>
-              <span className="text-xs font-bold block text-slate-300">Live Chat Desk:</span>
+              <span className="text-xs font-bold block text-slate-300">{t('liveChatDesk')}</span>
               <span className="text-sm font-black text-white">
-                {isStaffAvailable ? 'Available (Take Over Chat)' : 'Away (Bensi AI Active)'}
+                {isStaffAvailable ? t('availableTakeOver') : t('awayBotActive')}
               </span>
             </div>
             <button
@@ -125,15 +125,6 @@ export const AdminDashboard: React.FC = () => {
               {isStaffAvailable ? <ToggleRight className="w-6 h-6" /> : <ToggleLeft className="w-6 h-6" />}
             </button>
           </div>
-
-          <button
-            onClick={() => navigate('/notifications')}
-            className="p-3 bg-white/10 hover:bg-white/20 text-white rounded-2xl border border-white/20 transition flex items-center gap-1.5 text-xs font-bold"
-            title="View Notifications"
-          >
-            <Bell className="w-5 h-5 text-amber-300" />
-            <span className="hidden sm:inline">Alerts</span>
-          </button>
         </div>
       </div>
 
@@ -314,9 +305,9 @@ export const AdminDashboard: React.FC = () => {
                 <Users className="w-6 h-6 text-purple-600 group-hover:scale-110 transition-transform" />
                 <span className="text-[11px] font-bold text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-950/60 px-2 py-0.5 rounded-md uppercase">Super Admin</span>
               </div>
-              <h3 className="font-extrabold text-base text-slate-900 dark:text-white">Staff & User Accounts</h3>
+              <h3 className="font-extrabold text-base text-slate-900 dark:text-white">{t('staffUserAccountsTitle')}</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Create & edit Admins, manage roles, suspend accounts, and reset passwords with security confirmation.
+                {t('staffUserAccountsDesc')}
               </p>
             </button>
 
@@ -329,9 +320,9 @@ export const AdminDashboard: React.FC = () => {
                 <Globe className="w-6 h-6 text-blue-600 group-hover:scale-110 transition-transform" />
                 <span className="text-[11px] font-bold text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-950/60 px-2 py-0.5 rounded-md uppercase">Super Admin</span>
               </div>
-              <h3 className="font-extrabold text-base text-slate-900 dark:text-white">Landing Page CMS & Live Publish</h3>
+              <h3 className="font-extrabold text-base text-slate-900 dark:text-white">{t('cmsLivePublishTitle')}</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Review Admin drafts, publish live to bensican.gov.ph with password verification, version history & rollback.
+                {t('cmsLivePublishDesc')}
               </p>
             </button>
 
@@ -344,9 +335,9 @@ export const AdminDashboard: React.FC = () => {
                 <Settings className="w-6 h-6 text-indigo-600 group-hover:scale-110 transition-transform" />
                 <span className="text-[11px] font-bold text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-950/60 px-2 py-0.5 rounded-md uppercase">Super Admin</span>
               </div>
-              <h3 className="font-extrabold text-base text-slate-900 dark:text-white">Master System Settings</h3>
+              <h3 className="font-extrabold text-base text-slate-900 dark:text-white">{t('masterSettingsTitle')}</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Concern categories CRUD, hearing venues, bill types, official barangay directory, and database JSON backup.
+                {t('masterSettingsDesc')}
               </p>
             </button>
 
@@ -359,9 +350,9 @@ export const AdminDashboard: React.FC = () => {
                 <ShieldAlert className="w-6 h-6 text-rose-600 group-hover:scale-110 transition-transform" />
                 <span className="text-[11px] font-bold text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-950/60 px-2 py-0.5 rounded-md uppercase">Super Admin</span>
               </div>
-              <h3 className="font-extrabold text-base text-slate-900 dark:text-white">Security & Audit Center</h3>
+              <h3 className="font-extrabold text-base text-slate-900 dark:text-white">{t('securityAuditTitle')}</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                100% immutable audit log trail, monitor active user sessions, terminate unauthorized sessions, and intrusion alerts.
+                {t('securityAuditDesc')}
               </p>
             </button>
 
@@ -374,9 +365,9 @@ export const AdminDashboard: React.FC = () => {
                 <Archive className="w-6 h-6 text-amber-600 group-hover:scale-110 transition-transform" />
                 <span className="text-[11px] font-bold text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-950/60 px-2 py-0.5 rounded-md uppercase">Super Admin</span>
               </div>
-              <h3 className="font-extrabold text-base text-slate-900 dark:text-white">Direct Archive Restoration</h3>
+              <h3 className="font-extrabold text-base text-slate-900 dark:text-white">{t('directArchiveRecoveryTitle')}</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Directly restore any soft-archived concern, hearing, subpoena, bill, or account with password re-entry.
+                {t('directArchiveRecoveryDesc')}
               </p>
             </button>
 
@@ -389,9 +380,9 @@ export const AdminDashboard: React.FC = () => {
                 <DollarSign className="w-6 h-6 text-emerald-600 group-hover:scale-110 transition-transform" />
                 <span className="text-[11px] font-bold text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-950/60 px-2 py-0.5 rounded-md uppercase">Super Admin</span>
               </div>
-              <h3 className="font-extrabold text-base text-slate-900 dark:text-white">Payroll & Compensation Ledger</h3>
+              <h3 className="font-extrabold text-base text-slate-900 dark:text-white">{t('payrollDisbursementTitle')}</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Compute monthly staff salaries and honoraria, process deductions, approve cash advances, and print payslips.
+                {t('payrollDisbursementDesc')}
               </p>
             </button>
           </div>
@@ -403,10 +394,10 @@ export const AdminDashboard: React.FC = () => {
         <div className="flex items-center justify-between border-b pb-2">
           <div>
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
-              Barangay Operational Workstation
+              {t('barangayOperationalWorkstation')}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500">
-              Day-to-day community concerns, resident verifications, hearings, transparency, and notices.
+              {t('operationalWorkstationDesc')}
             </p>
           </div>
         </div>
@@ -418,9 +409,9 @@ export const AdminDashboard: React.FC = () => {
             className="p-5 bg-white dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-slate-750 rounded-2xl border-2 border-emerald-400 text-left space-y-1.5 shadow-xs hover:shadow-md transition group"
           >
             <FileText className="w-6 h-6 text-emerald-600 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">Community Concerns Queue</h3>
+            <h3 className="font-bold text-base text-slate-900 dark:text-white">{t('communityConcernsQueue')}</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Review, assign handlers, prioritize (*Urgent/Normal*), update statuses, and chat with residents.
+              {t('communityConcernsQueueDesc')}
             </p>
           </button>
 
@@ -430,9 +421,9 @@ export const AdminDashboard: React.FC = () => {
             className="p-5 bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-750 rounded-2xl border-2 border-blue-400 text-left space-y-1.5 shadow-xs hover:shadow-md transition group"
           >
             <UserCheck className="w-6 h-6 text-blue-600 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">Resident Approvals (4-Step)</h3>
+            <h3 className="font-bold text-base text-slate-900 dark:text-white">{t('residentApprovalsTitle')}</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Verify valid IDs & selfies, confirm Bensican residency, approve or reject with clear reasons.
+              {t('residentApprovalsDesc')}
             </p>
           </button>
 
@@ -442,9 +433,9 @@ export const AdminDashboard: React.FC = () => {
             className="p-5 bg-white dark:bg-slate-800 hover:bg-purple-50 dark:hover:bg-slate-750 rounded-2xl border-2 border-purple-400 text-left space-y-1.5 shadow-xs hover:shadow-md transition group"
           >
             <Calendar className="w-6 h-6 text-purple-600 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">Lupong Hearing Scheduler</h3>
+            <h3 className="font-bold text-base text-slate-900 dark:text-white">{t('luponHearingScheduler')}</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Schedule Katarungang Pambarangay hearings with conflict & double-booking prevention.
+              {t('luponHearingSchedulerDesc')}
             </p>
           </button>
 
@@ -454,9 +445,9 @@ export const AdminDashboard: React.FC = () => {
             className="p-5 bg-white dark:bg-slate-800 hover:bg-amber-50 dark:hover:bg-slate-750 rounded-2xl border-2 border-amber-400 text-left space-y-1.5 shadow-xs hover:shadow-md transition group"
           >
             <Scale className="w-6 h-6 text-amber-600 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">KP Form 9 Subpoenas</h3>
+            <h3 className="font-bold text-base text-slate-900 dark:text-white">{t('kpSubpoenasTitle')}</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Generate official summons (`BSN-S-YYYY-NNNNN`) and download official letterhead PDFs.
+              {t('kpSubpoenasDesc')}
             </p>
           </button>
 
@@ -466,9 +457,9 @@ export const AdminDashboard: React.FC = () => {
             className="p-5 bg-white dark:bg-slate-800 hover:bg-amber-50 dark:hover:bg-slate-750 rounded-2xl border-2 border-slate-300 dark:border-slate-700 text-left space-y-1.5 shadow-xs hover:shadow-md transition group"
           >
             <Sparkles className="w-6 h-6 text-amber-500 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">Public Announcements</h3>
+            <h3 className="font-bold text-base text-slate-900 dark:text-white">{t('publicAnnouncementsTitle')}</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Publish community news, health advisories, curfew notices, and targeted notifications.
+              {t('publicAnnouncementsDesc')}
             </p>
           </button>
 
@@ -478,9 +469,9 @@ export const AdminDashboard: React.FC = () => {
             className="p-5 bg-white dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-slate-750 rounded-2xl border-2 border-slate-300 dark:border-slate-700 text-left space-y-1.5 shadow-xs hover:shadow-md transition group"
           >
             <FileSpreadsheet className="w-6 h-6 text-emerald-600 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">Bills & Transparency Ledger</h3>
+            <h3 className="font-bold text-base text-slate-900 dark:text-white">{t('billsTransparencyLedger')}</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Add utility bills, streetlighting, and vouchers for the public financial ledger.
+              {t('billsTransparencyLedgerDesc')}
             </p>
           </button>
 
@@ -490,9 +481,9 @@ export const AdminDashboard: React.FC = () => {
             className="p-5 bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-750 rounded-2xl border-2 border-slate-300 dark:border-slate-700 text-left space-y-1.5 shadow-xs hover:shadow-md transition group"
           >
             <FileText className="w-6 h-6 text-blue-600 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">Records Explorer</h3>
+            <h3 className="font-bold text-base text-slate-900 dark:text-white">{t('recordsExplorerTitle')}</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Google Drive-style directory for digitized cases, vouchers, certificates, and folders.
+              {t('recordsExplorerDesc')}
             </p>
           </button>
 
@@ -502,9 +493,9 @@ export const AdminDashboard: React.FC = () => {
             className="p-5 bg-white dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-slate-750 rounded-2xl border-2 border-slate-300 dark:border-slate-700 text-left space-y-1.5 shadow-xs hover:shadow-md transition group"
           >
             <TrendingUp className="w-6 h-6 text-emerald-600 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">Accountability Report</h3>
+            <h3 className="font-bold text-base text-slate-900 dark:text-white">{t('accountabilityReportTitle')}</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Resolution rates, average completion times, SDG 16/11/9 metrics, and PDF/Excel export.
+              {t('accountabilityReportDesc')}
             </p>
           </button>
 
@@ -514,9 +505,9 @@ export const AdminDashboard: React.FC = () => {
             className="p-5 bg-white dark:bg-slate-800 hover:bg-amber-50 dark:hover:bg-slate-750 rounded-2xl border-2 border-slate-300 dark:border-slate-700 text-left space-y-1.5 shadow-xs hover:shadow-md transition group"
           >
             <Archive className="w-6 h-6 text-amber-600 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">Barangay Archive Explorer</h3>
+            <h3 className="font-bold text-base text-slate-900 dark:text-white">{t('archiveExplorerTitle')}</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Inspect soft-archived items and submit restore authorization requests to Super Admin.
+              {t('archiveExplorerDesc')}
             </p>
           </button>
 
@@ -526,9 +517,9 @@ export const AdminDashboard: React.FC = () => {
             className="p-5 bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-750 rounded-2xl border-2 border-slate-300 dark:border-slate-700 text-left space-y-1.5 shadow-xs hover:shadow-md transition group"
           >
             <Globe className="w-6 h-6 text-blue-600 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">Landing Page CMS Draft</h3>
+            <h3 className="font-bold text-base text-slate-900 dark:text-white">{t('cmsDraftTitle')}</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Edit public site headlines and contact details (saved as draft awaiting Super Admin approval).
+              {t('cmsDraftDesc')}
             </p>
           </button>
 
@@ -538,9 +529,9 @@ export const AdminDashboard: React.FC = () => {
             className="p-5 bg-white dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-slate-750 rounded-2xl border-2 border-slate-300 dark:border-slate-700 text-left space-y-1.5 shadow-xs hover:shadow-md transition group"
           >
             <Clock className="w-6 h-6 text-indigo-600 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">Staff Punch Clock & HR</h3>
+            <h3 className="font-bold text-base text-slate-900 dark:text-white">{t('punchClockTitle')}</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Daily Time In / Time Out punch clock, leave requests, and attendance history.
+              {t('punchClockDesc')}
             </p>
           </button>
 
@@ -550,9 +541,9 @@ export const AdminDashboard: React.FC = () => {
             className="p-5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-750 rounded-2xl border-2 border-slate-300 dark:border-slate-700 text-left space-y-1.5 shadow-xs hover:shadow-md transition group"
           >
             <User className="w-6 h-6 text-slate-600 dark:text-slate-300 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">My Profile & Security</h3>
+            <h3 className="font-bold text-base text-slate-900 dark:text-white">{t('profileSecurityTitle')}</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Personal contact details, password change, and elderly accessibility preferences.
+              {t('profileSecurityDesc')}
             </p>
           </button>
         </div>

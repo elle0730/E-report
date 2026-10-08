@@ -76,7 +76,7 @@ export const VoucherModal: React.FC<VoucherModalProps> = ({
           {/* Header Seal */}
           <div className="flex items-center justify-between border-b-2 border-emerald-600/30 pb-4">
             <div className="flex items-center gap-3">
-              <img src="/logo.svg" alt="Barangay Bensican Seal" className="w-14 h-14 drop-shadow" />
+              <img src="/logo.png" alt="Barangay Bensican Seal" className="w-14 h-14 drop-shadow object-contain" />
               <div>
                 <span className="text-[11px] font-bold tracking-widest text-emerald-800 dark:text-emerald-400 uppercase block">
                   Republic of the Philippines

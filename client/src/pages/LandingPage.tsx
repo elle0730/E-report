@@ -57,7 +57,7 @@ export const LandingPage: React.FC = () => {
         <div className="relative z-10 max-w-3xl space-y-6">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/60 text-amber-300 text-xs sm:text-sm font-bold border border-emerald-500/40 shadow-inner">
             <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
-            Official Barangay Portal • San Nicolas, Pangasinan
+            {t('officialBarangayPortal')}
           </div>
 
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-black leading-tight tracking-tight text-white drop-shadow">
@@ -72,7 +72,7 @@ export const LandingPage: React.FC = () => {
 
         {/* Decorative Seal Icon */}
         <div className="absolute -bottom-8 -right-8 opacity-20 pointer-events-none hidden md:block">
-          <img src="/logo.svg" alt="" className="w-96 h-96" />
+          <img src="/logo.png" alt="" className="w-96 h-96 object-contain" />
         </div>
       </section>
 
@@ -80,10 +80,10 @@ export const LandingPage: React.FC = () => {
       <section className="space-y-8">
         <div className="text-center max-w-2xl mx-auto space-y-2">
           <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
-            How It Works in 3 Simple Steps
+            {t('howItWorks')}
           </h2>
           <p className="text-base text-slate-600 dark:text-slate-400">
-            Designed specifically for elderly and non-technical residents. No complicated forms.
+            {t('howItWorksDesc')}
           </p>
         </div>
 
@@ -95,14 +95,14 @@ export const LandingPage: React.FC = () => {
                 1
               </div>
               <h3 className="text-2xl font-black text-slate-900 dark:text-white">
-                1. Register with Proof
+                {t('step1Title')}
               </h3>
               <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-                Provide your name, Bensican home address, and a photo of your ID. Friendly barangay staff will confirm your account.
+                {t('step1Desc')}
               </p>
             </div>
             <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700/60 text-xs font-bold text-emerald-700 dark:text-emerald-400">
-              Exclusive to Barangay Bensican residents
+              {t('step1Badge')}
             </div>
           </div>
 
@@ -113,14 +113,14 @@ export const LandingPage: React.FC = () => {
                 2
               </div>
               <h3 className="text-2xl font-black text-slate-900 dark:text-white">
-                2. Send Your Concern
+                {t('step2Title')}
               </h3>
               <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-                Write words, speak with your voice microphone, or take photos/videos. No hard words or complicated typing required.
+                {t('step2Desc')}
               </p>
             </div>
             <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700/60 text-xs font-bold text-blue-700 dark:text-blue-400">
-              Voice dictation & photo-only mode supported
+              {t('step1Badge')}
             </div>
           </div>
 
@@ -131,14 +131,14 @@ export const LandingPage: React.FC = () => {
                 3
               </div>
               <h3 className="text-2xl font-black text-slate-900 dark:text-white">
-                3. Track with Number
+                {t('step3Title')}
               </h3>
               <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-                Receive your unique reference number (e.g. BSN-2026-00042). Check status updates, assigned handlers, or Lupon hearings.
+                {t('step3Desc')}
               </p>
             </div>
             <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700/60 text-xs font-bold text-purple-700 dark:text-purple-400">
-              Assigned official photo & name shown clearly
+              {t('step3Badge')}
             </div>
           </div>
         </div>
@@ -191,7 +191,7 @@ export const LandingPage: React.FC = () => {
       {/* About Barangay Bensican */}
       <section className="bg-white dark:bg-slate-800/80 p-8 sm:p-12 rounded-3xl border-2 border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
         <div className="flex items-center gap-3">
-          <img src="/logo.svg" alt="" className="w-12 h-12" />
+          <img src="/logo.png" alt="" className="w-12 h-12 object-contain" />
           <div>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
               About Barangay Bensican

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   MessageSquare, Send, Volume2, Mic, MicOff, Bot,
   User, CheckCircle, AlertCircle, Phone, ArrowLeft, Sparkles
@@ -7,8 +8,17 @@ import { useAccessibility } from '../context/AccessibilityContext.js';
 import { useAuth } from '../context/AuthContext.js';
 
 export const BensiChatPage: React.FC = () => {
+  const navigate = useNavigate();
   const { language, t, speak, stopSpeaking, isSpeaking, listen, stopListening, isListening } = useAccessibility();
   const { user } = useAuth();
+
+  const handleBack = () => {
+    if (user?.role === 'admin' || user?.role === 'super_admin') {
+      navigate('/admin/dashboard');
+    } else {
+      navigate('/resident/dashboard');
+    }
+  };
 
   const [messages, setMessages] = useState<any[]>([]);
   const [inputText, setInputText] = useState<string>('');
@@ -163,6 +173,17 @@ export const BensiChatPage: React.FC = () => {
       {/* Presence & Header Banner */}
       <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border-3 border-emerald-300 dark:border-slate-700 shadow-md flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={handleBack}
+            className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-white transition-colors flex items-center gap-1.5 focus:ring-2 focus:ring-emerald-400 min-h-[44px] min-w-[44px]"
+            title={t('back')}
+            aria-label={t('back')}
+          >
+            <ArrowLeft className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+            <span className="text-xs sm:text-sm font-semibold pr-1 hidden sm:inline">{t('back')}</span>
+          </button>
+
           <div className="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-md">
             <Bot className="w-8 h-8" />
           </div>

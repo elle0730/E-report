@@ -77,9 +77,9 @@ export const ResidentDashboard: React.FC = () => {
           </h1>
           <p className="text-base text-emerald-100 max-w-xl">
             {activeReportsCount > 0 ? (
-              <span>You have <strong>{activeReportsCount}</strong> active concern being attended to by our barangay staff.</span>
+              <span>{t('activeConcernsNotice')} (<strong>{activeReportsCount}</strong>)</span>
             ) : (
-              <span>All your submitted concerns are up to date. You can send a new concern anytime below.</span>
+              <span>{t('allConcernsUpToDate')}</span>
             )}
           </p>
         </div>
@@ -90,20 +90,20 @@ export const ResidentDashboard: React.FC = () => {
             type="button"
             onClick={() => setVoucherModalOpen(true)}
             className="p-3 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-2xl font-bold flex flex-col items-center justify-center min-w-[90px] shadow-sm transition"
-            title="View Official Resident Assistance Voucher"
+            title={t('viewVoucher')}
           >
             <Award className="w-6 h-6 text-slate-950 mb-0.5" />
-            <span className="text-xs font-black">View Voucher</span>
+            <span className="text-xs font-black">{t('viewVoucher')}</span>
           </button>
 
           <div className="bg-emerald-900/80 p-3 rounded-2xl border border-emerald-500/40 text-center min-w-[90px]">
             <span className="block text-2xl font-black text-amber-300">{activeReportsCount}</span>
-            <span className="text-xs font-semibold text-emerald-200">Active</span>
+            <span className="text-xs font-semibold text-emerald-200">{t('active')}</span>
           </div>
 
           <div className="bg-emerald-900/80 p-3 rounded-2xl border border-emerald-500/40 text-center min-w-[90px]">
             <span className="block text-2xl font-black text-white">{resolvedReportsCount}</span>
-            <span className="text-xs font-semibold text-emerald-200">Resolved</span>
+            <span className="text-xs font-semibold text-emerald-200">{t('resolved')}</span>
           </div>
         </div>
       </div>
@@ -114,10 +114,10 @@ export const ResidentDashboard: React.FC = () => {
           <AlertCircle className="w-7 h-7 text-amber-600 shrink-0 mt-0.5" />
           <div className="space-y-1">
             <h2 className="font-black text-lg text-amber-900 dark:text-amber-200">
-              Account Status: Verification Pending
+              {t('verificationPendingTitle')}
             </h2>
             <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-              Your resident account registration for Barangay Bensican has been received. Our barangay administrators are currently verifying your proof of residency. You have full access to submit concerns, talk to Bensi, and read public announcements in the meantime.
+              {t('verificationPendingNotice')}
             </p>
           </div>
         </div>
@@ -143,7 +143,7 @@ export const ResidentDashboard: React.FC = () => {
           </div>
 
           <div className="pt-4 flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-black text-base">
-            <span>{language === 'tl' ? 'Magsumbong Ngayon' : language === 'il' ? 'Ibaon ti Report' : 'Send Report'}</span>
+            <span>{t('sendReportNow')}</span>
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </div>
         </button>
@@ -166,7 +166,7 @@ export const ResidentDashboard: React.FC = () => {
           </div>
 
           <div className="pt-4 flex items-center gap-2 text-blue-700 dark:text-blue-400 font-black text-base">
-            <span>View Timeline & Handler</span>
+            <span>{t('viewTimelineHandler')}</span>
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </div>
         </button>
@@ -189,7 +189,7 @@ export const ResidentDashboard: React.FC = () => {
           </div>
 
           <div className="pt-4 flex items-center gap-2 text-amber-700 dark:text-amber-400 font-black text-base">
-            <span>Read Updates & Advisories</span>
+            <span>{t('readUpdatesAdvisories')}</span>
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </div>
         </button>
@@ -212,7 +212,7 @@ export const ResidentDashboard: React.FC = () => {
           </div>
 
           <div className="pt-4 flex items-center gap-2 text-purple-700 dark:text-purple-400 font-black text-base">
-            <span>{scheduledHearingsCount > 0 ? `${scheduledHearingsCount} Scheduled Hearing` : 'View Hearing Notices'}</span>
+            <span>{scheduledHearingsCount > 0 ? `${scheduledHearingsCount} ${t('scheduledHearingCount')}` : t('viewHearingNotices')}</span>
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </div>
         </button>
@@ -230,10 +230,10 @@ export const ResidentDashboard: React.FC = () => {
           </div>
           <div className="text-left">
             <h3 className="font-bold text-lg text-emerald-950 dark:text-emerald-200">
-              Chat with Bensi AI Assistant
+              {t('chatWithBensiAssistant')}
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-400">
-              Instant answers in Ilocano, Tagalog, and English.
+              {t('chatWithBensiSub')}
             </p>
           </div>
         </button>
@@ -248,10 +248,10 @@ export const ResidentDashboard: React.FC = () => {
           </div>
           <div className="text-left">
             <h3 className="font-bold text-lg text-slate-900 dark:text-white">
-              Bills & Finance Transparency
+              {t('billsTransparencyTitle')}
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-400">
-              View official barangay utility bills & expenditures.
+              {t('billsTransparencySub')}
             </p>
           </div>
         </button>

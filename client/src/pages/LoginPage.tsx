@@ -173,7 +173,7 @@ export const LoginPage: React.FC = () => {
       {/* Login Card */}
       <div className="bg-white dark:bg-slate-800/90 p-8 sm:p-10 rounded-3xl border-3 border-emerald-300 dark:border-slate-700 shadow-xl space-y-6">
         <div className="text-center space-y-2">
-          <img src="/logo.svg" alt="Barangay Bensican Official Seal" className="w-16 h-16 mx-auto drop-shadow" />
+          <img src="/logo.png" alt="Barangay Bensican Official Seal" className="w-16 h-16 mx-auto drop-shadow object-contain" />
           <h1 className="text-3xl font-black text-slate-900 dark:text-white">
             {t('login')}
           </h1>
@@ -195,7 +195,7 @@ export const LoginPage: React.FC = () => {
             <div className="p-4 bg-amber-50 dark:bg-amber-950/50 border-2 border-amber-400 rounded-2xl space-y-2">
               <div className="flex items-center gap-2 text-amber-900 dark:text-amber-200 font-bold">
                 <ShieldCheck className="w-6 h-6 text-amber-600" />
-                <span>Two-Factor Authentication Required</span>
+                <span>{t('twoFactorRequired')}</span>
               </div>
               <p className="text-sm text-slate-700 dark:text-slate-300">
                 {twoFactorNotice}
@@ -204,7 +204,7 @@ export const LoginPage: React.FC = () => {
 
             <div>
               <label className="block text-base font-bold text-slate-900 dark:text-white mb-1">
-                Enter 6-Digit Security Code
+                {t('enter2faCode')}
               </label>
               <input
                 type="text"
@@ -223,7 +223,7 @@ export const LoginPage: React.FC = () => {
               disabled={isLoading}
               className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl text-lg shadow-lg transition min-h-[48px]"
             >
-              Verify and Access System
+              {t('verifyAndAccess')}
             </button>
 
             <button
@@ -235,21 +235,21 @@ export const LoginPage: React.FC = () => {
               }}
               className="w-full py-2.5 text-slate-600 dark:text-slate-400 font-bold hover:underline text-sm transition"
             >
-              Cancel and Back to Email Sign-in
+              {t('cancelBack')}
             </button>
           </form>
         ) : (
           <form onSubmit={handleLoginSubmit} className="space-y-4">
             <div>
               <label className="block text-base font-bold text-slate-900 dark:text-white mb-1">
-                Email Address
+                {t('emailAddress')}
               </label>
               <div className="relative">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email address"
+                  placeholder={t('enterEmail')}
                   className="w-full px-4 py-3 pl-11 rounded-xl border-2 border-slate-300 dark:border-slate-600 text-base font-medium focus:border-emerald-600 dark:bg-slate-900"
                   required
                 />
@@ -259,14 +259,14 @@ export const LoginPage: React.FC = () => {
 
             <div>
               <label className="block text-base font-bold text-slate-900 dark:text-white mb-1">
-                Password
+                {t('password')}
               </label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
+                  placeholder={t('enterPassword')}
                   className="w-full px-4 py-3 pl-11 pr-12 rounded-xl border-2 border-slate-300 dark:border-slate-600 text-base font-medium focus:border-emerald-600 dark:bg-slate-900"
                   required
                 />
@@ -286,7 +286,7 @@ export const LoginPage: React.FC = () => {
             {requiresCaptcha && captchaData && (
               <div className="p-4 bg-blue-50 dark:bg-blue-950/40 rounded-2xl border-2 border-blue-300 dark:border-blue-700 space-y-3">
                 <span className="text-sm font-bold text-blue-900 dark:text-blue-200 block">
-                  Security Check (Pagsusuri sa Seguridad):
+                  {t('securityCheck')}
                 </span>
                 <p className="text-base font-black text-slate-900 dark:text-white">
                   {captchaData.question}
@@ -316,7 +316,7 @@ export const LoginPage: React.FC = () => {
                 onClick={() => setForgotPasswordOpen(true)}
                 className="font-bold text-emerald-700 dark:text-emerald-400 hover:underline"
               >
-                Forgot Password?
+                {t('forgotPassword')}
               </button>
             </div>
 
@@ -325,7 +325,7 @@ export const LoginPage: React.FC = () => {
               disabled={isLoading}
               className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl text-lg shadow-lg transition flex items-center justify-center gap-2 min-h-[48px]"
             >
-              <span>{isLoading ? 'Signing In...' : t('login')}</span>
+              <span>{isLoading ? t('signingIn') : t('login')}</span>
               <ArrowRight className="w-5 h-5" />
             </button>
           </form>
@@ -334,7 +334,7 @@ export const LoginPage: React.FC = () => {
         {/* OAuth Buttons */}
         <div className="pt-4 border-t border-slate-200 dark:border-slate-700 space-y-3">
           <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block text-center">
-            Or sign in with (Para sa Mabilisang Pagpasok):
+            {t('orSignInWith')}
           </span>
           <div className="grid grid-cols-2 gap-3">
             <button
@@ -356,12 +356,12 @@ export const LoginPage: React.FC = () => {
 
         {/* Register link */}
         <div className="pt-2 text-center text-sm">
-          <span className="text-slate-600 dark:text-slate-400">New resident of Bensican? </span>
+          <span className="text-slate-600 dark:text-slate-400">{t('newResident')} </span>
           <button
             onClick={() => navigate('/register')}
             className="font-bold text-emerald-700 dark:text-emerald-400 hover:underline ml-1"
           >
-            Register Here (Magpatala Dito)
+            {t('registerHere')}
           </button>
         </div>
       </div>

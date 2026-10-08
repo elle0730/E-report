@@ -4,6 +4,7 @@ import {
   DollarSign, Calendar, TrendingUp, Download, Printer
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.js';
+import { PageHeader } from '../components/PageHeader.js';
 
 export const StaffPayrollPage: React.FC = () => {
   const { user } = useAuth();
@@ -148,36 +149,31 @@ export const StaffPayrollPage: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto py-6 px-4 space-y-8 animate-fade-in">
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white flex items-center gap-3">
-            <Users className="w-8 h-8 text-emerald-600" />
-            <span>Barangay Staff Payroll & Human Resources</span>
-          </h1>
-          <p className="text-sm text-slate-600 dark:text-slate-400">
-            Attendance monitoring, cash advances, sick/vacation leave requests, and payroll disbursements.
-          </p>
-        </div>
+      <PageHeader
+        title="Barangay Staff Payroll & Human Resources"
+        subtitle="Attendance monitoring, cash advances, sick/vacation leave requests, and payroll disbursements."
+        icon={Users}
+        badges={isSuperAdmin ? ['Super Admin HR Management', 'Payroll Disbursal'] : ['Staff Attendance Portal', 'Official Service']}
+        backTo={isSuperAdmin ? '/super-admin' : '/admin'}
+        actions={
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={handleTimeLog}
+              className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl text-xs shadow-md flex items-center gap-1.5 transition min-h-[44px]"
+            >
+              <Clock className="w-4 h-4 text-amber-300" />
+              <span>Punch Clock</span>
+            </button>
 
-        {/* Attendance Stamp Button for Staff */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={handleTimeLog}
-            className="px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-2xl text-base shadow-lg flex items-center gap-2 transition min-h-[48px]"
-          >
-            <Clock className="w-5 h-5 text-amber-300" />
-            <span>Punch Clock: Time In / Time Out</span>
-          </button>
-
-          <button
-            onClick={() => setShowRequestModal(true)}
-            className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl text-sm transition min-h-[48px]"
-          >
-            + File Leave / Cash Advance
-          </button>
-        </div>
-      </div>
+            <button
+              onClick={() => setShowRequestModal(true)}
+              className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition min-h-[44px]"
+            >
+              + File Request
+            </button>
+          </div>
+        }
+      />
 
       {attendanceStatus !== 'Ready' && (
         <div className="p-3 bg-emerald-50 text-emerald-800 rounded-xl text-xs font-bold border border-emerald-300">

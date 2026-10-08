@@ -185,39 +185,31 @@ export const BensiFloatingChatbot: React.FC = () => {
               </div>
               <div>
                 <h3 className="font-extrabold text-base leading-tight flex items-center gap-1.5">
-                  <span>Bensi Assistant</span>
+                  <span>{t('bensiAssistant')}</span>
                   <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
                 </h3>
                 <span className="text-[11px] text-emerald-200 block">
-                  Barangay Bensican Support
+                  {t('barangaySupport')}
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-1">
-              {/* Language Selector */}
-              <div className="flex bg-emerald-950/60 rounded-lg p-0.5 text-[10px] font-bold border border-emerald-600/40">
-                <button
-                  type="button"
-                  onClick={() => setLanguage('en')}
-                  className={`px-1.5 py-0.5 rounded transition ${language === 'en' ? 'bg-white text-emerald-900' : 'text-emerald-200 hover:text-white'}`}
+            <div className="flex items-center gap-2">
+              {/* Language Dropdown Selector */}
+              <div className="relative inline-flex items-center">
+                <label htmlFor="bensi-floating-lang" className="sr-only">Select Language</label>
+                <select
+                  id="bensi-floating-lang"
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value as 'en' | 'tl' | 'il')}
+                  className="bg-emerald-950/80 hover:bg-emerald-950 text-white text-xs font-bold py-1.5 pl-2.5 pr-7 rounded-xl border border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-white/40 cursor-pointer appearance-none shadow-sm transition"
+                  aria-label="Language"
                 >
-                  EN
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setLanguage('tl')}
-                  className={`px-1.5 py-0.5 rounded transition ${language === 'tl' ? 'bg-white text-emerald-900' : 'text-emerald-200 hover:text-white'}`}
-                >
-                  TL
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setLanguage('il')}
-                  className={`px-1.5 py-0.5 rounded transition ${language === 'il' ? 'bg-white text-emerald-900' : 'text-emerald-200 hover:text-white'}`}
-                >
-                  IL
-                </button>
+                  <option value="en" className="bg-slate-900 text-white">🌐 English</option>
+                  <option value="tl" className="bg-slate-900 text-white">🌐 Tagalog</option>
+                  <option value="il" className="bg-slate-900 text-white">🌐 Ilokano</option>
+                </select>
+                <ChevronDown className="w-3.5 h-3.5 text-emerald-300 absolute right-2 pointer-events-none" />
               </div>
 
               {/* Close Button */}
@@ -258,7 +250,7 @@ export const BensiFloatingChatbot: React.FC = () => {
                 >
                   <div className="flex items-center gap-1.5 mb-1 px-1">
                     <span className="text-[10px] font-bold text-slate-400">
-                      {isMe ? 'You' : 'Bensi'}
+                      {isMe ? t('you') : 'Bensi'}
                     </span>
                     <span className="text-[9px] text-slate-400">
                       {m.created_at ? new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
@@ -278,10 +270,10 @@ export const BensiFloatingChatbot: React.FC = () => {
                         type="button"
                         onClick={() => speak(m.message)}
                         className="mt-1.5 pt-1 border-t border-slate-100 dark:border-slate-700 text-[10px] text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1 font-bold"
-                        title="Listen to response"
+                        title={t('readAloud')}
                       >
                         <Volume2 className="w-3 h-3" />
-                        <span>Listen</span>
+                        <span>{t('readAloud')}</span>
                       </button>
                     )}
                   </div>
@@ -292,7 +284,7 @@ export const BensiFloatingChatbot: React.FC = () => {
             {isSending && (
               <div className="flex items-center gap-2 text-xs text-slate-400 p-2 italic">
                 <Bot className="w-4 h-4 animate-spin text-emerald-500" />
-                <span>Bensi is typing...</span>
+                <span>Bensi...</span>
               </div>
             )}
             <div ref={messagesEndRef} />
@@ -314,7 +306,7 @@ export const BensiFloatingChatbot: React.FC = () => {
                   ? 'bg-red-500 text-white border-red-600 animate-pulse'
                   : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 border-slate-200 dark:border-slate-700'
               }`}
-              title={isListening ? 'Stop listening' : 'Voice dictation'}
+              title={isListening ? t('stopAudio') : t('voiceInput')}
             >
               {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
             </button>
@@ -323,7 +315,7 @@ export const BensiFloatingChatbot: React.FC = () => {
               type="text"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder={language === 'tl' ? 'Magtanong kay Bensi...' : language === 'il' ? 'Agdamag ken ni Bensi...' : 'Ask Bensi anything...'}
+              placeholder={isListening ? t('listening') : t('typeYourQuestion')}
               className="flex-1 px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-hidden focus:border-emerald-500 dark:text-white"
             />
 
@@ -331,7 +323,7 @@ export const BensiFloatingChatbot: React.FC = () => {
               type="submit"
               disabled={!inputText.trim() || isSending}
               className="p-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 text-white rounded-xl shadow-xs transition"
-              title="Send message"
+              title={t('submit')}
             >
               <Send className="w-4 h-4" />
             </button>
@@ -345,14 +337,14 @@ export const BensiFloatingChatbot: React.FC = () => {
         onClick={() => setIsOpen(prev => !prev)}
         className="group relative flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-full shadow-2xl border-2 border-white/60 transition-all transform hover:scale-105 active:scale-95 min-h-[52px]"
         aria-label="Open Bensi AI Chatbot"
-        title="Chat with Bensi AI Assistant"
+        title={t('chatWithBensi')}
       >
         <div className="relative">
           <Bot className="w-6 h-6 text-white" />
           <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-300 animate-ping"></span>
         </div>
         <span className="text-sm font-extrabold pr-1 hidden sm:inline">
-          {isOpen ? 'Close Bensi' : 'Ask Bensi AI'}
+          {isOpen ? t('close') : t('bensiAiAssistant')}
         </span>
         {unreadAlert && !isOpen && (
           <span className="w-3 h-3 rounded-full bg-red-500 border border-white"></span>

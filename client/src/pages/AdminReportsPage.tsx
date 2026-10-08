@@ -5,6 +5,7 @@ import {
   Clock, AlertTriangle, Send, Archive, Plus, ShieldCheck, Scale, Phone
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.js';
+import { PageHeader } from '../components/PageHeader.js';
 
 export const AdminReportsPage: React.FC = () => {
   const { id: paramId } = useParams();
@@ -249,27 +250,25 @@ export const AdminReportsPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto py-6 px-4 space-y-6 animate-fade-in">
-      {/* Top Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white">
-            Report & Concern Management Queue
-          </h1>
-          <p className="text-sm text-slate-600 dark:text-slate-400">
-            Review, prioritize, assign, and update community reports filed by residents.
-          </p>
-        </div>
+    <div className="space-y-6 animate-fade-in pb-16">
+      <PageHeader
+        title="Report & Concern Management Queue"
+        subtitle="Review, prioritize, assign, and update community reports filed by residents."
+        icon={FileText}
+        backTo="/admin/dashboard"
+        badges={[`${reports.length} Total Reports`, 'Admin Queue']}
+        actions={
+          <button
+            onClick={() => setShowWalkInModal(true)}
+            className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm flex items-center gap-2 shadow transition min-h-[44px]"
+          >
+            <Plus className="w-5 h-5" />
+            <span>Walk-In Assist: File for Resident</span>
+          </button>
+        }
+      />
 
-        {/* Walk-in assist button */}
-        <button
-          onClick={() => setShowWalkInModal(true)}
-          className="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm flex items-center gap-2 shadow transition min-h-[48px]"
-        >
-          <Plus className="w-5 h-5" />
-          <span>Walk-In Assist: File for Resident</span>
-        </button>
-      </div>
+      <div className="max-w-7xl mx-auto px-4 space-y-6">
 
       {/* Filter and Search Bar */}
       <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 shadow-sm flex flex-wrap items-center gap-3">
@@ -761,6 +760,7 @@ export const AdminReportsPage: React.FC = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

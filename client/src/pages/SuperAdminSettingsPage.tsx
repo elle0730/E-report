@@ -25,7 +25,11 @@ export const SuperAdminSettingsPage: React.FC = () => {
 
   // Venues & Bill types state
   const [venues, setVenues] = useState<string[]>([]);
+  const [archivedVenues, setArchivedVenues] = useState<string[]>([]);
   const [newVenue, setNewVenue] = useState<string>('');
+  const [archiveConfirmVenue, setArchiveConfirmVenue] = useState<string | null>(null);
+  const [restoreConfirmVenue, setRestoreConfirmVenue] = useState<string | null>(null);
+
   const [billTypes, setBillTypes] = useState<string[]>([]);
   const [archivedBillTypes, setArchivedBillTypes] = useState<string[]>([]);
   const [newBillType, setNewBillType] = useState<string>('');
@@ -71,6 +75,7 @@ export const SuperAdminSettingsPage: React.FC = () => {
         if (data.settings) {
           setSettings(data.settings);
           if (data.settings.venues) setVenues(data.settings.venues);
+          if (data.settings.archived_venues) setArchivedVenues(data.settings.archived_venues);
           if (data.settings.bill_types) setBillTypes(data.settings.bill_types);
           if (data.settings.archived_bill_types) setArchivedBillTypes(data.settings.archived_bill_types);
           if (data.settings.bensi_config) setBensiConfig(data.settings.bensi_config);
@@ -159,10 +164,24 @@ export const SuperAdminSettingsPage: React.FC = () => {
     handleSaveSetting('venues', updated);
   };
 
-  const handleRemoveVenue = (idx: number) => {
-    const updated = venues.filter((_, i) => i !== idx);
-    setVenues(updated);
-    handleSaveSetting('venues', updated);
+  const handleArchiveVenue = (venue: string) => {
+    const updatedActive = venues.filter(v => v !== venue);
+    const updatedArchived = [...archivedVenues, venue];
+    setVenues(updatedActive);
+    setArchivedVenues(updatedArchived);
+    handleSaveSetting('venues', updatedActive);
+    handleSaveSetting('archived_venues', updatedArchived);
+    setArchiveConfirmVenue(null);
+  };
+
+  const handleRestoreVenue = (venue: string) => {
+    const updatedArchived = archivedVenues.filter(v => v !== venue);
+    const updatedActive = [...venues, venue];
+    setVenues(updatedActive);
+    setArchivedVenues(updatedArchived);
+    handleSaveSetting('venues', updatedActive);
+    handleSaveSetting('archived_venues', updatedArchived);
+    setRestoreConfirmVenue(null);
   };
 
   const handleAddBillType = () => {
@@ -337,8 +356,10 @@ export const SuperAdminSettingsPage: React.FC = () => {
         {/* 2. VENUES TAB */}
         {activeTab === 'venues' && (
           <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white">Lupong Tagapamayapa Hearing Venues</h2>
-            <p className="text-xs text-slate-500 -mt-4">Physical rooms or conference areas available for conciliation hearings.</p>
+            <div>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">Lupong Tagapamayapa Hearing Venues</h2>
+              <p className="text-xs text-slate-500 mt-0.5">Physical rooms or conference areas available for conciliation hearings.</p>
+            </div>
 
             <div className="flex gap-2 max-w-md">
               <input
@@ -346,25 +367,67 @@ export const SuperAdminSettingsPage: React.FC = () => {
                 value={newVenue}
                 onChange={(e) => setNewVenue(e.target.value)}
                 placeholder="e.g. Lupon Conference Room A"
-                className="flex-1 px-4 py-2 rounded-xl border text-sm"
+                className="flex-1 px-4 py-2.5 rounded-xl border text-sm dark:bg-slate-900 dark:text-white"
               />
               <button
+                type="button"
                 onClick={handleAddVenue}
-                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm"
+                className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm transition"
               >
                 Add Venue
               </button>
             </div>
 
-            <div className="space-y-2 max-w-md">
-              {venues.map((v, i) => (
-                <div key={i} className="flex items-center justify-between p-3 rounded-xl border bg-slate-50 text-sm">
-                  <span className="font-semibold text-slate-800">{v}</span>
-                  <button onClick={() => handleRemoveVenue(i)} className="text-red-500 hover:text-red-700 p-1">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+            {/* ACTIVE VENUES */}
+            <div className="space-y-3">
+              <span className="text-xs font-black uppercase tracking-wider text-slate-500 block">
+                Active Venues ({venues.length})
+              </span>
+              <div className="space-y-2 max-w-lg">
+                {venues.map((v, i) => (
+                  <div key={i} className="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-850 text-sm">
+                    <span className="font-semibold text-slate-800 dark:text-slate-200">{v}</span>
+                    <button
+                      type="button"
+                      onClick={() => setArchiveConfirmVenue(v)}
+                      className="px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:hover:bg-amber-900 dark:text-amber-300 font-bold text-xs flex items-center gap-1.5 transition border border-amber-300 dark:border-amber-700"
+                      title="Archive this venue"
+                    >
+                      <Archive className="w-3.5 h-3.5" />
+                      <span>Archive</span>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ARCHIVED VENUES (REVERSIBLE) */}
+            <div className="pt-4 border-t border-slate-200 dark:border-slate-700 space-y-3">
+              <span className="text-xs font-black uppercase tracking-wider text-slate-500 block flex items-center gap-1.5">
+                <Archive className="w-3.5 h-3.5 text-slate-400" />
+                <span>Archived Venues ({archivedVenues.length})</span>
+              </span>
+
+              {archivedVenues.length === 0 ? (
+                <p className="text-xs text-slate-400 italic">No archived venues.</p>
+              ) : (
+                <div className="space-y-2 max-w-lg">
+                  {archivedVenues.map((av, i) => (
+                    <div key={i} className="flex items-center justify-between p-3.5 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 bg-slate-100/60 dark:bg-slate-900 text-sm">
+                      <span className="font-medium text-slate-500 dark:text-slate-400 line-through">{av}</span>
+                      <button
+                        type="button"
+                        onClick={() => setRestoreConfirmVenue(av)}
+                        className="px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:hover:bg-emerald-900 dark:text-emerald-300 font-bold text-xs flex items-center gap-1.5 transition border border-emerald-300 dark:border-emerald-700"
+                        title="Restore venue"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />
+                        <span>Restore</span>
+                      </button>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
           </div>
         )}
@@ -510,6 +573,78 @@ export const SuperAdminSettingsPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleRestoreBillType(restoreConfirmCategory)}
+                      className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-sm"
+                    >
+                      Confirm Restore
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* VENUE ARCHIVE CONFIRMATION MODAL */}
+            {archiveConfirmVenue && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
+                <div className="bg-white dark:bg-slate-900 border-4 border-amber-500 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-3 bg-amber-100 dark:bg-amber-950 rounded-2xl text-amber-700">
+                      <Archive className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-black text-slate-900 dark:text-white">Archive Hearing Venue?</h3>
+                      <p className="text-xs text-slate-500">Venue: {archiveConfirmVenue}</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Are you sure you want to archive <strong>"{archiveConfirmVenue}"</strong>? It will no longer appear in new hearing mediation schedules, but past hearing minutes will be preserved, and you can restore it at any time.
+                  </p>
+                  <div className="flex items-center justify-end gap-2 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setArchiveConfirmVenue(null)}
+                      className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold rounded-xl text-xs"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleArchiveVenue(archiveConfirmVenue)}
+                      className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-xs shadow-sm"
+                    >
+                      Confirm Archive
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* VENUE RESTORE CONFIRMATION MODAL */}
+            {restoreConfirmVenue && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
+                <div className="bg-white dark:bg-slate-900 border-4 border-emerald-500 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-3 bg-emerald-100 dark:bg-emerald-950 rounded-2xl text-emerald-700">
+                      <RotateCcw className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-black text-slate-900 dark:text-white">Restore Hearing Venue?</h3>
+                      <p className="text-xs text-slate-500">Venue: {restoreConfirmVenue}</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Restore <strong>"{restoreConfirmVenue}"</strong> back to active Lupong Tagapamayapa hearing venues? It will immediately become available again for mediation hearings and summons.
+                  </p>
+                  <div className="flex items-center justify-end gap-2 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setRestoreConfirmVenue(null)}
+                      className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold rounded-xl text-xs"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleRestoreVenue(restoreConfirmVenue)}
                       className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-sm"
                     >
                       Confirm Restore

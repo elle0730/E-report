@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.js';
 import { generateSubpoenaPdf } from '../utils/pdfGenerators.js';
+import { PageHeader } from '../components/PageHeader.js';
 
 export const AdminSubpoenaPage: React.FC = () => {
   const { user } = useAuth();
@@ -23,7 +24,7 @@ export const AdminSubpoenaPage: React.FC = () => {
   const [hearingTime, setHearingTime] = useState<string>('09:30 AM');
   const [venue, setVenue] = useState<string>('Lupong Tagapamayapa Mediation Room, Barangay Hall');
   const [reason, setReason] = useState<string>('');
-  const [signatory, setSignatory] = useState<string>('Hon. Eduardo V. Morales');
+  const [signatory, setSignatory] = useState<string>('');
   const [signatoryTitle, setSignatoryTitle] = useState<string>('Punong Barangay / Lupon Chairman');
 
   const token = localStorage.getItem('bensican_token');
@@ -115,26 +116,25 @@ export const AdminSubpoenaPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto py-6 px-4 space-y-6 animate-fade-in">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white flex items-center gap-3">
-            <Scale className="w-8 h-8 text-amber-600" />
-            <span>Official Subpoenas & Summons (Patawag)</span>
-          </h1>
-          <p className="text-sm text-slate-600 dark:text-slate-400">
-            Issue legal appearance summons (KP Form No. 9) with official Barangay Bensican letterhead.
-          </p>
-        </div>
+    <div className="space-y-6 animate-fade-in pb-16">
+      <PageHeader
+        title="Official Subpoenas & Summons (Patawag)"
+        subtitle="Issue legal appearance summons (KP Form No. 9) with official Barangay Bensican letterhead."
+        icon={Scale}
+        backTo="/admin/dashboard"
+        badges={[`${subpoenas.length} Issued Records`, 'KP Form 9']}
+        actions={
+          <button
+            onClick={() => setShowIssueModal(true)}
+            className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm flex items-center gap-2 shadow transition min-h-[44px]"
+          >
+            <Plus className="w-5 h-5" />
+            <span>Write / Issue Subpoena</span>
+          </button>
+        }
+      />
 
-        <button
-          onClick={() => setShowIssueModal(true)}
-          className="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm flex items-center gap-2 shadow transition min-h-[48px]"
-        >
-          <Plus className="w-5 h-5" />
-          <span>Write / Issue Subpoena</span>
-        </button>
-      </div>
+      <div className="max-w-7xl mx-auto px-4 space-y-6">
 
       {/* Filter bar */}
       <div className="flex flex-wrap gap-2">
@@ -337,6 +337,7 @@ export const AdminSubpoenaPage: React.FC = () => {
                     type="text"
                     value={signatory}
                     onChange={(e) => setSignatory(e.target.value)}
+                    placeholder="Official Signatory Name (e.g. Punong Barangay)"
                     className="w-full p-2.5 rounded-xl border dark:bg-slate-800"
                     required
                   />
@@ -371,6 +372,7 @@ export const AdminSubpoenaPage: React.FC = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

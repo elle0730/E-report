@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
         {/* Col 1: Barangay Identity & Hotline */}
         <div>
           <div className="flex items-center gap-3 mb-4">
-            <img src="/logo.svg" alt="Barangay Bensican Official Seal" className="w-12 h-12 drop-shadow" />
+            <img src="/logo.png" alt="Barangay Bensican Official Seal" className="w-12 h-12 drop-shadow object-contain" />
             <div>
               <h3 className="text-xl font-black text-white">Barangay Bensican</h3>
               <p className="text-xs text-emerald-400 font-semibold uppercase tracking-wider">San Nicolas, Pangasinan</p>
@@ -26,7 +26,7 @@ export const Footer: React.FC = () => {
             className="inline-flex items-center gap-2.5 px-5 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-base shadow-lg transition min-h-[48px]"
           >
             <Phone className="w-5 h-5 animate-pulse text-amber-300" />
-            <span>Need Help? Call Us: 0917-555-BENSI</span>
+            <span>{t('callHotline')}</span>
           </a>
         </div>
 
@@ -35,11 +35,11 @@ export const Footer: React.FC = () => {
           <h4 className="text-lg font-bold text-white border-b border-slate-700 pb-2">Barangay Hall Information</h4>
           <div className="flex items-start gap-2.5 text-sm text-slate-300">
             <MapPin className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-            <span>Barangay Hall, Main Road, Bensican, San Nicolas, Pangasinan 2447</span>
+            <span>{t('barangayAddress')} 2447</span>
           </div>
           <div className="flex items-start gap-2.5 text-sm text-slate-300">
             <Clock className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-            <span>Monday to Friday: 8:00 AM – 5:00 PM<br /><strong className="text-amber-400">Emergency Desk & Tanod Post: 24/7 Open</strong></span>
+            <span>{t('officeHours')}</span>
           </div>
           <div className="flex items-start gap-2.5 text-sm text-slate-300">
             <Phone className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
@@ -67,7 +67,7 @@ export const Footer: React.FC = () => {
 
           <div className="bg-slate-800/80 p-3 rounded-lg border border-slate-700 text-xs text-slate-300 leading-relaxed">
             <strong className="text-emerald-400 block mb-1">Philippine Data Privacy Act (RA 10173)</strong>
-            All resident personal records, submitted IDs, selfie verifications, and Lupon hearing files are encrypted and confidential. Only authorized officials have access.
+            {t('confidentialityNotice')}
           </div>
         </div>
       </div>
