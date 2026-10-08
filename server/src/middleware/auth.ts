@@ -18,6 +18,9 @@ export interface AuthenticatedUser {
 export interface AuthRequest extends Request {
   user?: AuthenticatedUser;
   token?: string;
+  query: Request['query'];
+  params: Request['params'];
+  body: Request['body'];
 }
 
 export function generateToken(user: { id: string; email: string; role: string }): string {
