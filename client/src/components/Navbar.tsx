@@ -119,7 +119,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenHelp, pageTitle }) => {
 
   return (
     <header className="sticky top-0 z-40 bg-white dark:bg-slate-900 border-b-2 border-slate-200 dark:border-slate-800 shadow-xs transition-colors">
-      <div className="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between gap-3">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-3">
         {/* Left Side: Official Brand & Logo */}
         <button
           type="button"
