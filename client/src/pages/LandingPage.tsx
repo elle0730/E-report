@@ -66,54 +66,20 @@ export const LandingPage: React.FC = () => {
           {/* Lower opacity green gradient overlay as requested */}
           <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/75 via-emerald-900/40 to-emerald-950/65 backdrop-blur-[0.5px]" />
 
-          {/* Banner content: compact height & horizontally balanced */}
-          <div className="relative z-10 px-5 py-5 sm:px-7 sm:py-6 md:px-8 md:py-6 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
-            {/* Left Column: Official Badge, Title & Subtitle */}
-            <div className="max-w-xl space-y-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 text-amber-300 text-xs font-bold border border-emerald-500/40 shadow-inner">
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
-                {t('officialBarangayPortal')}
-              </div>
-
-              <h1 className="text-2xl sm:text-3xl md:text-3xl font-black leading-tight tracking-tight text-white drop-shadow-md">
-                {heroTitle}
-              </h1>
-
-              <p className="text-xs sm:text-sm text-emerald-100 font-medium leading-relaxed drop-shadow-sm max-w-lg">
-                {heroSubtitle}
-              </p>
+          {/* Banner content: compact, clean & unobstructed */}
+          <div className="relative z-10 px-6 py-6 sm:px-8 sm:py-7 md:px-10 md:py-8 max-w-2xl space-y-2.5">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 text-amber-300 text-xs font-bold border border-emerald-500/40 shadow-inner">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+              {t('officialBarangayPortal')}
             </div>
 
-            {/* Right Column: Horizontally Balanced Announcement / Community Badge */}
-            <div className="shrink-0 flex items-center md:items-end justify-between md:justify-center">
-              {announcements.length > 0 ? (
-                <div
-                  onClick={() => navigate('/announcements')}
-                  className="cursor-pointer bg-slate-950/60 hover:bg-slate-950/75 backdrop-blur-md border border-amber-400/50 hover:border-amber-400 rounded-2xl p-3.5 max-w-xs transition shadow-lg space-y-1.5 group"
-                >
-                  <div className="flex items-center gap-1.5 text-amber-300 text-xs font-black uppercase tracking-wider">
-                    <AlertCircle className="w-4 h-4 text-amber-400 animate-pulse shrink-0" />
-                    <span>Announcement</span>
-                    <span className="text-[10px] text-emerald-200 ml-auto font-normal group-hover:underline">View →</span>
-                  </div>
-                  <p className="text-xs font-bold text-white line-clamp-1">
-                    {announcements[0].title}
-                  </p>
-                  <p className="text-[11px] text-emerald-100/90 line-clamp-1">
-                    {announcements[0].content}
-                  </p>
-                </div>
-              ) : (
-                <div className="flex items-center gap-3 bg-slate-950/60 backdrop-blur-md px-4 py-3 rounded-2xl border border-emerald-500/30 shadow-md">
-                  <img src="/logo.png" alt="Barangay Bensican Seal" className="w-10 h-10 object-contain drop-shadow" />
-                  <div>
-                    <div className="text-xs font-bold text-white leading-tight">Barangay Bensican</div>
-                    <div className="text-[11px] text-emerald-200">San Nicolas, Pangasinan</div>
-                    <div className="text-[10px] text-amber-300 font-semibold mt-0.5">● 24/7 Digital Services</div>
-                  </div>
-                </div>
-              )}
-            </div>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black leading-tight tracking-tight text-white drop-shadow-md">
+              {heroTitle}
+            </h1>
+
+            <p className="text-xs sm:text-sm md:text-base text-emerald-100 font-medium leading-relaxed drop-shadow-sm">
+              {heroSubtitle}
+            </p>
           </div>
         </section>
 
