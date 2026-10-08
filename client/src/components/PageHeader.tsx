@@ -4,12 +4,15 @@ import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.js';
 import { useAccessibility } from '../context/AccessibilityContext.js';
 
+type IconType = React.ComponentType<{ className?: string }> | React.ReactNode;
+
 interface PageHeaderProps {
   title: string;
   subtitle?: string;
-  icon?: React.ReactNode;
-  backTo?: string;
+  icon?: IconType;
   badge?: React.ReactNode;
+  badges?: React.ReactNode[];
+  backTo?: string;
   actions?: React.ReactNode;
   speakText?: string;
   className?: string;
@@ -19,8 +22,9 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
   title,
   subtitle,
   icon,
-  backTo,
   badge,
+  badges,
+  backTo,
   actions,
   speakText,
   className = ''
@@ -73,7 +77,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
 
           {icon && (
             <div className="p-3 bg-emerald-500/20 rounded-2xl border border-emerald-400/30 text-emerald-400 shrink-0">
-              {icon}
+              {React.isValidElement(icon) ? icon : React.createElement(icon as React.ComponentType<{ className?: string }>, { className: 'w-5 h-5' })}
             </div>
           )}
 
@@ -108,6 +112,11 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
         </div>
 
         <div className="flex items-center gap-3 self-start md:self-center flex-wrap">
+          {badges?.map((b: React.ReactNode, i: number) => (
+            <span key={i} className="px-2 py-0.5 text-xs font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-400/30 rounded-full">
+              {b}
+            </span>
+          ))}
           {badge}
           {actions}
         </div>
