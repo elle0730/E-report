@@ -42,3 +42,4 @@ if (Test-Path $edge) {
 } else {
     Start-Process -FilePath $appUrl
 }
+

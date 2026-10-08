@@ -51,28 +51,66 @@ export const LandingPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-16 py-4 animate-fade-in">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-800 via-emerald-700 to-green-900 text-white p-8 sm:p-12 md:p-16 shadow-2xl border-4 border-emerald-600/60">
-        <div className="relative z-10 max-w-3xl space-y-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/60 text-amber-300 text-xs sm:text-sm font-bold border border-emerald-500/40 shadow-inner">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
-            {t('officialBarangayPortal')}
+    <div className="space-y-10 sm:space-y-12 py-3 animate-fade-in">
+      {/* Banner Announcement / Hero Section */}
+      <section className="relative overflow-hidden rounded-3xl shadow-xl border-2 sm:border-3 border-emerald-500/60 bg-emerald-950">
+        {/* Background Photo with Scenery and 'WE ❤️ BENSICAN' Letters */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 hover:scale-105"
+          style={{ backgroundImage: `url('/bensican-banner.png')` }}
+        />
+
+        {/* Semi-transparent gradient overlay ensuring text legibility while letting the photo's vibrant scenery show */}
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/90 via-emerald-950/65 to-emerald-950/80 backdrop-blur-[0.5px]" />
+
+        {/* Content Container: Horizontally Balanced & Compact Height */}
+        <div className="relative z-10 px-6 py-5 sm:px-8 sm:py-6 md:px-10 md:py-6 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+          {/* Left Column: Official Badge, Title & Subtitle */}
+          <div className="max-w-2xl space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/75 text-amber-300 text-xs font-bold border border-emerald-500/40 shadow-inner">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+              {t('officialBarangayPortal')}
+            </div>
+
+            <h1 className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-black leading-tight tracking-tight text-white drop-shadow-md">
+              {heroTitle}
+            </h1>
+
+            <p className="text-xs sm:text-sm md:text-base text-emerald-100 font-medium leading-relaxed drop-shadow-sm max-w-xl">
+              {heroSubtitle}
+            </p>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-black leading-tight tracking-tight text-white drop-shadow">
-            {heroTitle}
-          </h1>
-
-          <p className="text-lg sm:text-xl text-emerald-100 font-medium leading-relaxed drop-shadow-sm">
-            {heroSubtitle}
-          </p>
-
-        </div>
-
-        {/* Decorative Seal Icon */}
-        <div className="absolute -bottom-8 -right-8 opacity-20 pointer-events-none hidden md:block">
-          <img src="/logo.png" alt="" className="w-96 h-96 object-contain" />
+          {/* Right Column: Horizontally Balanced Announcement / Community Badge */}
+          <div className="shrink-0 flex items-center md:items-end justify-between md:justify-center gap-3">
+            {announcements.length > 0 ? (
+              <div
+                onClick={() => navigate('/announcements')}
+                className="cursor-pointer bg-emerald-950/80 hover:bg-emerald-950/95 backdrop-blur-md border border-amber-400/50 hover:border-amber-400 rounded-2xl p-3.5 max-w-xs transition shadow-lg space-y-1.5 group"
+              >
+                <div className="flex items-center gap-1.5 text-amber-300 text-xs font-black uppercase tracking-wider">
+                  <AlertCircle className="w-4 h-4 text-amber-400 animate-pulse shrink-0" />
+                  <span>Announcement</span>
+                  <span className="text-[10px] text-emerald-200 ml-auto font-normal group-hover:underline">View →</span>
+                </div>
+                <p className="text-xs font-bold text-white line-clamp-1">
+                  {announcements[0].title}
+                </p>
+                <p className="text-[11px] text-emerald-100/90 line-clamp-1">
+                  {announcements[0].content}
+                </p>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3 bg-emerald-950/75 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-emerald-500/40 shadow-md">
+                <img src="/logo.png" alt="Barangay Bensican Seal" className="w-10 h-10 object-contain drop-shadow" />
+                <div>
+                  <div className="text-xs font-bold text-white leading-tight">Barangay Bensican</div>
+                  <div className="text-[11px] text-emerald-200">San Nicolas, Pangasinan</div>
+                  <div className="text-[10px] text-amber-300 font-semibold mt-0.5">● 24/7 Digital Services</div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
