@@ -7,8 +7,7 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "dist",
-    "rootDir": "src",
-    "types": ["node", "express", "multer", "bcryptjs", "cors", "jsonwebtoken", "morgan"]
+    "rootDir": "src"
   },
   "include": ["src/**/*"]
 }
