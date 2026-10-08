@@ -29,13 +29,39 @@ import notificationsRoutes from './routes/notifications.routes.js';
 import uploadRoutes from './routes/upload.routes.js';
 
 // Initialize DB schema
-// Use persistent disk on Render, fallback to local uploads folder
-const dataDir = process.env.DATA_DIR || path.join(process.cwd(), 'uploads');
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
+let dataDir = process.env.DATA_DIR || path.join(process.cwd(), 'data');
+try {
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+  }
+} catch {
+  dataDir = path.join(process.cwd(), 'data');
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+  }
 }
 process.env.DB_PATH = path.join(dataDir, 'database.sqlite');
 initDb();
+
+// Auto-seed if database has no accounts yet (e.g. freshly deployed instance on Render)
+try {
+  import('./db/index.js').then(({ db }) => {
+    const userCheck = db.prepare('SELECT count(*) as count FROM users').get() as { count: number };
+    if (!userCheck || userCheck.count === 0) {
+      console.log('[Auto-Seed] Empty database detected on startup. Initializing default data and accounts...');
+      import('./db/seed.js').then(({ seed }) => {
+        try {
+          seed();
+          console.log('[Auto-Seed] Database successfully seeded with default accounts.');
+        } catch (sErr) {
+          console.error('[Auto-Seed] Error seeding database:', sErr);
+        }
+      });
+    }
+  });
+} catch (e) {
+  console.warn('[DB Check] Unable to run auto-seed check:', e);
+}
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -55,25 +81,28 @@ app.use(express.urlencoded({ extended: true, limit: '30mb' }));
 
 // Ensure upload directory exists (use persistent dataDir)
 const uploadDir = path.join(dataDir, 'uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+try {
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+} catch {
+  // fallback
 }
 
 // Serve uploaded assets
 app.use('/uploads', express.static(uploadDir));
 
-// Serve frontend build in production
-const clientBuildPath = path.join(__dirname, '../../client/dist');
-if (fs.existsSync(clientBuildPath)) {
+// Serve frontend build static files in production if available
+const possibleClientPaths = [
+  path.join(__dirname, '../../client/dist'),
+  path.join(process.cwd(), 'client/dist'),
+  path.join(process.cwd(), '../client/dist'),
+  path.join(__dirname, '../client/dist')
+];
+const clientBuildPath = possibleClientPaths.find(p => fs.existsSync(p));
+if (clientBuildPath) {
+  console.log('[Static] Serving frontend from:', clientBuildPath);
   app.use(express.static(clientBuildPath));
-  
-  // SPA fallback - serve index.html for non-API routes
-  app.get('*', (req, res, next) => {
-    if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) {
-      return next();
-    }
-    res.sendFile(path.join(clientBuildPath, 'index.html'));
-  });
 }
 
 // Mount API routes
@@ -104,6 +133,16 @@ app.get('/api/health', (req, res) => {
     version: '1.0.0'
   });
 });
+
+// SPA fallback for frontend client routing (mounted AFTER all API endpoints)
+if (clientBuildPath) {
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) {
+      return next();
+    }
+    res.sendFile(path.join(clientBuildPath, 'index.html'));
+  });
+}
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {

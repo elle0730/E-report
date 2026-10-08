@@ -1,11 +1,25 @@
 import Database from 'better-sqlite3';
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 
-const dbPath = process.env.DB_PATH || path.join(process.cwd(), 'data', 'bensican.db');
-const dbDir = path.dirname(dbPath);
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+let dbPath = process.env.DB_PATH || path.join(process.cwd(), 'data', 'bensican.db');
+let dbDir = path.dirname(dbPath);
+try {
+  if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+  }
+} catch (dirErr) {
+  // If custom DB_PATH / DATA_DIR directory isn't writable, fallback to local data dir
+  console.warn('[DB] Could not create directory for DB_PATH, falling back to ./data');
+  dbPath = path.join(process.cwd(), 'data', 'bensican.db');
+  dbDir = path.dirname(dbPath);
+  if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+  }
 }
 
 export const db = new Database(dbPath);
@@ -16,7 +30,17 @@ db.pragma('foreign_keys = ON');
 
 // Initialize schema
 export function initDb() {
-  const schemaPath = path.join(__dirname, 'schema.sql');
+  const possiblePaths = [
+    path.join(__dirname, 'schema.sql'),
+    path.join(__dirname, '../../src/db/schema.sql'),
+    path.join(process.cwd(), 'src/db/schema.sql'),
+    path.join(process.cwd(), 'server/src/db/schema.sql'),
+    path.join(__dirname, '../src/db/schema.sql')
+  ];
+  const schemaPath = possiblePaths.find(p => fs.existsSync(p));
+  if (!schemaPath) {
+    throw new Error(`Could not find schema.sql in: ${possiblePaths.join(', ')}`);
+  }
   const schemaSql = fs.readFileSync(schemaPath, 'utf8');
   db.exec(schemaSql);
 }

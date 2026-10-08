@@ -3,15 +3,26 @@
   "version": "1.0.0",
   "description": "E-Report Barangay Bensican - Full Stack System",
   "scripts": {
-    "dev:server": "cd server && npm run dev",
-    "dev:client": "cd client && npm run dev",
-    "seed": "cd server && npm run seed",
+    "install:server": "cd server && npm install --include=dev",
+    "install:client": "cd client && npm install --include=dev",
+    "install:all": "npm run install:server && npm run install:client",
+    "postinstall": "npm run install:all",
     "build:server": "cd server && npm run build",
     "build:client": "cd client && npm run build",
-    "build": "npm run build:server && npm run build:client",
-    "start": "cd server && npm run start"
+    "build": "npm run install:all && npm run build:server && npm run build:client",
+    "start": "cd server && npm run start",
+    "seed": "cd server && npm run seed",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev"
   },
-  "keywords": ["barangay", "e-report", "bensican", "pangasinan", "accessibility", "pwa"],
+  "keywords": [
+    "barangay",
+    "e-report",
+    "bensican",
+    "pangasinan",
+    "accessibility",
+    "pwa"
+  ],
   "author": "Barangay Bensican IT Team",
   "license": "ISC"
 }
