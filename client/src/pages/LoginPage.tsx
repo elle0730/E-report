@@ -116,33 +116,6 @@ export const LoginPage: React.FC = () => {
     }
   };
 
-  // OAuth Simulation
-  const handleOAuthLogin = async (provider: 'google' | 'facebook') => {
-    setIsLoading(true);
-    try {
-      const res = await fetch('/api/auth/oauth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          provider,
-          email: `${provider}.resident@example.com`,
-          fullName: 'Resident User',
-          oauthToken: 'oauth-token'
-        })
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        login(data.token, data.user, data.refreshToken);
-        navigate('/', { replace: true });
-      }
-    } catch (err) {
-      setErrorMessage('OAuth sign-in temporarily unavailable.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!forgotEmail) return;
@@ -337,31 +310,8 @@ export const LoginPage: React.FC = () => {
           </form>
         )}
 
-        {/* OAuth Buttons */}
-        <div className="pt-4 border-t border-slate-200 dark:border-slate-700 space-y-3">
-          <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block text-center">
-            {t('orSignInWith')}
-          </span>
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={() => handleOAuthLogin('google')}
-              className="py-3 px-4 bg-slate-50 hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-800 dark:text-white font-bold rounded-xl border border-slate-300 dark:border-slate-700 text-sm flex items-center justify-center gap-2 transition min-h-[48px]"
-            >
-              <span>Google</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleOAuthLogin('facebook')}
-              className="py-3 px-4 bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 font-bold rounded-xl border border-blue-300 dark:border-blue-700 text-sm flex items-center justify-center gap-2 transition min-h-[48px]"
-            >
-              <span>Facebook</span>
-            </button>
-          </div>
-        </div>
-
         {/* Register link */}
-        <div className="pt-2 text-center text-sm">
+        <div className="pt-4 border-t border-slate-200 dark:border-slate-700 text-center text-sm">
           <span className="text-slate-600 dark:text-slate-400">{t('newResident')} </span>
           <button
             onClick={() => navigate('/register')}

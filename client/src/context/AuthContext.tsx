@@ -75,35 +75,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = async (allDevices = false) => {
     const currentToken = token;
-    // Clear storage immediately so stale tokens/users are not retained
+    // 1. Clear all storage immediately so no stale tokens/users are retained
     try {
       localStorage.removeItem('bensican_token');
       localStorage.removeItem('bensican_refresh_token');
       localStorage.removeItem('bensican_user');
+      sessionStorage.clear();
     } catch (e) {
       console.warn('Failed to clear storage:', e);
     }
 
+    // 2. Clear state in memory
     setToken(null);
     setUser(null);
 
-    try {
-      if (currentToken) {
-        await fetch('/api/auth/logout', {
+    // 3. Fire backend logout in background without blocking the UI redirection
+    if (currentToken) {
+      try {
+        fetch('/api/auth/logout', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${currentToken}`
           },
           body: JSON.stringify({ allDevices })
+        }).catch((err) => {
+          console.log('Logout notice:', err);
         });
-      }
-    } catch (err) {
-      console.log('Logout notice:', err);
-    } finally {
-      // Direct cleanly to login / sign up page for any account
-      window.location.href = '/login';
+      } catch {}
     }
+
+    // 4. Immediately and unconditionally redirect to /login
+    window.location.replace('/login');
   };
 
   const updateUser = (updatedFields: Partial<User>) => {
