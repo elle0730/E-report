@@ -727,9 +727,9 @@ export const translations: Translations = {
     il: 'Password'
   },
   enterEmail: {
-    en: 'Enter your email address',
-    tl: 'Ilagay ang inyong email',
-    il: 'Ikabil ti email-yo'
+    en: 'e.g. resident@gmail.com',
+    tl: 'hal. resident@gmail.com',
+    il: 'kas pangarigan: resident@gmail.com'
   },
   enterPassword: {
     en: 'Enter your password',

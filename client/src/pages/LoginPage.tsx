@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Lock, Mail, Eye, EyeOff, ShieldCheck, KeyRound,
@@ -33,6 +33,17 @@ export const LoginPage: React.FC = () => {
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState<boolean>(false);
   const [forgotEmail, setForgotEmail] = useState<string>('');
   const [forgotSuccessMsg, setForgotSuccessMsg] = useState<string>('');
+
+  // Clear inputs on mount to prevent browser password managers from pre-filling admin credentials
+  useEffect(() => {
+    setEmail('');
+    setPassword('');
+    const timer = setTimeout(() => {
+      setEmail('');
+      setPassword('');
+    }, 150);
+    return () => clearTimeout(timer);
+  }, []);
 
   const loadCaptcha = async () => {
     try {
@@ -216,19 +227,40 @@ export const LoginPage: React.FC = () => {
             </button>
           </form>
         ) : (
-          <form onSubmit={handleLoginSubmit} className="space-y-4">
+          <form onSubmit={handleLoginSubmit} className="space-y-4" autoComplete="off">
+            {/* Decoy hidden inputs to divert Chrome/Edge autofill away from citizen inputs */}
+            <input
+              type="text"
+              name="bensican_fake_username"
+              tabIndex={-1}
+              aria-hidden="true"
+              style={{ display: 'none', position: 'absolute', opacity: 0, pointerEvents: 'none' }}
+              autoComplete="off"
+            />
+            <input
+              type="password"
+              name="bensican_fake_password"
+              tabIndex={-1}
+              aria-hidden="true"
+              style={{ display: 'none', position: 'absolute', opacity: 0, pointerEvents: 'none' }}
+              autoComplete="new-password"
+            />
+
             <div>
               <label className="block text-base font-bold text-slate-900 dark:text-white mb-1">
                 {t('emailAddress')}
               </label>
               <div className="relative">
                 <input
-                  type="email"
+                  type="text"
+                  inputMode="email"
+                  name="citizen_login_user"
+                  id="citizen_login_user"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   autoComplete="off"
                   placeholder={t('enterEmail')}
-                  className="w-full px-4 py-3 pl-11 rounded-xl border-2 border-slate-300 dark:border-slate-600 text-base font-medium focus:border-emerald-600 dark:bg-slate-900"
+                  className="w-full px-4 py-3 pl-11 rounded-xl border-2 border-slate-300 dark:border-slate-600 text-base font-medium focus:border-emerald-600 dark:bg-slate-900 bg-white"
                   required
                 />
                 <Mail className="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5" />
@@ -242,11 +274,13 @@ export const LoginPage: React.FC = () => {
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
+                  name="citizen_login_secret"
+                  id="citizen_login_secret"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="current-password"
+                  autoComplete="new-password"
                   placeholder={t('enterPassword')}
-                  className="w-full px-4 py-3 pl-11 pr-12 rounded-xl border-2 border-slate-300 dark:border-slate-600 text-base font-medium focus:border-emerald-600 dark:bg-slate-900"
+                  className="w-full px-4 py-3 pl-11 pr-12 rounded-xl border-2 border-slate-300 dark:border-slate-600 text-base font-medium focus:border-emerald-600 dark:bg-slate-900 bg-white"
                   required
                 />
                 <Lock className="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5" />
