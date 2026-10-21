@@ -254,10 +254,10 @@ export const UserProfilePage: React.FC = () => {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-16">
       {/* Consistent Header Pattern */}
       <PageHeader
-        title="My Profile & Accessibility"
-        subtitle="Manage your profile picture, personal details, assistive helper, and reading comfort."
+        title="My Profile Details"
+        subtitle="Manage your profile picture, personal contact information, and assistive helper."
         icon={<User className="w-8 h-8 text-emerald-400" />}
-        backTo={user?.role === 'resident' ? '/resident/dashboard' : '/admin/dashboard'}
+        backTo={user?.role === 'resident' ? '/' : '/admin/dashboard'}
         badge={
           <span className="px-3.5 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs font-bold flex items-center gap-1.5">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -361,84 +361,7 @@ export const UserProfilePage: React.FC = () => {
           </div>
         </div>
 
-        {/* 2. ACCESSIBILITY & DISPLAY PREFERENCES */}
-        <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 md:p-8 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-amber-100 dark:bg-amber-900/30 rounded-2xl text-amber-700 dark:text-amber-400">
-              <Sliders className="w-6 h-6" />
-            </div>
-            <div>
-              <h2 className="text-xl font-black text-slate-900 dark:text-white">Display & Reading Comfort</h2>
-              <p className="text-sm text-slate-500">Settings designed for elderly readers and ease of use.</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-            {/* Font scaling control */}
-            <div className="bg-slate-50 dark:bg-slate-750 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
-                Text Size Magnification ({Math.round(textScale * 100)}%)
-              </span>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={decreaseTextSize}
-                  className="px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl text-base font-bold shadow-xs hover:bg-slate-100 min-h-[48px] min-w-[48px]"
-                  title="Make text smaller"
-                >
-                  A−
-                </button>
-                <button
-                  type="button"
-                  onClick={resetTextSize}
-                  className="px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl text-sm font-semibold shadow-xs hover:bg-slate-100 min-h-[48px]"
-                  title="Reset to default text size"
-                >
-                  Standard (100%)
-                </button>
-                <button
-                  type="button"
-                  onClick={increaseTextSize}
-                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-lg font-black shadow-xs min-h-[48px] min-w-[48px]"
-                  title="Make text bigger"
-                >
-                  A+
-                </button>
-              </div>
-              <p className="text-xs text-slate-500">Scale all words on the screen up to 200% for comfortable reading.</p>
-            </div>
-
-            {/* Language Selection */}
-            <div className="bg-slate-50 dark:bg-slate-750 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block flex items-center gap-1">
-                <Globe className="w-3.5 h-3.5" /> Language / Lenggwahe
-              </span>
-              <div className="grid grid-cols-3 gap-2">
-                {[
-                  { code: 'en', label: 'English' },
-                  { code: 'tl', label: 'Tagalog' },
-                  { code: 'il', label: 'Ilokano' }
-                ].map(l => (
-                  <button
-                    key={l.code}
-                    type="button"
-                    onClick={() => setLanguage(l.code as any)}
-                    className={`py-3 px-2 rounded-xl text-xs font-bold border transition ${
-                      language === l.code
-                        ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
-                        : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-200 border-slate-300 dark:border-slate-600 hover:bg-slate-100 min-h-[48px]'
-                    }`}
-                  >
-                    {l.label}
-                  </button>
-                ))}
-              </div>
-              <p className="text-xs text-slate-500">Select language for menus, forms, voice dictation, and Bensi.</p>
-            </div>
-          </div>
-        </div>
-
-        {/* 3. PERSONAL INFORMATION FORM */}
+        {/* 2. PERSONAL INFORMATION FORM */}
         <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 md:p-8 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-2xl text-blue-700 dark:text-blue-400">
@@ -526,17 +449,31 @@ export const UserProfilePage: React.FC = () => {
             <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 space-y-2">
               <label className="block text-xs font-bold text-amber-900 dark:text-amber-200 uppercase flex items-center gap-1.5">
                 <HeartHandshake className="w-4 h-4 text-amber-600" />
-                "Bring a Helper" Mode (Designated Assistant Name)
+                {language === 'tl'
+                  ? '"May Kasamang Tumulong" (Pangalan ng Katulong)'
+                  : language === 'il'
+                  ? '"Adda Kadua a Timmulong" (Nagan ti Katulong)'
+                  : '"Bring a Helper" Mode (Designated Assistant Name)'}
               </label>
               <input
                 type="text"
                 value={helperName}
                 onChange={(e) => setHelperName(e.target.value)}
-                placeholder="Enter designated family member or helper name (optional)"
+                placeholder={
+                  language === 'tl'
+                    ? 'Ilagay ang pangalan ng kapamilya o katulong (opsyonal)'
+                    : language === 'il'
+                    ? 'Ikabil ti nagan ti kapamilia wenno katulong (opsyonal)'
+                    : 'Enter designated family member or helper name (optional)'
+                }
                 className="w-full px-4 py-3 rounded-xl border border-amber-300 dark:border-amber-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-base min-h-[48px]"
               />
               <p className="text-xs text-amber-800 dark:text-amber-300">
-                If someone in your family or a barangay worker assists you in preparing and filing reports, specify their name here.
+                {language === 'tl'
+                  ? 'Kung may kapamilya o kawani ng barangay na tumutulong sa inyo sa paggawa at pagpasa ng mga ulat, ilagay ang kanilang pangalan dito.'
+                  : language === 'il'
+                  ? 'No adda kapamilia wenno trabahador ti barangay a tumulong kadakayo nga agsagana ken agipatulod kadagiti report, ikabil ti naganda ditoy.'
+                  : 'If someone in your family or a barangay worker assists you in preparing and filing reports, specify their name here.'}
               </p>
             </div>
 

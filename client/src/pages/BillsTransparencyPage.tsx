@@ -40,13 +40,32 @@ export const BillsTransparencyPage: React.FC = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'Paid':
-        return <span className="px-3 py-1 bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-black text-xs rounded-full border border-emerald-300">✓ Paid</span>;
+        return (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black bg-emerald-100 text-emerald-900 border border-emerald-300 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span>Paid / Settled</span>
+          </span>
+        );
       case 'Unpaid':
-        return <span className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300 font-black text-xs rounded-full border border-blue-300">Pending Payment</span>;
+        return (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-950/70 dark:text-amber-300 dark:border-amber-700 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+            <span>Unpaid / Pending</span>
+          </span>
+        );
       case 'Overdue':
-        return <span className="px-3 py-1 bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300 font-black text-xs rounded-full border border-red-300">Overdue</span>;
+        return (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black bg-red-100 text-red-900 border border-red-300 dark:bg-red-950/70 dark:text-red-300 dark:border-red-700 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-red-500"></span>
+            <span>Overdue</span>
+          </span>
+        );
       default:
-        return <span>{status}</span>;
+        return (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-300 dark:bg-slate-800 dark:text-slate-200">
+            {status}
+          </span>
+        );
     }
   };
 

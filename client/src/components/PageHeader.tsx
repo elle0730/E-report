@@ -45,7 +45,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
       } else if (user.role === 'admin' || user.role === 'super_admin') {
         navigate('/admin/dashboard');
       } else {
-        navigate('/resident/dashboard');
+        navigate('/');
       }
     } else {
       navigate('/');

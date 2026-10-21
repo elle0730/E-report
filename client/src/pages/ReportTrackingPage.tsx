@@ -147,7 +147,7 @@ export const ReportTrackingPage: React.FC = () => {
         title={t('residentCheckReports')}
         subtitle="Track your reports by title, check real-time progress, review admin remarks, and converse with assigned officials."
         icon={<FileText className="w-8 h-8 text-emerald-400" />}
-        backTo={user ? (user.role === 'resident' ? '/resident/dashboard' : '/admin/dashboard') : '/'}
+        backTo={user ? (user.role === 'resident' ? '/' : '/admin/dashboard') : '/'}
         actions={
           <button
             type="button"

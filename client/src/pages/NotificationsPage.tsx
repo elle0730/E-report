@@ -78,7 +78,7 @@ export const NotificationsPage: React.FC = () => {
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-center space-x-3">
             <Link
-              to={user?.role === 'resident' ? '/resident/dashboard' : '/admin/dashboard'}
+              to={user?.role === 'resident' ? '/' : '/admin/dashboard'}
               className="p-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-white transition-colors flex items-center gap-1 focus:ring-2 focus:ring-emerald-400"
               title="Back to Dashboard"
             >

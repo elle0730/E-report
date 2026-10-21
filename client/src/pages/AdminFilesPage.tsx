@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Folder, FileText, Upload, Plus, Star, Search,
-  ChevronRight, Archive, ShieldCheck, Download, X, Eye, File
+  ChevronRight, Archive, ShieldCheck, Download, X, Eye, File, AlertTriangle
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.js';
 import { PageHeader } from '../components/PageHeader.js';
@@ -28,6 +28,7 @@ export const AdminFilesPage: React.FC = () => {
   const [showArchiveModal, setShowArchiveModal] = useState<boolean>(false);
   const [archiveItem, setArchiveItem] = useState<any>(null);
   const [archiveReason, setArchiveReason] = useState<string>('');
+  const [archiveError, setArchiveError] = useState<string>('');
 
   const token = localStorage.getItem('bensican_token');
 
@@ -115,22 +116,34 @@ export const AdminFilesPage: React.FC = () => {
   };
 
   const handleArchive = async () => {
-    if (!archiveItem || !archiveReason.trim()) return;
+    if (!archiveItem) return;
+    if (!archiveReason.trim()) {
+      setArchiveError('Reason is required: Please specify why this file is being archived.');
+      return;
+    }
     try {
+      setArchiveError('');
       const res = await fetch(`/api/files/${archiveItem.id}/archive`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ reason: archiveReason })
+        body: JSON.stringify({ reason: archiveReason.trim() })
       });
 
       if (res.ok) {
         setShowArchiveModal(false);
+        setArchiveReason('');
+        setArchiveError('');
         loadItems();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setArchiveError(data.error || 'Failed to archive file.');
       }
-    } catch (err) {}
+    } catch (err) {
+      setArchiveError('Network error while archiving file.');
+    }
   };
 
   return (
@@ -363,20 +376,63 @@ export const AdminFilesPage: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in">
           <div className="bg-white dark:bg-slate-900 border-4 border-red-500 rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4">
             <h3 className="text-xl font-black text-red-600">Soft-Archive: {archiveItem.name}</h3>
+            <p className="text-xs text-slate-500">
+              Note: Hard deletion is blocked. This item will be placed in the Archive center and can be restored by the Super Admin.
+            </p>
+
+            {archiveError && (
+              <div
+                role="alert"
+                className="p-3 rounded-xl bg-red-50 dark:bg-red-950/60 border-2 border-red-500 text-red-700 dark:text-red-300 text-xs font-bold flex items-start gap-2 animate-shake"
+              >
+                <AlertTriangle className="w-4 h-4 shrink-0 text-red-600 mt-0.5" />
+                <span>{archiveError}</span>
+              </div>
+            )}
+
             <div>
-              <label className="block text-xs font-bold mb-1">Reason *</label>
+              <label className="block text-xs font-bold mb-1 text-slate-800 dark:text-slate-200">
+                Reason for Archiving <span className="text-red-500">*</span>
+              </label>
               <textarea
                 rows={2}
                 value={archiveReason}
-                onChange={(e) => setArchiveReason(e.target.value)}
-                placeholder="Reason..."
-                className="w-full p-2.5 rounded-xl border text-sm dark:bg-slate-800"
+                onChange={(e) => {
+                  setArchiveReason(e.target.value);
+                  if (archiveError) setArchiveError('');
+                }}
+                placeholder="State reason for archiving..."
+                className={`w-full p-2.5 rounded-xl border text-sm dark:bg-slate-800 transition ${
+                  archiveError
+                    ? 'border-red-500 ring-2 ring-red-400 bg-red-50/30'
+                    : 'border-slate-300 dark:border-slate-700'
+                }`}
                 required
               />
+              {archiveError && (
+                <p className="text-[11px] text-red-600 font-semibold mt-1">
+                  * Please provide a reason to confirm archiving.
+                </p>
+              )}
             </div>
             <div className="flex justify-end gap-2 pt-2">
-              <button type="button" onClick={() => setShowArchiveModal(false)} className="px-4 py-2 bg-slate-100 rounded-xl text-xs font-bold">Cancel</button>
-              <button type="button" onClick={handleArchive} className="px-5 py-2 bg-red-600 text-white rounded-xl text-xs font-bold">Archive</button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowArchiveModal(false);
+                  setArchiveError('');
+                }}
+                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 rounded-xl text-xs font-bold transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleArchive}
+                className="px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition"
+              >
+                Confirm Soft-Archive
+              </button>
             </div>
           </div>
         </div>

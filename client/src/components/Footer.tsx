@@ -3,7 +3,7 @@ import { Phone, MapPin, Clock, ShieldCheck, HeartHandshake, Building2, HelpCircl
 import { useAccessibility } from '../context/AccessibilityContext.js';
 
 export const Footer: React.FC = () => {
-  const { t } = useAccessibility();
+  const { t, language } = useAccessibility();
 
   return (
     <footer className="w-full bg-slate-900 text-slate-200 border-t-4 border-emerald-600 mt-16 py-12 transition-colors">
@@ -19,7 +19,11 @@ export const Footer: React.FC = () => {
               </div>
             </div>
             <p className="text-sm text-slate-300 leading-relaxed mb-4">
-              E-Report Barangay is the centralized digital governance and concern reporting portal dedicated to serving every resident of Barangay Bensican, with special design care for our elderly and non-tech-savvy community members.
+              {language === 'tl'
+                ? 'Ang E-Report Barangay ay ang sentralisadong digital na tanggapan at pag-uulat ng mga suliranin para sa bawat mamamayan ng Barangay Bensican, lalo na para sa ating mga nakatatanda.'
+                : language === 'il'
+                ? 'Ti E-Report Barangay ket ti sentralisado a digital nga opisina ken pagipadamagan ti pakaseknan para iti amin nga umili ti Barangay Bensican, nangruna dagiti lallakay ken baket.'
+                : 'E-Report Barangay is the centralized digital governance and concern reporting portal dedicated to serving every resident of Barangay Bensican, with special design care for our elderly and non-tech-savvy community members.'}
             </p>
 
             <a
@@ -33,7 +37,9 @@ export const Footer: React.FC = () => {
 
           {/* Col 2: Hall Location, Hours & Emergency Contacts */}
           <div className="space-y-3">
-            <h4 className="text-lg font-bold text-white border-b border-slate-700 pb-2">Barangay Hall Information</h4>
+            <h4 className="text-lg font-bold text-white border-b border-slate-700 pb-2">
+              {t('barangayHallInfo')}
+            </h4>
             <div className="flex items-start gap-2.5 text-sm text-slate-300">
               <MapPin className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
               <span>{t('barangayAddress')} 2447</span>
@@ -50,31 +56,33 @@ export const Footer: React.FC = () => {
 
           {/* Col 3: SDG Commitments & Data Privacy Act */}
           <div className="space-y-3">
-            <h4 className="text-lg font-bold text-white border-b border-slate-700 pb-2">Public Trust & Standards</h4>
+            <h4 className="text-lg font-bold text-white border-b border-slate-700 pb-2">
+              {t('publicTrustStandards')}
+            </h4>
             <div className="grid grid-cols-3 gap-2 text-center text-xs font-bold">
               <div className="bg-slate-800 p-2.5 rounded-lg border border-slate-700 text-amber-300">
                 <ShieldCheck className="w-5 h-5 mx-auto mb-1 text-emerald-400" />
-                SDG 16<br /><span className="text-[10px] text-slate-300 font-normal">Peace & Justice</span>
+                SDG 16<br /><span className="text-[10px] text-slate-300 font-normal">{t('sdg16Title')}</span>
               </div>
               <div className="bg-slate-800 p-2.5 rounded-lg border border-slate-700 text-amber-300">
                 <Building2 className="w-5 h-5 mx-auto mb-1 text-emerald-400" />
-                SDG 11<br /><span className="text-[10px] text-slate-300 font-normal">Safe Community</span>
+                SDG 11<br /><span className="text-[10px] text-slate-300 font-normal">{t('sdg11Title')}</span>
               </div>
               <div className="bg-slate-800 p-2.5 rounded-lg border border-slate-700 text-amber-300">
                 <HeartHandshake className="w-5 h-5 mx-auto mb-1 text-emerald-400" />
-                SDG 9<br /><span className="text-[10px] text-slate-300 font-normal">Innovation</span>
+                SDG 9<br /><span className="text-[10px] text-slate-300 font-normal">{t('sdg9Title')}</span>
               </div>
             </div>
 
             <div className="bg-slate-800/80 p-3 rounded-lg border border-slate-700 text-xs text-slate-300 leading-relaxed">
-              <strong className="text-emerald-400 block mb-1">Philippine Data Privacy Act (RA 10173)</strong>
+              <strong className="text-emerald-400 block mb-1">{t('dataPrivacyActTitle')}</strong>
               {t('confidentialityNotice')}
             </div>
           </div>
         </div>
 
         <div className="border-t border-slate-800 mt-8 pt-6 text-center text-xs text-slate-400">
-          © 2026 Barangay Bensican, San Nicolas, Pangasinan. Republic of the Philippines. All rights reserved.
+          {t('footerCopyright')}
         </div>
       </div>
     </footer>

@@ -12,34 +12,24 @@ export const RegisterWizardPage: React.FC = () => {
   const { t, language } = useAccessibility();
   const { user, login } = useAuth();
 
-  // Load wizard draft from localStorage
-  const [step, setStep] = useState<number>(() => {
-    const savedStep = localStorage.getItem('bensican_reg_step');
-    return savedStep ? parseInt(savedStep, 10) : 1;
-  });
+  // Wizard step state starts fresh at step 1
+  const [step, setStep] = useState<number>(1);
 
-  const [formData, setFormData] = useState(() => {
-    const saved = localStorage.getItem('bensican_reg_data');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {}
-    }
-    return {
-      fullName: '',
-      email: '',
-      password: '',
-      birthday: '',
-      contactNumber: '',
-      houseNumber: '',
-      street: '',
-      barangay: 'Bensican',
-      residencyLength: '',
-      validIdUrl: '',
-      selfieUrl: '',
-      helperName: '',
-      agreePrivacyPolicy: false
-    };
+  // Form data starts completely clean and empty (no unwanted default pre-fill)
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    password: '',
+    birthday: '',
+    contactNumber: '',
+    houseNumber: '',
+    street: '',
+    barangay: 'Bensican',
+    residencyLength: '',
+    validIdUrl: '',
+    selfieUrl: '',
+    helperName: '',
+    agreePrivacyPolicy: false
   });
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -47,22 +37,13 @@ export const RegisterWizardPage: React.FC = () => {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [createdUserId, setCreatedUserId] = useState<string>('');
 
-  // If already authenticated and not viewing registration completion, redirect to dashboard
+  // Clear any stale cached registration data on mount
   useEffect(() => {
-    if (user && !isSuccess) {
-      if (user.role === 'super_admin' || user.role === 'admin') {
-        navigate('/admin/dashboard', { replace: true });
-      } else {
-        navigate('/resident/dashboard', { replace: true });
-      }
-    }
-  }, [user, isSuccess, navigate]);
-
-  // Autosave progress to localStorage
-  useEffect(() => {
-    localStorage.setItem('bensican_reg_data', JSON.stringify(formData));
-    localStorage.setItem('bensican_reg_step', step.toString());
-  }, [formData, step]);
+    try {
+      localStorage.removeItem('bensican_reg_data');
+      localStorage.removeItem('bensican_reg_step');
+    } catch {}
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target as any;
@@ -173,9 +154,7 @@ export const RegisterWizardPage: React.FC = () => {
 
       const data = await res.json();
       if (res.ok) {
-        if (data.token && data.user) {
-          login(data.token, data.user, data.refreshToken);
-        }
+        // Do NOT auto-login after registration — user must sign in manually
         setIsSuccess(true);
         setCreatedUserId(data.userId);
         // Clear wizard draft
@@ -211,15 +190,15 @@ export const RegisterWizardPage: React.FC = () => {
           </div>
 
           <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed">
-            Need urgent help or want to follow up in person? Call our hotline at <strong>0917-555-BENSI</strong> or drop by the Barangay Hall during office hours.
+            {t('needUrgentHelpRegister')}
           </p>
 
           <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center">
             <button
-              onClick={() => navigate('/resident/dashboard', { replace: true })}
+              onClick={() => navigate('/', { replace: true })}
               className="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-base shadow transition min-h-[48px]"
             >
-              Go to Resident Dashboard
+              Return to Home Portal
             </button>
           </div>
         </div>
@@ -228,7 +207,26 @@ export const RegisterWizardPage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4 animate-fade-in space-y-8">
+    <div className="max-w-3xl mx-auto py-8 px-4 animate-fade-in space-y-6">
+      {/* Top Back Navigation Button */}
+      <div className="flex items-center justify-between">
+        <button
+          type="button"
+          onClick={() => (step > 1 ? handlePrev() : navigate('/'))}
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white text-sm font-bold transition min-h-[44px] shadow-xs"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>{t('back')}</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate('/login')}
+          className="text-xs font-bold text-emerald-700 dark:text-emerald-400 hover:underline"
+        >
+          Already registered? Sign in
+        </button>
+      </div>
+
       {/* Title & Progress Header */}
       <div className="text-center space-y-2">
         <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
@@ -286,6 +284,7 @@ export const RegisterWizardPage: React.FC = () => {
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
+                  autoComplete="off"
                   placeholder="Enter your full legal name"
                   className="w-full px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-slate-600 text-base font-medium focus:border-emerald-600 dark:bg-slate-900"
                   required
@@ -302,6 +301,7 @@ export const RegisterWizardPage: React.FC = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
+                    autoComplete="off"
                     placeholder="Enter your email address"
                     className="w-full px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-slate-600 text-base font-medium focus:border-emerald-600 dark:bg-slate-900"
                     required
@@ -317,6 +317,7 @@ export const RegisterWizardPage: React.FC = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
+                    autoComplete="new-password"
                     placeholder="At least 6 characters"
                     className="w-full px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-slate-600 text-base font-medium focus:border-emerald-600 dark:bg-slate-900"
                     required
@@ -532,17 +533,23 @@ export const RegisterWizardPage: React.FC = () => {
             <div className="p-4 bg-emerald-50 dark:bg-emerald-950/40 rounded-2xl border border-emerald-200 dark:border-emerald-800 space-y-2">
               <label className="block text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <HeartHandshake className="w-5 h-5 text-emerald-600" />
-                <span>{language === 'tl' ? 'Pangalan ng Tumulong (Opsyonal)' : 'Bring a Helper (Optional)'}</span>
+                <span>{language === 'tl' ? 'Pangalan ng Tumulong (Opsyonal)' : language === 'il' ? 'Nagan ti Timmulong (Opsyonal)' : 'Bring a Helper (Optional)'}</span>
               </label>
               <input
                 type="text"
                 name="helperName"
                 value={formData.helperName}
                 onChange={handleChange}
-                placeholder="Enter helper or assistant name (optional)"
+                placeholder={language === 'tl' ? 'Ilagay ang pangalan ng tumulong (opsyonal)' : language === 'il' ? 'Ikabil ti nagan ti timmulong (opsyonal)' : 'Enter helper or assistant name (optional)'}
                 className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 text-base dark:bg-slate-900"
               />
-              <p className="text-xs text-slate-500">Optional: Enter helper name if an assistant or family member helped you register.</p>
+              <p className="text-xs text-slate-500">
+                {language === 'tl'
+                  ? 'Opsyonal: Ilagay ang pangalan kung may kapamilya o kawani na tumulong sa inyo magpatala.'
+                  : language === 'il'
+                  ? 'Opsyonal: Ikabil ti nagan no adda kapamilia wenno opisial a timmulong kadakayo nga agparehistro.'
+                  : 'Optional: Enter helper name if an assistant or family member helped you register.'}
+              </p>
             </div>
 
             {/* Data Privacy Consent (RA 10173) */}
@@ -578,10 +585,11 @@ export const RegisterWizardPage: React.FC = () => {
           ) : (
             <button
               type="button"
-              onClick={() => navigate('/login')}
-              className="text-sm font-bold text-emerald-700 dark:text-emerald-400 hover:underline"
+              onClick={() => (window.history.length > 1 ? navigate(-1) : navigate('/'))}
+              className="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold rounded-xl text-base flex items-center gap-2 transition min-h-[48px]"
             >
-              Already registered? Sign in
+              <ArrowLeft className="w-5 h-5" />
+              <span>{t('back')}</span>
             </button>
           )}
 

@@ -229,8 +229,8 @@ export function seed() {
     INSERT INTO staff_presence (user_id, is_online, is_available, last_heartbeat)
     VALUES (?, ?, ?, ?)
   `);
-  insertPresence.run(superAdminId, 1, 1, now);
-  insertPresence.run(adminId, 1, 1, now);
+  insertPresence.run(superAdminId, 1, 0, now);
+  insertPresence.run(adminId, 1, 0, now);
 
   // 3. Categories
   const categories = [

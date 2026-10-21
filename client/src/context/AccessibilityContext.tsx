@@ -28,22 +28,38 @@ interface AccessibilityContextType {
 const AccessibilityContext = createContext<AccessibilityContextType | undefined>(undefined);
 
 export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Load preferences from localStorage
+  // Load preferences from localStorage safely
   const [language, setLanguageState] = useState<Language>(() => {
-    return (localStorage.getItem('bensican_lang') as Language) || 'en';
+    try {
+      return (localStorage.getItem('bensican_lang') as Language) || 'en';
+    } catch {
+      return 'en';
+    }
   });
 
   const [textScale, setTextScale] = useState<number>(() => {
-    const saved = localStorage.getItem('bensican_text_scale');
-    return saved ? parseFloat(saved) : 1.0;
+    try {
+      const saved = localStorage.getItem('bensican_text_scale');
+      return saved ? parseFloat(saved) : 1.0;
+    } catch {
+      return 1.0;
+    }
   });
 
   const [highContrast, setHighContrast] = useState<boolean>(() => {
-    return localStorage.getItem('bensican_contrast') === 'high';
+    try {
+      return localStorage.getItem('bensican_contrast') === 'high';
+    } catch {
+      return false;
+    }
   });
 
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    return (localStorage.getItem('bensican_theme') as 'light' | 'dark') || 'light';
+    try {
+      return (localStorage.getItem('bensican_theme') as 'light' | 'dark') || 'light';
+    } catch {
+      return 'light';
+    }
   });
 
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
@@ -51,7 +67,11 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
   const [recognitionInstance, setRecognitionInstance] = useState<any>(null);
 
   const [tutorialOpen, setTutorialOpen] = useState<boolean>(() => {
-    return localStorage.getItem('bensican_tutorial_seen') !== 'true';
+    try {
+      return localStorage.getItem('bensican_tutorial_seen') !== 'true';
+    } catch {
+      return false;
+    }
   });
 
   const speechSupported = typeof window !== 'undefined' && 'speechSynthesis' in window;

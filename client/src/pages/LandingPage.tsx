@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import {
   FileText, ShieldCheck, Clock, Users, ArrowRight, Volume2,
   Phone, MapPin, CheckCircle, Award, HeartHandshake, Building2,
-  Calendar, AlertCircle
+  Calendar, AlertCircle, Search, Megaphone, FileSpreadsheet
 } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext.js';
 import { useAuth } from '../context/AuthContext.js';
+import { getLocalizedAnnouncement } from '../utils/translations.js';
 
 export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
@@ -83,7 +84,113 @@ export const LandingPage: React.FC = () => {
           </div>
         </section>
 
-        {/* 2. How It Works - 3 Picture Steps */}
+        {/* 2. Core Resident Public Services (Direct One-Click Access) */}
+        <section className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+              {language === 'tl' ? 'Pangunahing Serbisyong Pambarangay' : language === 'il' ? 'Kangrunaan a Serbisio ti Barangay' : 'Primary Barangay Services'}
+            </h2>
+            <span className="text-xs text-slate-500 font-semibold hidden sm:inline">
+              Barangay Bensican 24/7 Digital Desk
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Card 1: Send a Report */}
+            <button
+              type="button"
+              onClick={() => navigate('/resident/report')}
+              className="p-5 bg-white dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-slate-750 border-2 border-emerald-400 dark:border-emerald-700/80 rounded-2xl shadow-xs hover:shadow-md text-left flex flex-col justify-between transition group min-h-[170px]"
+            >
+              <div className="space-y-2">
+                <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 flex items-center justify-center border border-emerald-300 dark:border-emerald-700 group-hover:scale-105 transition-transform">
+                  <FileText className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-black text-slate-900 dark:text-white leading-snug">
+                  {t('residentSendReport')}
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-2">
+                  {t('residentSendReportDesc')}
+                </p>
+              </div>
+              <div className="pt-3 flex items-center gap-1.5 text-xs font-black text-emerald-700 dark:text-emerald-400">
+                <span>{language === 'tl' ? 'Mag-ulat Ngayon' : language === 'il' ? 'Ipadamag Ita' : 'Send Report'}</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </button>
+
+            {/* Card 2: Track / Check Reports */}
+            <button
+              type="button"
+              onClick={() => navigate('/track')}
+              className="p-5 bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-750 border-2 border-blue-400 dark:border-blue-700/80 rounded-2xl shadow-xs hover:shadow-md text-left flex flex-col justify-between transition group min-h-[170px]"
+            >
+              <div className="space-y-2">
+                <div className="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 flex items-center justify-center border border-blue-300 dark:border-blue-700 group-hover:scale-105 transition-transform">
+                  <Search className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-black text-slate-900 dark:text-white leading-snug">
+                  {t('residentCheckReports')}
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-2">
+                  {t('residentCheckReportsDesc')}
+                </p>
+              </div>
+              <div className="pt-3 flex items-center gap-1.5 text-xs font-black text-blue-700 dark:text-blue-400">
+                <span>{language === 'tl' ? 'Sundan ang Ulat' : language === 'il' ? 'Bantayan ti Report' : 'Track Status'}</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </button>
+
+            {/* Card 3: Announcements */}
+            <button
+              type="button"
+              onClick={() => navigate('/announcements')}
+              className="p-5 bg-white dark:bg-slate-800 hover:bg-amber-50 dark:hover:bg-slate-750 border-2 border-amber-400 dark:border-amber-700/80 rounded-2xl shadow-xs hover:shadow-md text-left flex flex-col justify-between transition group min-h-[170px]"
+            >
+              <div className="space-y-2">
+                <div className="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 flex items-center justify-center border border-amber-300 dark:border-amber-700 group-hover:scale-105 transition-transform">
+                  <Megaphone className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-black text-slate-900 dark:text-white leading-snug">
+                  {t('residentAnnouncements')}
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-2">
+                  {t('residentAnnouncementsDesc')}
+                </p>
+              </div>
+              <div className="pt-3 flex items-center gap-1.5 text-xs font-black text-amber-700 dark:text-amber-400">
+                <span>{language === 'tl' ? 'Tingnan Lahat' : language === 'il' ? 'Kitaen Amin' : 'View Notices'}</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </button>
+
+            {/* Card 4: Bills Transparency */}
+            <button
+              type="button"
+              onClick={() => navigate('/bills')}
+              className="p-5 bg-white dark:bg-slate-800 hover:bg-purple-50 dark:hover:bg-slate-750 border-2 border-purple-400 dark:border-purple-700/80 rounded-2xl shadow-xs hover:shadow-md text-left flex flex-col justify-between transition group min-h-[170px]"
+            >
+              <div className="space-y-2">
+                <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 flex items-center justify-center border border-purple-300 dark:border-purple-700 group-hover:scale-105 transition-transform">
+                  <FileSpreadsheet className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-black text-slate-900 dark:text-white leading-snug">
+                  {t('billsTransparencyTitle')}
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-2">
+                  {t('billsTransparencySub')}
+                </p>
+              </div>
+              <div className="pt-3 flex items-center gap-1.5 text-xs font-black text-purple-700 dark:text-purple-400">
+                <span>{language === 'tl' ? 'Tingnan Pananalapi' : language === 'il' ? 'Kitaen ti Pinansia' : 'View Finances'}</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </button>
+          </div>
+        </section>
+
+        {/* 3. How It Works - 3 Picture Steps */}
         <section className="space-y-6">
           <div className="text-center max-w-2xl mx-auto space-y-1.5">
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
@@ -160,37 +267,40 @@ export const LandingPage: React.FC = () => {
                   <AlertCircle className="w-5 h-5" />
                 </span>
                 <h3 className="text-xl font-black text-slate-900 dark:text-white">
-                  Urgent Community Notice
+                  {t('urgentNoticeTitle')}
                 </h3>
               </div>
               <button
                 onClick={() => navigate('/announcements')}
                 className="text-xs sm:text-sm font-bold text-emerald-700 dark:text-emerald-400 hover:underline"
               >
-                View all announcements →
+                {t('viewAllAnnouncements')}
               </button>
             </div>
 
             <div className="space-y-3">
-              {announcements.slice(0, 2).map((a) => (
-                <div key={a.id} className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-amber-200 dark:border-slate-700 space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <h4 className="font-bold text-base text-slate-900 dark:text-white">{a.title}</h4>
-                    <span className="text-[11px] px-2.5 py-0.5 bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-bold rounded-full shrink-0">
-                      {a.target_group}
-                    </span>
+              {announcements.slice(0, 2).map((orig) => {
+                const a = getLocalizedAnnouncement(orig, language);
+                return (
+                  <div key={a.id} className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-amber-200 dark:border-slate-700 space-y-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <h4 className="font-bold text-base text-slate-900 dark:text-white">{a.title}</h4>
+                      <span className="text-[11px] px-2.5 py-0.5 bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-bold rounded-full shrink-0">
+                        {a.target_group}
+                      </span>
+                    </div>
+                    <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{a.content}</p>
+                    <div className="pt-1 flex justify-end">
+                      <button
+                        onClick={() => speak(`${a.title}. ${a.content}`)}
+                        className="text-xs font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1 hover:underline"
+                      >
+                        <Volume2 className="w-3.5 h-3.5" /> {t('listenAnnouncement')}
+                      </button>
+                    </div>
                   </div>
-                  <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{a.content}</p>
-                  <div className="pt-1 flex justify-end">
-                    <button
-                      onClick={() => speak(`${a.title}. ${a.content}`)}
-                      className="text-xs font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1 hover:underline"
-                    >
-                      <Volume2 className="w-3.5 h-3.5" /> Listen to announcement
-                    </button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </section>
         )}

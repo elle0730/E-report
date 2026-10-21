@@ -191,7 +191,15 @@ export const AdminSubpoenaPage: React.FC = () => {
                     <select
                       value={sub.status}
                       onChange={(e) => handleUpdateStatus(sub.id, e.target.value)}
-                      className="px-2 py-1 rounded-lg border text-xs font-bold dark:bg-slate-900"
+                      className={`px-3 py-1.5 rounded-full border text-xs font-black shadow-2xs cursor-pointer ${
+                        sub.status === 'Served' || sub.status === 'Attended'
+                          ? 'bg-emerald-100 text-emerald-900 border-emerald-300 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700'
+                          : sub.status === 'Issued'
+                          ? 'bg-blue-100 text-blue-900 border-blue-300 dark:bg-blue-950/70 dark:text-blue-300 dark:border-blue-700'
+                          : sub.status === 'Missed'
+                          ? 'bg-red-100 text-red-900 border-red-300 dark:bg-red-950/70 dark:text-red-300 dark:border-red-700'
+                          : 'bg-amber-100 text-amber-900 border-amber-300 dark:bg-amber-950/70 dark:text-amber-300 dark:border-amber-700'
+                      }`}
                     >
                       <option value="Draft">Draft</option>
                       <option value="Issued">Issued</option>

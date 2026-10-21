@@ -177,12 +177,18 @@ export const AdminHearingSchedulerPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold border ${
-                    h.status === 'Scheduled' ? 'bg-amber-100 text-amber-800 border-amber-300' :
-                    h.status === 'Completed' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' :
-                    'bg-slate-100 text-slate-800 border-slate-300'
+                  <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black border shadow-2xs ${
+                    h.status === 'Scheduled'
+                      ? 'bg-amber-100 text-amber-900 border-amber-300 dark:bg-amber-950/70 dark:text-amber-300 dark:border-amber-700'
+                      : h.status === 'Completed'
+                      ? 'bg-emerald-100 text-emerald-900 border-emerald-300 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700'
+                      : 'bg-slate-100 text-slate-900 border-slate-300 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'
                   }`}>
-                    {h.status}
+                    <span className={`w-2 h-2 rounded-full ${
+                      h.status === 'Scheduled' ? 'bg-amber-500 animate-pulse' :
+                      h.status === 'Completed' ? 'bg-emerald-500' : 'bg-slate-400'
+                    }`}></span>
+                    <span>{h.status}</span>
                   </span>
                 </div>
               </div>

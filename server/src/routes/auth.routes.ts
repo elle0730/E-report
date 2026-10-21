@@ -290,12 +290,12 @@ router.post('/login', async (req: Request, res: Response) => {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `).run(sessionId, user.id, token, refreshToken, clientIp, req.headers['user-agent'] || 'Unknown', expiresAt, new Date().toISOString());
 
-    // Update staff presence online
+    // Update staff presence online (preserve previous availability setting, default to 0 / away)
     if (user.role === 'admin' || user.role === 'super_admin') {
       db.prepare(`
         INSERT INTO staff_presence (user_id, is_online, is_available, last_heartbeat)
-        VALUES (?, 1, 1, ?)
-        ON CONFLICT(user_id) DO UPDATE SET is_online = 1, is_available = 1, last_heartbeat = excluded.last_heartbeat
+        VALUES (?, 1, 0, ?)
+        ON CONFLICT(user_id) DO UPDATE SET is_online = 1, last_heartbeat = excluded.last_heartbeat
       `).run(user.id, new Date().toISOString());
     }
 
@@ -366,12 +366,12 @@ router.post('/verify-2fa', async (req: Request, res: Response) => {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `).run(sessionId, user.id, token, refreshToken, clientIp, req.headers['user-agent'] || 'Unknown', expiresAt, new Date().toISOString());
 
-    // Update staff presence online
+    // Update staff presence online (preserve previous availability setting, default to 0 / away)
     if (user.role === 'admin' || user.role === 'super_admin') {
       db.prepare(`
         INSERT INTO staff_presence (user_id, is_online, is_available, last_heartbeat)
-        VALUES (?, 1, 1, ?)
-        ON CONFLICT(user_id) DO UPDATE SET is_online = 1, is_available = 1, last_heartbeat = excluded.last_heartbeat
+        VALUES (?, 1, 0, ?)
+        ON CONFLICT(user_id) DO UPDATE SET is_online = 1, last_heartbeat = excluded.last_heartbeat
       `).run(user.id, new Date().toISOString());
     }
 

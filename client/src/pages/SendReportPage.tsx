@@ -12,7 +12,7 @@ import { PageHeader } from '../components/PageHeader.js';
 
 export const SendReportPage: React.FC = () => {
   const navigate = useNavigate();
-  const { t, listen, stopListening, isListening } = useAccessibility();
+  const { t, language, listen, stopListening, isListening } = useAccessibility();
   const { user } = useAuth();
 
   const [categories, setCategories] = useState<any[]>([]);
@@ -97,13 +97,25 @@ export const SendReportPage: React.FC = () => {
     setErrorMessage('');
 
     if (!selectedCategory || !title.trim() || !locationDetails.trim()) {
-      setErrorMessage('Please select a category, enter a title, and provide the exact location.');
+      setErrorMessage(
+        language === 'tl'
+          ? 'Mangyaring pumili ng kategorya, maglagay ng pamagat, at ilagay ang eksaktong lokasyon.'
+          : language === 'il'
+          ? 'Masapul a mangpili ti kategoria, ikabil ti titulo, ken ti eksakto a disso.'
+          : 'Please select a category, enter a title, and provide the exact location.'
+      );
       return;
     }
 
     // Photo/Video only mode: Description is optional ONLY if attachments exist
     if (!description.trim() && attachments.length === 0) {
-      setErrorMessage('Please either write a description or attach at least one photo/video.');
+      setErrorMessage(
+        language === 'tl'
+          ? 'Mangyaring maglagay ng detalye o maglakip ng kahit isang litrato o video bilang patunay.'
+          : language === 'il'
+          ? 'Masapul nga agsurat ti detalye wenno mangikabil ti uray maysa a retrato/video.'
+          : 'Please either write a description or attach at least one photo/video.'
+      );
       return;
     }
 
@@ -164,6 +176,49 @@ export const SendReportPage: React.FC = () => {
     }
   };
 
+  const getLocalizedCategory = (cat: any) => {
+    const translationsMap: Record<string, { name: { en: string; tl: string; il: string }; desc: { en: string; tl: string; il: string } }> = {
+      'cat-peace': {
+        name: { en: 'Peace and Order', tl: 'Kapayapaan at Kaayusan', il: 'Kappia ken Urnos' },
+        desc: { en: 'Disputes, disturbances, public safety, and curfew concerns', tl: 'Alitan, gulo, kaligtasan, at curfew sa komunidad', il: 'Riri, ariwawa, kinatalged, ken curfew' }
+      },
+      'cat-sanitation': {
+        name: { en: 'Sanitation & Cleanliness', tl: 'Kalinisan at Basura', il: 'Kinalinis ken Basura' },
+        desc: { en: 'Uncollected garbage, drainage clogs, and improper waste disposal', tl: 'Hindi nakolektang basura, baradong kanal, maruming paligid', il: 'Saan a naala a basura, barado a kanal, narugit a disso' }
+      },
+      'cat-infra': {
+        name: { en: 'Infrastructure & Roads', tl: 'Imprastraktura at Kalsada', il: 'Imprastraktura ken Dalan' },
+        desc: { en: 'Potholes, broken streetlights, broken canals, fallen tree branches', tl: 'Lubak sa kalsada, pundidong ilaw, sirang kanal, nabuwal na sanga', il: 'Bettel iti dalan, nadadael a silaw, narba a kanal, napukan a sanga' }
+      },
+      'cat-noise': {
+        name: { en: 'Noise Disturbance', tl: 'Ingay at Istorbo', il: 'Ariwawa ken Singa' },
+        desc: { en: 'Late-night videoke, loud mufflers, barking dogs, construction noise', tl: 'Videoke sa hatinggabi, maingay na tambutso, tahol ng aso', il: 'Videoke iti tengnga ti rabii, napigsa a muffler, taol ti aso' }
+      },
+      'cat-dispute': {
+        name: { en: 'Neighborhood & Boundary Dispute', tl: 'Alitan sa Lupa o Hangganan', il: 'Riri iti Daga wenno Pagbedngan' },
+        desc: { en: 'Property borders, fence disagreements, right of way disputes', tl: 'Bakod, hangganan ng lote, at right of way sa kapitbahay', il: 'Alad, beddeng ti daga, ken right of way iti kaarruba' }
+      },
+      'cat-health': {
+        name: { en: 'Health & Environment', tl: 'Kalusugan at Kapaligiran', il: 'Salun-at ken Aglawlaw' },
+        desc: { en: 'Dengue breeding sites, stagnant water, stray animal health risks', tl: 'Pamugaran ng lamok / dengue, maruming tubig, ligaw na hayop', il: 'Itlogan ti lamok ti dengue, naurnong a danum, agalla-alla nga ayup' }
+      },
+      'cat-other': {
+        name: { en: 'Other Barangay Concerns', tl: 'Iba Pang Sumbong o Ulat', il: 'Dadduma Pay a Pakaseknan' },
+        desc: { en: 'General community inquiries, certifications, lost items', tl: 'Pangkalahatang katanungan, sertipikasyon, nawawalang gamit', il: 'Sapasap a saludsod, sertipikasion, napukaw a banag' }
+      }
+    };
+
+    const found = translationsMap[cat.id];
+    if (found) {
+      const langKey = language as 'en' | 'tl' | 'il';
+      return {
+        name: found.name[langKey] || found.name.en || cat.name,
+        description: found.desc[langKey] || found.desc.en || cat.description
+      };
+    }
+    return { name: cat.name, description: cat.description };
+  };
+
   if (successData) {
     return (
       <div className="max-w-2xl mx-auto py-10 px-4 text-center animate-fade-in space-y-6">
@@ -200,7 +255,15 @@ export const SendReportPage: React.FC = () => {
               className="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold rounded-xl text-base flex items-center gap-2 transition min-h-[48px]"
             >
               <Copy className="w-5 h-5" />
-              <span>{copied ? 'Copied to Clipboard!' : t('copyNumber')}</span>
+              <span>
+                {copied
+                  ? language === 'tl'
+                    ? 'Nakopya sa Clipboard!'
+                    : language === 'il'
+                    ? 'Nakopia iti Clipboard!'
+                    : 'Copied to Clipboard!'
+                  : t('copyNumber')}
+              </span>
             </button>
 
             <button
@@ -217,15 +280,15 @@ export const SendReportPage: React.FC = () => {
               onClick={() => navigate(`/track/${successData.refNumber}`)}
               className="px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl text-lg shadow-lg flex items-center justify-center gap-2 transition min-h-[48px]"
             >
-              <span>Track This Report</span>
+              <span>{language === 'tl' ? 'Sundan ang Ulat na Ito' : language === 'il' ? 'Bantayan Daytoy a Report' : 'Track This Report'}</span>
               <ArrowRight className="w-5 h-5" />
             </button>
 
             <button
-              onClick={() => navigate('/resident')}
+              onClick={() => navigate('/')}
               className="px-6 py-3.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 font-bold text-base min-h-[48px]"
             >
-              Back to Home
+              {language === 'tl' ? 'Bumalik sa Tahanan' : language === 'il' ? 'Agsubli iti Tahanan' : 'Back to Home'}
             </button>
           </div>
         </div>
@@ -237,9 +300,15 @@ export const SendReportPage: React.FC = () => {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-16">
       <PageHeader
         title={t('residentSendReport')}
-        subtitle="Report community concerns, infrastructure issues, or disputes directly to Barangay Bensican."
+        subtitle={
+          language === 'tl'
+            ? 'Iulat ang mga problema sa komunidad, sira sa imprastraktura, o alitan nang direkta sa Barangay Bensican.'
+            : language === 'il'
+            ? 'Ipadamag dagiti pakaseknan ti komunidad, nadadael nga imprastraktura, wenno riri iti Barangay Bensican.'
+            : 'Report community concerns, infrastructure issues, or disputes directly to Barangay Bensican.'
+        }
         icon={<FileText className="w-8 h-8 text-emerald-400" />}
-        backTo="/resident/dashboard"
+        backTo="/"
       />
 
       <div className="max-w-3xl mx-auto py-6 px-4 space-y-6 animate-fade-in">
@@ -267,28 +336,31 @@ export const SendReportPage: React.FC = () => {
             {t('formCategory')} *
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`p-4 rounded-2xl border-3 text-left flex items-center gap-3 transition min-h-[58px] ${
-                  selectedCategory === cat.id
-                    ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/70 text-slate-900 dark:text-white font-black shadow-sm'
-                    : 'border-slate-200 dark:border-slate-700 hover:border-slate-400 text-slate-700 dark:text-slate-300 font-semibold'
-                }`}
-              >
-                <div className="p-2 bg-white dark:bg-slate-800 rounded-xl shadow-xs shrink-0">
-                  {getCategoryIcon(cat.icon)}
-                </div>
-                <div>
-                  <span className="block text-base leading-tight">{cat.name}</span>
-                  {cat.description && (
-                    <span className="text-xs text-slate-500 line-clamp-1">{cat.description}</span>
-                  )}
-                </div>
-              </button>
-            ))}
+            {categories.map((cat) => {
+              const loc = getLocalizedCategory(cat);
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`p-4 rounded-2xl border-3 text-left flex items-center gap-3 transition min-h-[58px] ${
+                    selectedCategory === cat.id
+                      ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/70 text-slate-900 dark:text-white font-black shadow-sm'
+                      : 'border-slate-200 dark:border-slate-700 hover:border-slate-400 text-slate-700 dark:text-slate-300 font-semibold'
+                  }`}
+                >
+                  <div className="p-2 bg-white dark:bg-slate-800 rounded-xl shadow-xs shrink-0">
+                    {getCategoryIcon(cat.icon)}
+                  </div>
+                  <div>
+                    <span className="block text-base leading-tight font-bold">{loc.name}</span>
+                    {loc.description && (
+                      <span className="text-xs text-slate-500 line-clamp-1">{loc.description}</span>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -338,7 +410,15 @@ export const SendReportPage: React.FC = () => {
               }`}
             >
               {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4 text-emerald-600" />}
-              <span>{isListening ? 'Stop Speaking' : t('speakMicrophone')}</span>
+              <span>
+                {isListening
+                  ? language === 'tl'
+                    ? 'Huminto sa Pagsasalita'
+                    : language === 'il'
+                    ? 'Agsardeng nga Agsao'
+                    : 'Stop Speaking'
+                  : t('speakMicrophone')}
+              </span>
             </button>
           </div>
 
@@ -350,7 +430,11 @@ export const SendReportPage: React.FC = () => {
             className="w-full px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-slate-600 text-base font-medium focus:border-emerald-600 dark:bg-slate-900"
           />
           <p className="text-xs text-slate-500">
-            Note: If you have difficulty typing, tap the microphone to talk or simply attach pictures below.
+            {language === 'tl'
+              ? 'Paunawa: Kung nahihirapang mag-type, pindutin ang mikropono upang magsalita o maglakip ng litrato sa ibaba.'
+              : language === 'il'
+              ? 'Pakaammo: No narigat ti agsurat, pinduten ti mikropono tapno agsao wenno mangikabil ti retrato iti baba.'
+              : 'Note: If you have difficulty typing, tap the microphone to talk or simply attach pictures below.'}
           </p>
         </div>
 
@@ -365,7 +449,11 @@ export const SendReportPage: React.FC = () => {
               <Camera className="w-6 h-6" />
             </div>
             <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-              Take a photo with your phone or select from your gallery
+              {language === 'tl'
+                ? 'Kumuha ng litrato gamit ang cellphone o pumili mula sa gallery'
+                : language === 'il'
+                ? 'Mangala ti retrato babaen ti cellphone wenno agpili iti gallery'
+                : 'Take a photo with your phone or select from your gallery'}
             </p>
 
             <input
@@ -411,7 +499,11 @@ export const SendReportPage: React.FC = () => {
             className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 text-base dark:bg-slate-800"
           />
           <p className="text-xs text-slate-500">
-            Optional: Name of daughter, grandson, neighbor, or barangay volunteer who helped you submit this.
+            {language === 'tl'
+              ? 'Opsyonal: Pangalan ng anak, apo, kapitbahay, o barangay volunteer na tumulong sa inyo.'
+              : language === 'il'
+              ? 'Opsyonal: Nagan ti anak, apo, kaarruba, wenno volunteer a timmulong kadakayo.'
+              : 'Optional: Name of daughter, grandson, neighbor, or barangay volunteer who helped you submit this.'}
           </p>
         </div>
 
@@ -436,7 +528,13 @@ export const SendReportPage: React.FC = () => {
             className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-400 text-white font-black rounded-2xl text-xl shadow-xl flex items-center justify-center gap-3 transition min-h-[56px]"
           >
             {isSubmitting ? (
-              <span>Sending Report...</span>
+              <span>
+                {language === 'tl'
+                  ? 'Ipinapadala ang Ulat...'
+                  : language === 'il'
+                  ? 'Ibaon ti Report...'
+                  : 'Sending Report...'}
+              </span>
             ) : (
               <>
                 <CheckCircle2 className="w-7 h-7" />

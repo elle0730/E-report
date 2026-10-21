@@ -27,6 +27,7 @@ export const AdminReportsPage: React.FC = () => {
   const [replyMessage, setReplyMessage] = useState<string>('');
   const [isAdminRequest, setIsAdminRequest] = useState<boolean>(false);
   const [archiveReason, setArchiveReason] = useState<string>('');
+  const [archiveError, setArchiveError] = useState<string>('');
 
   // Modals
   const [showManageModal, setShowManageModal] = useState<boolean>(false);
@@ -168,25 +169,36 @@ export const AdminReportsPage: React.FC = () => {
   };
 
   const handleArchiveReport = async () => {
-    if (!archiveReason.trim() || !selectedReport) return;
+    if (!selectedReport) return;
+    if (!archiveReason.trim()) {
+      setArchiveError('Reason is required: Please specify why this report is being archived.');
+      return;
+    }
 
     try {
+      setArchiveError('');
       const res = await fetch(`/api/reports/${selectedReport.id}/archive`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ reason: archiveReason })
+        body: JSON.stringify({ reason: archiveReason.trim() })
       });
 
       if (res.ok) {
         setShowArchiveModal(false);
         setShowManageModal(false);
+        setArchiveReason('');
+        setArchiveError('');
         loadReports();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setArchiveError(data.error || 'Failed to archive report.');
       }
     } catch (err) {
       console.error(err);
+      setArchiveError('Network error while archiving report.');
     }
   };
 
@@ -346,12 +358,17 @@ export const AdminReportsPage: React.FC = () => {
                     </span>
                   </td>
                   <td className="py-4 px-6">
-                    <span className={`px-3 py-1 rounded-full text-xs font-black border ${
-                      r.status === 'Pending' ? 'bg-amber-100 text-amber-800 border-amber-300' :
-                      r.status === 'In Progress' ? 'bg-blue-100 text-blue-800 border-blue-300' :
-                      'bg-emerald-100 text-emerald-800 border-emerald-300'
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black border shadow-2xs ${
+                      r.status === 'Pending' ? 'bg-amber-100 text-amber-900 border-amber-300 dark:bg-amber-950/70 dark:text-amber-300 dark:border-amber-700' :
+                      r.status === 'In Progress' ? 'bg-blue-100 text-blue-900 border-blue-300 dark:bg-blue-950/70 dark:text-blue-300 dark:border-blue-700' :
+                      'bg-emerald-100 text-emerald-900 border-emerald-300 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700'
                     }`}>
-                      {r.status}
+                      <span className={`w-2 h-2 rounded-full ${
+                        r.status === 'Pending' ? 'bg-amber-500 animate-pulse' :
+                        r.status === 'In Progress' ? 'bg-blue-500' :
+                        'bg-emerald-500'
+                      }`}></span>
+                      <span>{r.status}</span>
                     </span>
                   </td>
                   <td className="py-4 px-6 text-xs font-medium text-slate-600 dark:text-slate-400">
@@ -729,30 +746,57 @@ export const AdminReportsPage: React.FC = () => {
               Note: Hard deletion is blocked. This item will be placed in the Archive center and can be restored by the Super Admin.
             </p>
 
+            {archiveError && (
+              <div
+                role="alert"
+                className="p-3 rounded-xl bg-red-50 dark:bg-red-950/60 border-2 border-red-500 text-red-700 dark:text-red-300 text-xs font-bold flex items-start gap-2 animate-shake"
+              >
+                <AlertTriangle className="w-4 h-4 shrink-0 text-red-600 mt-0.5" />
+                <span>{archiveError}</span>
+              </div>
+            )}
+
             <div>
-              <label className="block text-xs font-bold mb-1">Reason for Archiving *</label>
+              <label className="block text-xs font-bold mb-1 text-slate-800 dark:text-slate-200">
+                Reason for Archiving <span className="text-red-500">*</span>
+              </label>
               <textarea
                 rows={3}
                 value={archiveReason}
-                onChange={(e) => setArchiveReason(e.target.value)}
+                onChange={(e) => {
+                  setArchiveReason(e.target.value);
+                  if (archiveError) setArchiveError('');
+                }}
                 placeholder="Explain why this report is being archived..."
-                className="w-full p-2.5 rounded-xl border text-sm dark:bg-slate-800"
+                className={`w-full p-2.5 rounded-xl border text-sm dark:bg-slate-800 transition ${
+                  archiveError
+                    ? 'border-red-500 ring-2 ring-red-400 bg-red-50/30'
+                    : 'border-slate-300 dark:border-slate-700'
+                }`}
                 required
               />
+              {archiveError && (
+                <p className="text-[11px] text-red-600 font-semibold mt-1">
+                  * Please fill in this field to proceed with archiving.
+                </p>
+              )}
             </div>
 
             <div className="flex justify-end gap-2 pt-2">
               <button
                 type="button"
-                onClick={() => setShowArchiveModal(false)}
-                className="px-4 py-2 bg-slate-100 rounded-xl font-bold text-sm"
+                onClick={() => {
+                  setShowArchiveModal(false);
+                  setArchiveError('');
+                }}
+                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl font-bold text-sm transition"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleArchiveReport}
-                className="px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-sm"
+                className="px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-sm shadow-sm transition"
               >
                 Confirm Soft-Archive
               </button>

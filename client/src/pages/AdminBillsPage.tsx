@@ -233,12 +233,21 @@ export const AdminBillsPage: React.FC = () => {
                     ₱{b.amount?.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                   </td>
                   <td className="py-4 px-6">
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-bold border ${
-                      b.status === 'Paid' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' :
-                      b.status === 'Unpaid' ? 'bg-blue-100 text-blue-800 border-blue-300' :
-                      'bg-red-100 text-red-800 border-red-300'
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black border shadow-2xs ${
+                      b.status === 'Paid'
+                        ? 'bg-emerald-100 text-emerald-900 border-emerald-300 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700'
+                        : b.status === 'Unpaid'
+                        ? 'bg-amber-100 text-amber-900 border-amber-300 dark:bg-amber-950/70 dark:text-amber-300 dark:border-amber-700'
+                        : 'bg-red-100 text-red-900 border-red-300 dark:bg-red-950/70 dark:text-red-300 dark:border-red-700'
                     }`}>
-                      {b.status}
+                      <span className={`w-2 h-2 rounded-full ${
+                        b.status === 'Paid'
+                          ? 'bg-emerald-500'
+                          : b.status === 'Unpaid'
+                          ? 'bg-amber-500 animate-pulse'
+                          : 'bg-red-500'
+                      }`}></span>
+                      <span>{b.status === 'Paid' ? 'Paid / Settled' : b.status === 'Unpaid' ? 'Unpaid / Pending' : 'Overdue'}</span>
                     </span>
                   </td>
                   <td className="py-4 px-6 text-right space-x-2">

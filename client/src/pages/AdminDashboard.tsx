@@ -26,7 +26,9 @@ export const AdminDashboard: React.FC = () => {
   });
 
   const [recentReports, setRecentReports] = useState<any[]>([]);
-  const [isStaffAvailable, setIsStaffAvailable] = useState<boolean>(true);
+  const [isStaffAvailable, setIsStaffAvailable] = useState<boolean>(() => {
+    return localStorage.getItem('bensican_staff_available') === 'true';
+  });
 
   const [selectedStatusCard, setSelectedStatusCard] = useState<{
     title: string;
@@ -59,7 +61,26 @@ export const AdminDashboard: React.FC = () => {
         if (data.reports) setRecentReports(data.reports.slice(0, 8));
       })
       .catch(() => {});
-  }, []);
+
+    // Sync saved staff availability status from database
+    if (user) {
+      fetch('/api/bensi/presence', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.staff && Array.isArray(data.staff)) {
+            const current = data.staff.find((s: any) => s.id === user.id);
+            if (current) {
+              const available = current.is_available === 1;
+              setIsStaffAvailable(available);
+              localStorage.setItem('bensican_staff_available', available.toString());
+            }
+          }
+        })
+        .catch(() => {});
+    }
+  }, [user]);
 
   const toggleAvailability = async () => {
     try {
@@ -72,7 +93,10 @@ export const AdminDashboard: React.FC = () => {
         },
         body: JSON.stringify({ isAvailable: next })
       });
-      if (res.ok) setIsStaffAvailable(next);
+      if (res.ok) {
+        setIsStaffAvailable(next);
+        localStorage.setItem('bensican_staff_available', next.toString());
+      }
     } catch (err) {}
   };
 
@@ -532,18 +556,6 @@ export const AdminDashboard: React.FC = () => {
             <h3 className="font-bold text-base text-slate-900 dark:text-white">{t('punchClockTitle')}</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               {t('punchClockDesc')}
-            </p>
-          </button>
-
-          {/* Operation 12: My Profile & Settings */}
-          <button
-            onClick={() => navigate('/profile')}
-            className="p-5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-750 rounded-2xl border-2 border-slate-300 dark:border-slate-700 text-left space-y-1.5 shadow-xs hover:shadow-md transition group"
-          >
-            <User className="w-6 h-6 text-slate-600 dark:text-slate-300 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">{t('profileSecurityTitle')}</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              {t('profileSecurityDesc')}
             </p>
           </button>
         </div>

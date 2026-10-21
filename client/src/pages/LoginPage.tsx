@@ -2,26 +2,15 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Lock, Mail, Eye, EyeOff, ShieldCheck, KeyRound,
-  AlertCircle, ArrowRight, UserCheck, Check
+  AlertCircle, ArrowRight, ArrowLeft, UserCheck, Check
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.js';
 import { useAccessibility } from '../context/AccessibilityContext.js';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const { user, login } = useAuth();
+  const { login } = useAuth();
   const { t } = useAccessibility();
-
-  // If already logged in, redirect directly to dashboard
-  React.useEffect(() => {
-    if (user) {
-      if (user.role === 'super_admin' || user.role === 'admin') {
-        navigate('/admin/dashboard', { replace: true });
-      } else {
-        navigate('/resident/dashboard', { replace: true });
-      }
-    }
-  }, [user, navigate]);
 
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -82,7 +71,7 @@ export const LoginPage: React.FC = () => {
           // Direct login
           login(data.token, data.user, data.refreshToken);
           if (data.user.role === 'super_admin' || data.user.role === 'admin') navigate('/admin/dashboard', { replace: true });
-          else navigate('/resident/dashboard', { replace: true });
+          else navigate('/', { replace: true });
         }
       } else {
         setErrorMessage(data.error || 'Failed to sign in.');
@@ -116,7 +105,7 @@ export const LoginPage: React.FC = () => {
       if (res.ok) {
         login(data.token, data.user, data.refreshToken);
         if (data.user.role === 'super_admin' || data.user.role === 'admin') navigate('/admin/dashboard', { replace: true });
-        else navigate('/resident/dashboard', { replace: true });
+        else navigate('/', { replace: true });
       } else {
         setErrorMessage(data.error || 'Invalid 2FA code.');
       }
@@ -145,7 +134,7 @@ export const LoginPage: React.FC = () => {
       const data = await res.json();
       if (res.ok) {
         login(data.token, data.user, data.refreshToken);
-        navigate('/resident/dashboard', { replace: true });
+        navigate('/', { replace: true });
       }
     } catch (err) {
       setErrorMessage('OAuth sign-in temporarily unavailable.');
@@ -169,7 +158,22 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto py-10 px-4 animate-fade-in space-y-6">
+    <div className="max-w-xl mx-auto py-8 px-4 animate-fade-in space-y-4">
+      {/* Top Back Navigation Button */}
+      <div className="flex items-center justify-between">
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white text-sm font-bold transition min-h-[44px] shadow-xs"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>{t('back')}</span>
+        </button>
+        <span className="text-xs text-slate-500 font-semibold">
+          Barangay Bensican Official Portal
+        </span>
+      </div>
+
       {/* Login Card */}
       <div className="bg-white dark:bg-slate-800/90 p-8 sm:p-10 rounded-3xl border-3 border-emerald-300 dark:border-slate-700 shadow-xl space-y-6">
         <div className="text-center space-y-2">
@@ -249,6 +253,7 @@ export const LoginPage: React.FC = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="off"
                   placeholder={t('enterEmail')}
                   className="w-full px-4 py-3 pl-11 rounded-xl border-2 border-slate-300 dark:border-slate-600 text-base font-medium focus:border-emerald-600 dark:bg-slate-900"
                   required
@@ -266,6 +271,7 @@ export const LoginPage: React.FC = () => {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
                   placeholder={t('enterPassword')}
                   className="w-full px-4 py-3 pl-11 pr-12 rounded-xl border-2 border-slate-300 dark:border-slate-600 text-base font-medium focus:border-emerald-600 dark:bg-slate-900"
                   required

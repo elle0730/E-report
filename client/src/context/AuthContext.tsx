@@ -30,12 +30,31 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
-    const saved = localStorage.getItem('bensican_user');
-    return saved ? JSON.parse(saved) : null;
+    try {
+      const saved = localStorage.getItem('bensican_user');
+      if (!saved || saved === 'undefined' || saved === 'null') {
+        return null;
+      }
+      return JSON.parse(saved);
+    } catch (err) {
+      console.warn('Failed to parse saved user in AuthContext:', err);
+      try {
+        localStorage.removeItem('bensican_user');
+      } catch {}
+      return null;
+    }
   });
 
   const [token, setToken] = useState<string | null>(() => {
-    return localStorage.getItem('bensican_token') || null;
+    try {
+      const saved = localStorage.getItem('bensican_token');
+      if (!saved || saved === 'undefined' || saved === 'null') {
+        return null;
+      }
+      return saved;
+    } catch {
+      return null;
+    }
   });
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -43,21 +62,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = (newToken: string, newUser: User, refreshToken?: string) => {
     setToken(newToken);
     setUser(newUser);
-    localStorage.setItem('bensican_token', newToken);
-    localStorage.setItem('bensican_user', JSON.stringify(newUser));
-    if (refreshToken) {
-      localStorage.setItem('bensican_refresh_token', refreshToken);
+    try {
+      localStorage.setItem('bensican_token', newToken);
+      localStorage.setItem('bensican_user', JSON.stringify(newUser));
+      if (refreshToken) {
+        localStorage.setItem('bensican_refresh_token', refreshToken);
+      }
+    } catch (e) {
+      console.warn('Failed to save auth to localStorage:', e);
     }
   };
 
   const logout = async (allDevices = false) => {
+    const currentToken = token;
+    // Clear storage immediately so stale tokens/users are not retained
     try {
-      if (token) {
+      localStorage.removeItem('bensican_token');
+      localStorage.removeItem('bensican_refresh_token');
+      localStorage.removeItem('bensican_user');
+    } catch (e) {
+      console.warn('Failed to clear storage:', e);
+    }
+
+    setToken(null);
+    setUser(null);
+
+    try {
+      if (currentToken) {
         await fetch('/api/auth/logout', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${currentToken}`
           },
           body: JSON.stringify({ allDevices })
         });
@@ -65,12 +101,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (err) {
       console.log('Logout notice:', err);
     } finally {
-      setToken(null);
-      setUser(null);
-      localStorage.removeItem('bensican_token');
-      localStorage.removeItem('bensican_refresh_token');
-      localStorage.removeItem('bensican_user');
-      window.location.replace('/');
+      // Direct cleanly to login / sign up page for any account
+      window.location.href = '/login';
     }
   };
 

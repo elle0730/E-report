@@ -59,23 +59,8 @@ const RequireAuth: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return <>{children}</>;
 };
 
-// Route guard for public-only pages (Landing page, login, register).
-// Authenticated users CANNOT access these pages and are redirected to their dashboard.
+// Route guard for public pages - lets users browse freely
 const PublicOnlyRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user, isLoading } = useAuth();
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
-        <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-  if (user) {
-    if (user.role === 'admin' || user.role === 'super_admin') {
-      return <Navigate to="/admin/dashboard" replace />;
-    }
-    return <Navigate to="/resident/dashboard" replace />;
-  }
   return <>{children}</>;
 };
 
@@ -94,32 +79,80 @@ const RequireRole: React.FC<{ roles: string[]; children: React.ReactNode }> = ({
   }
   if (!roles.includes(user.role)) {
     if (user.role === 'resident') {
-      return <Navigate to="/resident/dashboard" replace />;
+      return <Navigate to="/" replace />;
     }
     return <Navigate to="/admin/dashboard" replace />;
   }
   return <>{children}</>;
 };
 
-// Scroll to top and enforce back-button protection
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error?: Error;
+}
+
+class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('Unhandled UI Error caught by ErrorBoundary:', error, errorInfo);
+  }
+
+  handleReset = () => {
+    try {
+      localStorage.removeItem('bensican_token');
+      localStorage.removeItem('bensican_user');
+      localStorage.removeItem('bensican_refresh_token');
+    } catch {}
+    window.location.href = '/';
+  };
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen flex items-center justify-center p-6 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100">
+          <div className="max-w-md w-full bg-white dark:bg-slate-800 rounded-3xl p-8 border-2 border-slate-200 dark:border-slate-700 shadow-2xl text-center space-y-4">
+            <div className="w-16 h-16 bg-red-100 dark:bg-red-950/60 rounded-2xl flex items-center justify-center mx-auto text-red-600 dark:text-red-400">
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <h2 className="text-xl font-black">Something went wrong</h2>
+            <p className="text-sm text-slate-600 dark:text-slate-300">
+              An unexpected display issue occurred. You can safely return to the Barangay Bensican homepage.
+            </p>
+            <button
+              onClick={this.handleReset}
+              className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition"
+            >
+              Return to Homepage
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+// Scroll to top on navigation
 const RouteHistoryManager: React.FC = () => {
   const { pathname } = useLocation();
-  const { user } = useAuth();
-  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
-
-  // If user is authenticated and somehow arrives at '/', immediately bounce to dashboard
-  useEffect(() => {
-    if (user && pathname === '/') {
-      const destination = (user.role === 'admin' || user.role === 'super_admin')
-        ? '/admin/dashboard'
-        : '/resident/dashboard';
-      navigate(destination, { replace: true });
-    }
-  }, [user, pathname, navigate]);
 
   return null;
 };
@@ -159,32 +192,12 @@ export const App: React.FC = () => {
 
         {/* Main Content Router */}
         <main className="flex-1">
-          <Routes>
-            {/* PUBLIC ONLY ROUTES (Authenticated users redirected to their dashboard) */}
-            <Route
-              path="/"
-              element={
-                <PublicOnlyRoute>
-                  <LandingPage />
-                </PublicOnlyRoute>
-              }
-            />
-            <Route
-              path="/login"
-              element={
-                <PublicOnlyRoute>
-                  <LoginPage />
-                </PublicOnlyRoute>
-              }
-            />
-            <Route
-              path="/register"
-              element={
-                <PublicOnlyRoute>
-                  <RegisterWizardPage />
-                </PublicOnlyRoute>
-              }
-            />
+          <ErrorBoundary>
+            <Routes>
+            {/* PUBLIC & RESIDENT ACCESSIBLE ROUTES */}
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterWizardPage />} />
 
             {/* PUBLIC ACCESSIBLE INFORMATION ROUTES */}
             <Route path="/track" element={<ReportTrackingPage />} />
@@ -192,20 +205,11 @@ export const App: React.FC = () => {
             <Route path="/bills" element={<BillsTransparencyPage />} />
             <Route path="/announcements" element={<AnnouncementsPage />} />
 
-            {/* QUICK ROLE ALIASES */}
+            {/* QUICK ROLE ALIASES & REDIRECTS */}
             <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="/superadmin" element={<Navigate to="/admin/dashboard" replace />} />
-            <Route path="/resident" element={<Navigate to="/resident/dashboard" replace />} />
-
-            {/* RESIDENT ROUTES */}
-            <Route
-              path="/resident/dashboard"
-              element={
-                <RequireAuth>
-                  <ResidentDashboard />
-                </RequireAuth>
-              }
-            />
+            <Route path="/resident" element={<Navigate to="/" replace />} />
+            <Route path="/resident/dashboard" element={<Navigate to="/" replace />} />
             <Route
               path="/resident/report"
               element={
@@ -418,6 +422,7 @@ export const App: React.FC = () => {
             {/* 404 CATCH-ALL */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
+          </ErrorBoundary>
         </main>
 
         {/* FIXED FLOATING CHATBOT AT BOTTOM-RIGHT */}

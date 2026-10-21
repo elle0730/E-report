@@ -16,7 +16,7 @@ export const BensiChatPage: React.FC = () => {
     if (user?.role === 'admin' || user?.role === 'super_admin') {
       navigate('/admin/dashboard');
     } else {
-      navigate('/resident/dashboard');
+      navigate('/');
     }
   };
 

@@ -45,6 +45,16 @@ export const translations: Translations = {
     tl: 'Kailangan ng Tulong?',
     il: 'Masapul ti Tulong?'
   },
+  needHelp: {
+    en: 'Need Help?',
+    tl: 'Kailangan ng Tulong?',
+    il: 'Masapul ti Tulong?'
+  },
+  needHelpPrompt: {
+    en: 'Need Help? Tap to open guide & hotline',
+    tl: 'Kailangan ng Tulong? Pindutin para sa gabay at hotline',
+    il: 'Masapul ti Tulong? Pinduten para iti pangiwanwan ken hotline'
+  },
   login: {
     en: 'Sign In',
     tl: 'Mag-sign In',
@@ -152,23 +162,23 @@ export const translations: Translations = {
   confidentialityNotice: {
     en: 'Confidentiality Notice: Your report and personal details are confidential and only seen by authorized barangay staff pursuant to the Philippine Data Privacy Act (RA 10173).',
     tl: 'Paunawa sa Pagiging Lihim: Ang inyong ulat at personal na impormasyon ay kumpidensyal at makikita lamang ng mga awtorisadong kawani ng barangay alinsunod sa Data Privacy Act (RA 10173).',
-    il: 'Pakaammo iti Kinasilpo: Ti report ken personal a detalye ket kumpidensial ken dagiti laeng autorisado nga opisial ti makakita maitunos iti Data Privacy Act (RA 10173).'
+    il: 'Pakaammo iti Kinalimed: Ti report ken personal a detalye ket kumpidensial ken dagiti laeng autorisado nga opisial ti makakita maitunos iti Data Privacy Act (RA 10173).'
   },
 
   // Resident Dashboard Actions (4 Big Cards)
   residentSendReport: {
     en: 'Send a Report',
-    tl: 'Isumbong ang Problema',
+    tl: 'Magpadala ng Ulat',
     il: 'Ipadamag ti Pakaseknan'
   },
   residentSendReportDesc: {
     en: 'Tell the barangay about broken lights, noise, disputes, sanitation, or safety issues.',
-    tl: 'Sabihin sa barangay ang sira, ingay, alitan, basura, o kaligtasan.',
+    tl: 'Ipaalam sa barangay ang sira sa kalsada, pundidong ilaw, alitan, basura, o kaligtasan.',
     il: 'Ibagam iti barangay ti nadadael, ariwawa, riri, basura, wenno kinatalged.'
   },
   residentCheckReports: {
     en: 'Check My Reports',
-    tl: 'Tingnan ang Aking mga Sumbong',
+    tl: 'Tingnan ang Aking mga Ulat',
     il: 'Kitaen Dagiti Report-ko'
   },
   residentCheckReportsDesc: {
@@ -222,12 +232,12 @@ export const translations: Translations = {
   // Report Submission Form
   formCategory: {
     en: 'What kind of concern is this?',
-    tl: 'Anong uri ng problema ito?',
+    tl: 'Anong uri ng ulat o problema ito?',
     il: 'Ania a kita ti pakaseknan daytoy?'
   },
   formTitle: {
     en: 'Concern Title',
-    tl: 'Pamagat ng Problema',
+    tl: 'Pamagat ng Ulat',
     il: 'Titulo ti Pakaseknan'
   },
   formTitlePlaceholder: {
@@ -237,7 +247,7 @@ export const translations: Translations = {
   },
   formDesc: {
     en: 'Tell us more details (or leave empty if sending photos/video)',
-    tl: 'Ilarawan ang nangyari (o iwanang blangko kung may litrato/video)',
+    tl: 'Mga detalye ng ulat (o iwanang blangko kung may litrato/video)',
     il: 'Iladawan ti napasamak (wenno ibati a blangko no adda retrato/video)'
   },
   formDescPlaceholder: {
@@ -247,7 +257,7 @@ export const translations: Translations = {
   },
   formLocation: {
     en: 'Exact Place / Location in Bensican',
-    tl: 'Eksaktong Lugar sa Bensican',
+    tl: 'Eksaktong Lugar o Purok sa Bensican',
     il: 'Eksakto a Disso ditoy Bensican'
   },
   formLocationPlaceholder: {
@@ -267,7 +277,7 @@ export const translations: Translations = {
   },
   formHelper: {
     en: 'Did someone help you submit this report? (Helper name)',
-    tl: 'May tumulong ba sa inyo magsumbong? (Pangalan ng tumulong)',
+    tl: 'May tumulong ba sa inyo mag-ulat? (Pangalan ng tumulong)',
     il: 'Adda kadi timmulong kadakayo nga agipadamag? (Nagan ti timmulong)'
   },
   formHelperPlaceholder: {
@@ -277,19 +287,19 @@ export const translations: Translations = {
   },
   formSendButton: {
     en: 'Send My Report to Barangay',
-    tl: 'Ipadala ang Aking Sumbong sa Barangay',
+    tl: 'Isumite ang Aking Ulat sa Barangay',
     il: 'Ibaon ti Report-ko iti Barangay'
   },
 
   // Success Screen
   successTitle: {
     en: 'Your Report Has Been Sent!',
-    tl: 'Matagumpay na Naipadala ang Inyong Sumbong!',
+    tl: 'Matagumpay na Naipadala ang Inyong Ulat!',
     il: 'Siballigi a Naibaon ti Report-yo!'
   },
   successSubtitle: {
     en: 'Barangay officials have received your concern and will act on it promptly.',
-    tl: 'Natanggap na ng mga opisyal ng barangay ang inyong sumbong at ito ay aaksyunan agad.',
+    tl: 'Natanggap na ng mga opisyal ng barangay ang inyong ulat at ito ay aaksyunan agad.',
     il: 'Naawaten dagiti opisial ti barangay ti pakaseknanyo ket maikkan daytoy iti nasapa nga aksion.'
   },
   yourRefNumber: {
@@ -700,9 +710,9 @@ export const translations: Translations = {
     il: 'Dagiti Opisial a Pakaammo ti Barangay'
   },
   viewAllAnnouncements: {
-    en: 'View All Announcements',
-    tl: 'Tingnan Lahat ng Anunsyo',
-    il: 'Kitaen Amin a Pakaammo'
+    en: 'View all announcements →',
+    tl: 'Tingnan lahat ng anunsyo →',
+    il: 'Kitaen amin a pakaammo →'
   },
 
   // Login Page Strings
@@ -1156,13 +1166,364 @@ export const translations: Translations = {
     en: 'Got It, Let’s Start!',
     tl: 'Naiintindihan Ko, Simulan Na!',
     il: 'Naawatak, Irugin Tantan!'
+  },
+
+  // Interactive Tutorial Detailed Keys
+  helpGuide: {
+    en: 'Need Help & Guides',
+    tl: 'Kailangan ng Tulong at Gabay',
+    il: 'Masapul ti Tulong ken Pangiwanwan'
+  },
+  guideTips: {
+    en: 'Guide Tips (Interactive Tutorial)',
+    tl: 'Mga Tip at Gabay sa Paggamit',
+    il: 'Dagiti Pangiwanwan ken Tip'
+  },
+  skipGuide: {
+    en: 'Skip Guide',
+    tl: 'Laktawan ang Gabay',
+    il: 'Laktawan ti Pangiwanwan'
+  },
+  listenTip: {
+    en: 'Listen to this tip',
+    tl: 'Pakinggan ang tip na ito',
+    il: 'Denggen daytoy a tip'
+  },
+  tutorialStep0Title: {
+    en: 'Welcome to E-Report Barangay Bensican!',
+    tl: 'Malugod na Pagdating sa E-Report Barangay Bensican!',
+    il: 'Naimbag nga Idadanon iti E-Report Barangay Bensican!'
+  },
+  tutorialStep0Desc: {
+    en: 'This website is built specifically for Barangay Bensican residents, especially seniors and those who find computers tricky. We made everything big, plain, and easy.',
+    tl: 'Ang portal na ito ay ginawa para sa mga residente ng Bensican, lalo na ang mga senior citizen. Malalaki, malilinaw, at madaling gamitin ang lahat ng bahagi.',
+    il: 'Daytoy a website ket naisagana para kadagiti umili ti Bensican, nangruna dagiti lallakay ken baket. Pinagbalinmi a dakkel, nalawag, ken nalaka.'
+  },
+  tutorialStep1Title: {
+    en: '1. Text Size & Display Mode',
+    tl: '1. Laki ng Letra at Display Mode',
+    il: '1. Kadakkel ti Letra ken Display Mode'
+  },
+  tutorialStep1Desc: {
+    en: 'Tap the 3 dots (⋮) menu to switch between Light Mode and Dark Mode, or adjust font magnification (A+ / A−) for easy reading without glasses.',
+    tl: 'Pindutin ang 3 dots (⋮) menu upang magpalit sa Light Mode o Dark Mode, o lakihan ang letra (A+ / A−) para mabasa nang walang salamin.',
+    il: 'Pinduten ti 3 dots (⋮) menu tapno agpili ti Light Mode wenno Dark Mode, wenno padakkelen dagiti letra (A+ / A−).'
+  },
+  tutorialStep2Title: {
+    en: '2. Voice Dictation & Picture Uploads',
+    tl: '2. Magsalita Gamit ang Boses at Mag-upload ng Litrato',
+    il: '2. Agsao babaen ti Boses ken Mangikabil ti Retrato'
+  },
+  tutorialStep2Desc: {
+    en: 'No typing needed! You can tap the microphone to speak your reports, and tap "Listen (Read Aloud)" to hear instructions read out loud.',
+    tl: 'Hindi kailangang mag-type nang mahaba! Pindutin ang mikropono upang magsalita, at pindutin ang "Pakinggan" upang marinig ang pagbasa.',
+    il: 'Saan a masapul ti ag-type! Pinduten ti mikropono tapno agsao, ken pinduten ti "Denggen" tapno maibasa a sipipigsa.'
+  },
+  tutorialStep3Title: {
+    en: '3. Official Reference Number (Save It)',
+    tl: '3. Opisyal na Reference Number (Itabi Ito)',
+    il: '3. Opisial a Reference Number (Idulin Daytoy)'
+  },
+  tutorialStep3Desc: {
+    en: 'Every concern gets an official reference number like BSN-2026-00042. Keep this number to check your status and view updates.',
+    tl: 'Bawat ulat ay may opisyal na numero tulad ng BSN-2026-00042. Itabi ito upang masubaybayan ang pag-usad at aksyon ng barangay.',
+    il: 'Kada report ket maikkan ti numero a kas ti BSN-2026-00042. Idulin daytoy tapno masubaybayan ti report-yo.'
+  },
+  tutorialStep4Title: {
+    en: '4. Need Help? Call Us Anytime',
+    tl: '4. Kailangan ng Tulong? Tumawag Anumang Oras',
+    il: '4. Masapul ti Tulong? Agtawag Uray Kaano'
+  },
+  tutorialStep4Desc: {
+    en: 'You are never alone. Tap the "Need Help?" button or call our Barangay Bensican hotline at 0917-555-BENSI.',
+    tl: 'Hindi kayo nag-iisa. Pindutin ang buton na "Kailangan ng Tulong?" o tumawag sa hotline ng Barangay Bensican sa 0917-555-BENSI.',
+    il: 'Saan kayo nga agmaymaysa. Pinduten ti buton a "Masapul ti Tulong?" wenno agtawag iti hotline ti Barangay Bensican iti 0917-555-BENSI.'
+  },
+
+  // Help Guide Modal
+  helpGuideTitle: {
+    en: 'Need Help? - How to Use This Website',
+    tl: 'Kailangan ng Tulong? - Paano Gamitin ang Website',
+    il: 'Masapul ti Tulong? - Kasano ti Panagusar iti Website'
+  },
+  helpGuideSubtitle: {
+    en: 'Simple steps and assistance for our valued residents, senior citizens, and first-time users.',
+    tl: 'Mga simpleng hakbang at tulong para sa ating mga residente, nakatatanda, at unang beses na gagamit.',
+    il: 'Nalaka nga addang ken tulong para kadagiti umili, lallakay, baket, ken baro nga agar-aramat.'
+  },
+  helpListenGuide: {
+    en: 'Listen to this Guide (Read Aloud)',
+    tl: 'Pakinggan ang Gabay (Basahin nang Malakas)',
+    il: 'Denggen daytoy a Pangiwanwan'
+  },
+  helpStep1Title: {
+    en: 'Sending a Report or Concern',
+    tl: 'Pagpapadala ng Ulat o Sumbong',
+    il: 'Panagbaon ti Report wenno Pakaseknan'
+  },
+  helpStep1Desc: {
+    en: 'Tap "Send a Report". You do NOT have to write long paragraphs. You can simply tap the microphone icon to talk, or upload photos/videos of the problem.',
+    tl: 'Pindutin ang "Magpadala ng Ulat". Hindi kailangang sumulat nang mahaba. Maaari mong pindutin ang mikropono upang magsalita, o mag-upload ng litrato o video.',
+    il: 'Pinduten ti "Ibaon ti Report". Saan a masapul ti atiddog a surat. Pinduten laeng ti mikropono tapno agsao, wenno mangikabil ti retrato/video.'
+  },
+  helpStep2Title: {
+    en: 'Your Reference Number (e.g. BSN-2026-00042)',
+    tl: 'Ang Inyong Reference Number (hal. BSN-2026-00042)',
+    il: 'Ti Reference Number-yo (kas pangarigan BSN-2026-00042)'
+  },
+  helpStep2Desc: {
+    en: 'Every report gives you a clear number. Write it down or tap "Copy". Use it anytime under "Check My Reports" to see status updates and who is assigned to help you.',
+    tl: 'Bawat ulat ay may natatanging numero. Isulat o kopyahin ito. Gamitin ito sa "Tingnan ang Aking mga Ulat" upang malaman ang kalagayan at sino ang nakatalagang opisyal.',
+    il: 'Kada report ket addaan nalawag a numero. Isurat wenno kopyaren daytoy. Usaren iti "Kitaen Dagiti Report-ko" tapno maammuan ti kasasaad.'
+  },
+  helpStep3Title: {
+    en: 'Bring a Helper (May Kasama)',
+    tl: 'May Kasamang Tumulong (May Kasama)',
+    il: 'Adda Kadua a Timmulong (Adda Kadua)'
+  },
+  helpStep3Desc: {
+    en: 'A family member, child, or barangay volunteer can fill out forms for you. There is a field to enter their name so the barangay knows who assisted you.',
+    tl: 'Maaaring tulungan kayo ng inyong anak, kapamilya, o kawani ng barangay sa pagsagot ng form. May espasyo para ilagay ang kanilang pangalan upang malaman kung sino ang tumulong sa inyo.',
+    il: 'Mabalin a tulongan kayo ti anak, kapamilia, wenno volunteer ti barangay nga agsurat. Adda disso a pangikabilan ti naganda tapno maammuan no asino ti timmulong kadakayo.'
+  },
+  helpStep4Title: {
+    en: 'Direct Hotline Assistance',
+    tl: 'Direktang Tulong sa Hotline',
+    il: 'Direkta a Tulong iti Hotline'
+  },
+  helpStep4Desc: {
+    en: 'If you cannot use the website or need personal assistance, call the Barangay Bensican hotline at 0917-555-BENSI or visit the Barangay Hall during office hours (Monday to Friday, 8:00 AM – 5:00 PM).',
+    tl: 'Kung hindi makagamit ng website o nangangailangan ng personal na tulong, tumawag sa Barangay Bensican hotline sa 0917-555-BENSI o pumunta sa Barangay Hall sa oras ng opisina (Lunes hanggang Biyernes, 8:00 AM – 5:00 PM).',
+    il: 'No saan a makausar iti website wenno masapul ti personal a tulong, agtawag iti Barangay Bensican hotline iti 0917-555-BENSI wenno mapan iti Barangay Hall iti oras ti opisina (Lunes aginggana Biernes, 8:00 AM – 5:00 PM).'
+  },
+  callHotlineButton: {
+    en: 'Call Hotline: 0917-555-BENSI',
+    tl: 'Tawagan ang Hotline: 0917-555-BENSI',
+    il: 'Agtawag iti Hotline: 0917-555-BENSI'
+  },
+  urgentNoticeTitle: {
+    en: 'Urgent Community Notice',
+    tl: 'Mabilisang Pabatid sa Komunidad',
+    il: 'Pandarag a Pakaammo ti Komunidad'
+  },
+  listenAnnouncement: {
+    en: 'Listen to announcement',
+    tl: 'Pakinggan ang anunsyo',
+    il: 'Denggen ti pakaammo'
+  },
+  seniorCitizensGroup: {
+    en: 'Senior Citizens',
+    tl: 'Mga Nakatatanda (Senior)',
+    il: 'Dagiti Lallakay ken Baket'
+  },
+  allResidentsGroup: {
+    en: 'All Residents',
+    tl: 'Lahat ng Residente',
+    il: 'Amin nga Umili'
+  },
+  archiveReasonRequired: {
+    en: 'Reason is required: Please specify why this item is being archived before confirming.',
+    tl: 'Kinakailangan ang dahilan: Mangyaring ipaliwanag kung bakit ito ia-archive bago magpatuloy.',
+    il: 'Masapul ti rason: Pangngaasiyo ta ipaliwawag no apay nga i-archive daytoy sakbay nga agtuloy.'
+  },
+  archiveConfirmTitle: {
+    en: 'Confirm Soft-Archive',
+    tl: 'Kumpirmahin ang Pag-archive',
+    il: 'Pasingkedan ti Panag-archive'
+  },
+  archiveConfirmDesc: {
+    en: 'Note: Hard deletion is blocked. This item will be placed in the Archive center and can be restored by the Super Admin.',
+    tl: 'Paalala: Bawal ang permanenteng pagbura. Ilalagay ang talaang ito sa Archive center at maaaring ibalik ng Super Admin.',
+    il: 'Pakaammo: Maiparit ti permanente a panangikkat. Maikabil daytoy iti Archive center ken mabalin nga isubli ti Super Admin.'
+  },
+  archiveReasonLabel: {
+    en: 'Reason for Archiving *',
+    tl: 'Dahilan ng Pag-archive *',
+    il: 'Rason ti Panag-archive *'
+  },
+  archiveReasonPlaceholder: {
+    en: 'Explain why this item is being archived...',
+    tl: 'Ipaliwanag kung bakit ia-archive ang talaang ito...',
+    il: 'Ipaliwawag no apay nga i-archive daytoy...'
+  },
+  confirmSoftArchive: {
+    en: 'Confirm Soft-Archive',
+    tl: 'Kumpirmahin ang Pag-archive',
+    il: 'Pasingkedan ti Panag-archive'
+  },
+  publicTrustStandards: {
+    en: 'Public Trust & Standards',
+    tl: 'Pagtitiwala ng Publiko at Pamantayan',
+    il: 'Pangnamnama ti Publiko ken Pagalagadan'
+  },
+  barangayHallInfo: {
+    en: 'Barangay Hall Information',
+    tl: 'Impormasyon ng Barangay Hall',
+    il: 'Impormasion ti Barangay Hall'
+  },
+  dataPrivacyActTitle: {
+    en: 'Philippine Data Privacy Act (RA 10173)',
+    tl: 'Batas sa Pagiging Lihim ng Datos (RA 10173)',
+    il: 'Linteg ti Kinalimed ti Datos (RA 10173)'
+  },
+  footerCopyright: {
+    en: '© 2026 Barangay Bensican, San Nicolas, Pangasinan. Republic of the Philippines. All rights reserved.',
+    tl: '© 2026 Barangay Bensican, San Nicolas, Pangasinan. Republika ng Pilipinas. Nakalaan ang lahat ng karapatan.',
+    il: '© 2026 Barangay Bensican, San Nicolas, Pangasinan. Republika ti Filipinas. Naipreserba amin a kalintegan.'
+  },
+  sdg16Title: {
+    en: 'Peace & Justice',
+    tl: 'Kapayapaan at Katarungan',
+    il: 'Kappia ken Hustisia'
+  },
+  sdg11Title: {
+    en: 'Safe Community',
+    tl: 'Ligtas na Komunidad',
+    il: 'Natalged a Komunidad'
+  },
+  sdg9Title: {
+    en: 'Innovation',
+    tl: 'Makabagong Teknolohiya',
+    il: 'Mabael a Teknolohia'
+  },
+  needUrgentHelpRegister: {
+    en: 'Need urgent help or want to follow up in person? Call our hotline at 0917-555-BENSI or drop by the Barangay Hall during office hours.',
+    tl: 'Kailangan ng agarang tulong o nais mag-follow up nang personal? Tawagan ang aming hotline sa 0917-555-BENSI o pumunta sa Barangay Hall sa oras ng opisina.',
+    il: 'Masapul ti nasapa a tulong wenno kayat ti ag-follow up a personal? Agtawag iti hotline iti 0917-555-BENSI wenno mapan iti Barangay Hall iti oras ti opisina.'
+  },
+
+  // Masterlist Compilation
+  residentMasterlistTitle: {
+    en: 'Official Compilation of Registered Residents',
+    tl: 'Opisyal na Listahan ng mga Rehistradong Residente',
+    il: 'Opisial a Listaan dagiti Rehistrado nga Umili'
+  },
+  residentMasterlistDesc: {
+    en: 'Complete registry of verified resident accounts, addresses, and contacts in Barangay Bensican.',
+    tl: 'Kumpletong talaan ng mga rehistradong residente, tirahan, at kontak sa Barangay Bensican.',
+    il: 'Nalpas a listaan dagiti rehistrado nga umili, pagnaedan, ken kontak iti Barangay Bensican.'
+  },
+  printMasterlist: {
+    en: 'Print Compilation (PDF)',
+    tl: 'I-print ang Listahan (PDF)',
+    il: 'I-print ti Listaan (PDF)'
+  },
+  exportCsv: {
+    en: 'Export as CSV / Excel',
+    tl: 'I-download bilang CSV / Excel',
+    il: 'I-download a kas CSV / Excel'
   }
 };
 
 export function t(key: string, lang: Language): string {
-  if (translations[key] && translations[key][lang]) {
-    return translations[key][lang];
+  // Normalize common aliases
+  let resolvedKey = key;
+  const lower = (key || '').toLowerCase().trim();
+  if (lower === 'need help' || lower === 'need help?' || lower === 'need_help' || lower === 'help?') {
+    resolvedKey = 'help';
+  } else if (lower === 'guidetips' || lower === 'guide_tips' || lower === 'guide tips') {
+    resolvedKey = 'guideTips';
+  } else if (lower === 'helpguide' || lower === 'help_guide') {
+    resolvedKey = 'helpGuide';
   }
-  return translations[key]?.en || key;
+
+  if (translations[resolvedKey] && translations[resolvedKey][lang]) {
+    return translations[resolvedKey][lang];
+  }
+  return translations[resolvedKey]?.en || translations[key]?.en || key;
+}
+
+export interface AnnouncementData {
+  id?: string;
+  title: string;
+  content: string;
+  target_group?: string;
+  [key: string]: any;
+}
+
+const announcementTranslations: Record<string, { title: Record<Language, string>; content: Record<Language, string>; target_group?: Record<Language, string> }> = {
+  'Free Medical Checkup & Flu Vaccination for Senior Citizens': {
+    title: {
+      en: 'Free Medical Checkup & Flu Vaccination for Senior Citizens',
+      tl: 'Libreng Medical Checkup at Bakuna sa Trangkaso para sa mga Senior Citizen',
+      il: 'Libre a Medical Checkup ken Bakuna iti Trangkaso para kadagiti Lallakay ken Baket'
+    },
+    content: {
+      en: 'Notice to all Senior Citizens of Barangay Bensican: The San Nicolas Municipal Health Office will conduct a free medical mission, blood pressure screening, and flu vaccination on Saturday, October 17, 2026, starting at 8:00 AM at the Barangay Covered Court. Please bring your Senior Citizen ID.',
+      tl: 'Pabatid sa lahat ng Senior Citizen ng Barangay Bensican: Magsasagawa ang Tanggapan ng Pangkalusugan ng San Nicolas ng libreng medical mission, pagsusuri ng presyon ng dugo, at bakuna sa trangkaso sa darating na Sabado, Oktubre 17, 2026, simula 8:00 AM sa Covered Court ng Barangay. Mangyaring dalhin ang inyong Senior Citizen ID.',
+      il: 'Pakaammo iti amin a Senior Citizen ti Barangay Bensican: Ti San Nicolas Municipal Health Office ket mangisayangkat ti libre a medical mission, panagrukod ti presion ti dara, ken bakuna iti trangkaso inton Sabado, Oktubre 17, 2026, mangrugi 8:00 AM iti Covered Court ti Barangay. Pangngaasiyo ta ipan ti Senior Citizen ID-yo.'
+    },
+    target_group: {
+      en: 'Senior Citizens',
+      tl: 'Mga Nakatatanda (Senior)',
+      il: 'Dagiti Lallakay ken Baket'
+    }
+  },
+  'Barangay Bensican Clean-up Drive & Anti-Dengue Operation': {
+    title: {
+      en: 'Barangay Bensican Clean-up Drive & Anti-Dengue Operation',
+      tl: 'Barangay Bensican Clean-up Drive at Kampanya Laban sa Dengue',
+      il: 'Barangay Bensican Clean-up Drive ken Kampania Kontra Dengue'
+    },
+    content: {
+      en: 'Everyone is invited to join the Oplan Tapat Ko, Linis Ko anti-dengue drive this Saturday, 6:00 AM across Purok 1 to Purok 4. Clear stagnant water from tires, bottles, and flower pots.',
+      tl: 'Inaanyayahan ang lahat na lumahok sa Oplan Tapat Ko, Linis Ko kontra-dengue ngayong Sabado, 6:00 AM mula Purok 1 hanggang Purok 4. Alisin ang mga naipong tubig sa mga gulong, bote, at paso.',
+      il: 'Awisen ti amin a makipaset iti Oplan Tapat Ko, Linis Ko kontra-dengue ita a Sabado, 6:00 AM manipud Purok 1 inggana Purok 4. Ikkatem dagiti naurnong a danum iti pilid, bote, ken masetera.'
+    },
+    target_group: {
+      en: 'All Residents',
+      tl: 'Lahat ng Residente',
+      il: 'Amin nga Umili'
+    }
+  },
+  'Notice of Scheduled Power Interruption - PANELCO I': {
+    title: {
+      en: 'Notice of Scheduled Power Interruption - PANELCO I',
+      tl: 'Pabatid ng Nakaiskedyul na Pagkawala ng Kuryente - PANELCO I',
+      il: 'Pakaammo ti Naikeddeng a Panagpukaw ti Kuryente - PANELCO I'
+    },
+    content: {
+      en: 'PANELCO I advisory: Scheduled preventive maintenance along San Nicolas feeder on Thursday, October 15, from 8:00 AM to 1:00 PM. Affected areas include Barangay Bensican and neighboring barangays.',
+      tl: 'Advisory mula sa PANELCO I: Nakaiskedyul na pagsasaayos sa San Nicolas feeder sa Huwebes, Oktubre 15, mula 8:00 AM hanggang 1:00 PM. Kabilang sa maapektuhan ang Barangay Bensican at mga kalapit na barangay.',
+      il: 'Advisory manipud PANELCO I: Naikeddeng a panangmantener iti San Nicolas feeder inton Huebes, Oktubre 15, manipud 8:00 AM inggana 1:00 PM. Karaman dagiti maapektaran ti Barangay Bensican ken dagiti kaarruba a barangay.'
+    },
+    target_group: {
+      en: 'All Residents',
+      tl: 'Lahat ng Residente',
+      il: 'Amin nga Umili'
+    }
+  }
+};
+
+export function getLocalizedAnnouncement<T extends AnnouncementData>(announcement: T, lang: Language): T {
+  if (lang === 'en') return announcement;
+
+  for (const [key, trans] of Object.entries(announcementTranslations)) {
+    if (
+      announcement.title === key ||
+      (announcement.id === 'ann-001' && key.startsWith('Free Medical')) ||
+      (announcement.id === 'ann-002' && key.startsWith('Barangay Bensican Clean-up')) ||
+      (announcement.id === 'ann-003' && key.startsWith('Notice of Scheduled Power'))
+    ) {
+      return {
+        ...announcement,
+        title: trans.title[lang] || announcement.title,
+        content: trans.content[lang] || announcement.content,
+        target_group: trans.target_group ? trans.target_group[lang] || announcement.target_group : announcement.target_group
+      };
+    }
+  }
+
+  let localizedGroup = announcement.target_group;
+  if (announcement.target_group === 'Senior Citizens') {
+    localizedGroup = lang === 'tl' ? 'Mga Nakatatanda (Senior)' : 'Dagiti Lallakay ken Baket';
+  } else if (announcement.target_group === 'All Residents') {
+    localizedGroup = lang === 'tl' ? 'Lahat ng Residente' : 'Amin nga Umili';
+  }
+
+  return {
+    ...announcement,
+    target_group: localizedGroup
+  };
 }
 

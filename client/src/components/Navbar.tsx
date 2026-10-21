@@ -35,7 +35,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenHelp, pageTitle }) => {
 
   const { user, logout } = useAuth();
   const [unreadCount, setUnreadCount] = useState<number>(0);
-  const [isStaffAvailable, setIsStaffAvailable] = useState<boolean>(true);
+  const [isStaffAvailable, setIsStaffAvailable] = useState<boolean>(() => {
+    return localStorage.getItem('bensican_staff_available') === 'true';
+  });
   const [staffPresenceLoading, setStaffPresenceLoading] = useState<boolean>(false);
 
   // Dropdown states
@@ -79,13 +81,32 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenHelp, pageTitle }) => {
         })
         .catch(() => {});
     }
+
+    // Sync saved staff availability status
+    if (user && (user.role === 'admin' || user.role === 'super_admin')) {
+      fetch('/api/bensi/presence', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('bensican_token')}` }
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.staff && Array.isArray(data.staff)) {
+            const current = data.staff.find((s: any) => s.id === user.id);
+            if (current) {
+              const available = current.is_available === 1;
+              setIsStaffAvailable(available);
+              localStorage.setItem('bensican_staff_available', available.toString());
+            }
+          }
+        })
+        .catch(() => {});
+    }
   }, [user, location.pathname]);
 
   const toggleStaffPresence = async () => {
     if (!user || user.role === 'resident') return;
     setStaffPresenceLoading(true);
+    const nextState = !isStaffAvailable;
     try {
-      const nextState = !isStaffAvailable;
       const res = await fetch('/api/bensi/presence/toggle', {
         method: 'POST',
         headers: {
@@ -96,6 +117,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenHelp, pageTitle }) => {
       });
       if (res.ok) {
         setIsStaffAvailable(nextState);
+        localStorage.setItem('bensican_staff_available', nextState.toString());
       }
     } catch (err) {
       console.error('Failed to toggle presence:', err);
@@ -109,7 +131,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenHelp, pageTitle }) => {
       stopSpeaking();
     } else {
       const text = pageTitle
-        ? `${pageTitle}. Welcome to Barangay Bensican E-Report system. Tap any card or button to proceed.`
+        ? `${pageTitle}. ${
+            language === 'tl'
+              ? 'Malugod na pagdating sa Barangay Bensican E-Report system. Pindutin ang alinmang buton upang magpatuloy.'
+              : language === 'il'
+              ? 'Naimbag nga idadanon iti Barangay Bensican E-Report system. Pinduten ti uray ania a buton tapno agtuloy.'
+              : 'Welcome to Barangay Bensican E-Report system. Tap any card or button to proceed.'
+          }`
+        : language === 'tl'
+        ? 'Malugod na pagdating sa online portal ng Barangay Bensican. Mangyaring pumili ng opsyon.'
+        : language === 'il'
+        ? 'Naimbag nga idadanon iti online portal ti Barangay Bensican. Pangngaasiyo ta agpilika iti opsion.'
         : 'Welcome to Barangay Bensican online portal. Please choose an option.';
       speak(text);
     }
@@ -125,7 +157,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenHelp, pageTitle }) => {
           type="button"
           onClick={() => {
             if (user?.role === 'super_admin' || user?.role === 'admin') navigate('/admin/dashboard');
-            else if (user?.role === 'resident') navigate('/resident/dashboard');
             else navigate('/');
           }}
           className="flex items-center gap-3 text-left group focus:outline-hidden"
@@ -268,34 +299,46 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenHelp, pageTitle }) => {
                     )}
 
                     {user.role === 'resident' && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            navigate('/');
+                            setProfileMenuOpen(false);
+                          }}
+                          className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 text-sm font-semibold flex items-center gap-2.5 text-slate-800 dark:text-slate-200 transition"
+                        >
+                          <Layers className="w-4 h-4 text-emerald-600" />
+                          <span>{t('home')}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            navigate('/resident/report');
+                            setProfileMenuOpen(false);
+                          }}
+                          className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 text-sm font-semibold flex items-center gap-2.5 text-slate-800 dark:text-slate-200 transition"
+                        >
+                          <Sparkles className="w-4 h-4 text-emerald-600" />
+                          <span>{t('residentSendReport')}</span>
+                        </button>
+                      </>
+                    )}
+
+                    {/* Quick Sign Out from Profile Dropdown */}
+                    <div className="pt-1 mt-1 border-t border-slate-100 dark:border-slate-700/60">
                       <button
                         type="button"
                         onClick={() => {
-                          navigate('/resident/dashboard');
                           setProfileMenuOpen(false);
+                          logout(false);
                         }}
-                        className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 text-sm font-semibold flex items-center gap-2.5 text-slate-800 dark:text-slate-200 transition"
+                        className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-red-50 dark:hover:bg-red-950/40 text-sm font-semibold flex items-center gap-2.5 text-red-600 dark:text-red-400 transition"
                       >
-                        <Layers className="w-4 h-4 text-emerald-600" />
-                        <span>{t('residentDashboard')}</span>
+                        <LogOut className="w-4 h-4 text-red-600" />
+                        <span>{t('logout')}</span>
                       </button>
-                    )}
-
-                    {/* Divider */}
-                    <div className="border-t border-slate-200 dark:border-slate-700 my-1"></div>
-
-                    {/* Logout inside Profile Menu */}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setProfileMenuOpen(false);
-                        logout(false);
-                      }}
-                      className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-red-50 dark:hover:bg-red-950/40 text-sm font-bold flex items-center gap-2.5 text-red-600 transition"
-                    >
-                      <LogOut className="w-4 h-4 text-red-600" />
-                      <span>{t('logout')}</span>
-                    </button>
+                    </div>
                   </div>
                 )}
               </div>
@@ -348,37 +391,40 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenHelp, pageTitle }) => {
                   </span>
                 </div>
 
-                {/* Display Section */}
+                {/* Display Section: Light Mode and Dark Mode */}
                 <div className="space-y-2">
                   <span className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                     <Sun className="w-3.5 h-3.5 text-amber-500" /> {t('displayAppearance')}
                   </span>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-2 bg-slate-100 dark:bg-slate-750 p-1 rounded-2xl border border-slate-200 dark:border-slate-700">
                     <button
                       type="button"
-                      onClick={toggleTheme}
-                      className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-750 hover:bg-slate-100 dark:hover:bg-slate-700 text-left text-xs font-bold flex items-center justify-between transition"
+                      onClick={() => {
+                        if (theme !== 'light') toggleTheme();
+                      }}
+                      className={`p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition ${
+                        theme === 'light'
+                          ? 'bg-white text-slate-900 shadow-md border border-slate-200'
+                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                      }`}
                     >
-                      <span className="flex items-center gap-1.5">
-                        {theme === 'dark' ? <Moon className="w-4 h-4 text-indigo-400" /> : <Sun className="w-4 h-4 text-amber-500" />}
-                        {theme === 'dark' ? t('dark') : t('light')}
-                      </span>
+                      <Sun className={`w-4 h-4 ${theme === 'light' ? 'text-amber-500' : 'text-slate-400'}`} />
+                      <span>{t('lightMode')}</span>
                     </button>
 
                     <button
                       type="button"
-                      onClick={toggleHighContrast}
-                      className={`p-2.5 rounded-xl border text-left text-xs font-bold flex items-center justify-between transition ${
-                        highContrast
-                          ? 'bg-yellow-400 text-black border-yellow-500'
-                          : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-750 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200'
+                      onClick={() => {
+                        if (theme !== 'dark') toggleTheme();
+                      }}
+                      className={`p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition ${
+                        theme === 'dark'
+                          ? 'bg-slate-900 text-white shadow-md border border-slate-700'
+                          : 'text-slate-600 dark:text-slate-400 hover:text-white'
                       }`}
                     >
-                      <span className="flex items-center gap-1.5">
-                        <Eye className="w-4 h-4 text-emerald-600" />
-                        {t('contrast')}
-                      </span>
-                      {highContrast && <Check className="w-3.5 h-3.5" />}
+                      <Moon className={`w-4 h-4 ${theme === 'dark' ? 'text-indigo-400' : 'text-slate-400'}`} />
+                      <span>{t('darkMode')}</span>
                     </button>
                   </div>
                 </div>
@@ -468,7 +514,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenHelp, pageTitle }) => {
                 {/* Help & Tutorials Section */}
                 <div className="space-y-1.5 border-t border-slate-200 dark:border-slate-700 pt-3">
                   <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
-                    Learning & Assistance
+                    {t('helpGuide')}
                   </span>
                   <button
                     type="button"
@@ -476,10 +522,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenHelp, pageTitle }) => {
                       setSettingsMenuOpen(false);
                       openTutorial();
                     }}
-                    className="w-full text-left px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-750 hover:bg-slate-100 dark:hover:bg-slate-700 text-xs font-semibold flex items-center gap-2 text-slate-800 dark:text-slate-200 transition"
+                    className="w-full text-left px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-750 hover:bg-slate-100 dark:hover:bg-slate-700 text-xs font-bold flex items-center gap-2 text-slate-800 dark:text-slate-200 transition"
                   >
-                    <Sparkles className="w-4 h-4 text-amber-500" />
-                    <span>Guide Tips (Interactive Tutorial)</span>
+                    <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
+                    <span>{t('guideTips')}</span>
                   </button>
 
                   <button
@@ -488,9 +534,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenHelp, pageTitle }) => {
                       setSettingsMenuOpen(false);
                       onOpenHelp();
                     }}
-                    className="w-full text-left px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold flex items-center gap-2 shadow-xs transition"
+                    className="w-full text-left px-3 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-black flex items-center gap-2 shadow-xs transition"
                   >
-                    <HelpCircle className="w-4 h-4 text-slate-950" />
+                    <HelpCircle className="w-4 h-4 text-slate-950 shrink-0" />
                     <span>{t('help')}</span>
                   </button>
                 </div>
@@ -515,6 +561,23 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenHelp, pageTitle }) => {
                         {isStaffAvailable ? <ToggleRight className="w-5 h-5" /> : <ToggleLeft className="w-5 h-5" />}
                         <span>{isStaffAvailable ? 'Staff: Available (Live Chat)' : 'Staff: Away (Bensi Active)'}</span>
                       </span>
+                    </button>
+                  </div>
+                )}
+
+                {/* Prominent Sign Out in 3-Dots Menu */}
+                {user && (
+                  <div className="border-t border-slate-200 dark:border-slate-700 pt-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSettingsMenuOpen(false);
+                        logout(false);
+                      }}
+                      className="w-full py-2.5 px-3 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/40 dark:hover:bg-red-900/60 text-red-700 dark:text-red-300 text-xs font-black flex items-center justify-center gap-2 transition border border-red-200 dark:border-red-800/60 shadow-2xs"
+                    >
+                      <LogOut className="w-4 h-4 text-red-600" />
+                      <span>{t('logout')}</span>
                     </button>
                   </div>
                 )}
