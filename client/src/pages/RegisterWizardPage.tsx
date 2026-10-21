@@ -208,25 +208,6 @@ export const RegisterWizardPage: React.FC = () => {
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4 animate-fade-in space-y-6">
-      {/* Top Back Navigation Button */}
-      <div className="flex items-center justify-between">
-        <button
-          type="button"
-          onClick={() => (step > 1 ? handlePrev() : navigate('/'))}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white text-sm font-bold transition min-h-[44px] shadow-xs"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>{t('back')}</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => navigate('/login')}
-          className="text-xs font-bold text-emerald-700 dark:text-emerald-400 hover:underline"
-        >
-          Already registered? Sign in
-        </button>
-      </div>
-
       {/* Title & Progress Header */}
       <div className="text-center space-y-2">
         <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
@@ -620,6 +601,25 @@ export const RegisterWizardPage: React.FC = () => {
             </button>
           )}
         </div>
+      </div>
+
+      {/* Bottom Back Navigation & Sign In Link */}
+      <div className="flex items-center justify-between pt-2">
+        <button
+          type="button"
+          onClick={() => (step > 1 ? handlePrev() : navigate('/'))}
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white text-sm font-bold transition min-h-[44px] shadow-xs"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>{t('back')}</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate('/login')}
+          className="text-xs sm:text-sm font-bold text-emerald-700 dark:text-emerald-400 hover:underline"
+        >
+          {t('alreadyRegistered')}
+        </button>
       </div>
     </div>
   );

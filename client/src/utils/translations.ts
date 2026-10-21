@@ -756,6 +756,11 @@ export const translations: Translations = {
     tl: 'Bagong residente ng Bensican?',
     il: 'Baro nga umili ti Bensican?'
   },
+  alreadyRegistered: {
+    en: 'Already registered? Sign in',
+    tl: 'May account na? Mag-sign in',
+    il: 'Adda account-mon? Sumrek'
+  },
   registerHere: {
     en: 'Register Here (Magpatala Dito)',
     tl: 'Magpatala Dito',
