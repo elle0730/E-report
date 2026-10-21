@@ -553,12 +553,12 @@ export const RegisterWizardPage: React.FC = () => {
         )}
 
         {/* Wizard Navigation Footer */}
-        <div className="pt-6 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between gap-4">
+        <div className="pt-6 border-t border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4">
           {step > 1 ? (
             <button
               type="button"
               onClick={handlePrev}
-              className="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold rounded-xl text-base flex items-center gap-2 transition min-h-[48px]"
+              className="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold rounded-xl text-base flex items-center gap-2 transition min-h-[48px] w-full sm:w-auto justify-center"
             >
               <ArrowLeft className="w-5 h-5" />
               <span>{t('back')}</span>
@@ -567,18 +567,27 @@ export const RegisterWizardPage: React.FC = () => {
             <button
               type="button"
               onClick={() => (window.history.length > 1 ? navigate(-1) : navigate('/'))}
-              className="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold rounded-xl text-base flex items-center gap-2 transition min-h-[48px]"
+              className="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold rounded-xl text-base flex items-center gap-2 transition min-h-[48px] w-full sm:w-auto justify-center"
             >
               <ArrowLeft className="w-5 h-5" />
               <span>{t('back')}</span>
             </button>
           )}
 
+          {/* Middle In-Line: Already Registered? Sign In */}
+          <button
+            type="button"
+            onClick={() => navigate('/login')}
+            className="text-xs sm:text-sm font-bold text-emerald-700 dark:text-emerald-400 hover:underline px-2 py-1 text-center transition"
+          >
+            {t('alreadyRegistered')}
+          </button>
+
           {step < 4 ? (
             <button
               type="button"
               onClick={handleNext}
-              className="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl text-lg flex items-center gap-2 shadow-lg transition min-h-[48px]"
+              className="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl text-lg flex items-center gap-2 shadow-lg transition min-h-[48px] w-full sm:w-auto justify-center"
             >
               <span>{t('next')}</span>
               <ArrowRight className="w-5 h-5" />
@@ -588,7 +597,7 @@ export const RegisterWizardPage: React.FC = () => {
               type="button"
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-400 text-white font-black rounded-xl text-lg flex items-center gap-2 shadow-xl transition min-h-[48px]"
+              className="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-400 text-white font-black rounded-xl text-lg flex items-center gap-2 shadow-xl transition min-h-[48px] w-full sm:w-auto justify-center"
             >
               {isSubmitting ? (
                 <span>Submitting to Barangay...</span>
@@ -601,25 +610,6 @@ export const RegisterWizardPage: React.FC = () => {
             </button>
           )}
         </div>
-      </div>
-
-      {/* Bottom Back Navigation & Sign In Link */}
-      <div className="flex items-center justify-between pt-2">
-        <button
-          type="button"
-          onClick={() => (step > 1 ? handlePrev() : navigate('/'))}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white text-sm font-bold transition min-h-[44px] shadow-xs"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>{t('back')}</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => navigate('/login')}
-          className="text-xs sm:text-sm font-bold text-emerald-700 dark:text-emerald-400 hover:underline"
-        >
-          {t('alreadyRegistered')}
-        </button>
       </div>
     </div>
   );
