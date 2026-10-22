@@ -341,8 +341,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenHelp, pageTitle }) => {
                         type="button"
                         onClick={() => {
                           setProfileMenuOpen(false);
-                          navigate('/', { replace: true });
-                          logout(false);
+                          logout(false, '/');
                         }}
                         className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-red-50 dark:hover:bg-red-950/40 text-sm font-semibold flex items-center gap-2.5 text-red-600 dark:text-red-400 transition"
                       >
@@ -583,8 +582,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenHelp, pageTitle }) => {
                       type="button"
                       onClick={() => {
                         setSettingsMenuOpen(false);
-                        navigate('/', { replace: true });
-                        logout(false);
+                        logout(false, '/');
                       }}
                       className="w-full py-2.5 px-3 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/40 dark:hover:bg-red-900/60 text-red-700 dark:text-red-300 text-xs font-black flex items-center justify-center gap-2 transition border border-red-200 dark:border-red-800/60 shadow-2xs"
                     >

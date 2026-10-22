@@ -177,7 +177,7 @@ export const App: React.FC = () => {
   }, []);
 
   return (
-    <BrowserRouter>
+    <>
       <RouteHistoryManager />
       <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors">
         {/* Universal Top Navigation */}
@@ -443,7 +443,7 @@ export const App: React.FC = () => {
         {/* First-time Tutorial Modal */}
         <FirstTimeTutorial isOpen={tutorialOpen} onClose={closeTutorial} />
       </div>
-    </BrowserRouter>
+    </>
   );
 };
 

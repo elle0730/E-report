@@ -109,8 +109,7 @@ export const ResidentDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => {
-              navigate('/', { replace: true });
-              logout(false);
+              logout(false, '/');
             }}
             className="p-3 bg-red-600/90 hover:bg-red-600 text-white rounded-2xl font-bold flex flex-col items-center justify-center min-w-[90px] shadow-sm transition border border-red-400/50"
             title="Sign Out to Landing Page"

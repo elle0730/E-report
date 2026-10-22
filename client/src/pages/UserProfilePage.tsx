@@ -590,8 +590,7 @@ export const UserProfilePage: React.FC = () => {
           <button
             type="button"
             onClick={() => {
-              navigate('/', { replace: true });
-              logout(false);
+              logout(false, '/');
             }}
             className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-2 shrink-0 min-h-[44px]"
           >

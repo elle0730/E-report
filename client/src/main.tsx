@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 import { App } from './App.js';
 import { AuthProvider } from './context/AuthContext.js';
 import { AccessibilityProvider } from './context/AccessibilityContext.js';
@@ -33,8 +34,12 @@ class RootErrorBoundary extends React.Component<RootErrorBoundaryProps, RootErro
       localStorage.removeItem('bensican_token');
       localStorage.removeItem('bensican_user');
       localStorage.removeItem('bensican_refresh_token');
+      sessionStorage.clear();
+      if ('caches' in window) {
+        caches.keys().then((keys) => keys.forEach((k) => caches.delete(k)));
+      }
     } catch {}
-    window.location.href = '/login';
+    window.location.href = '/';
   };
 
   render() {
@@ -47,13 +52,13 @@ class RootErrorBoundary extends React.Component<RootErrorBoundaryProps, RootErro
             </div>
             <h1 style={{ fontSize: '20px', fontWeight: 'bold', margin: '0 0 8px 0' }}>Barangay Bensican Portal</h1>
             <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: 1.5, margin: '0 0 24px 0' }}>
-              Your session was refreshed. Click below to continue to the Log In / Sign Up screen.
+              Your session was refreshed. Click below to continue to the Barangay Bensican portal.
             </p>
             <button
               onClick={this.handleRecover}
               style={{ width: '100%', padding: '14px 20px', backgroundColor: '#16a34a', color: '#ffffff', border: 'none', borderRadius: '12px', fontSize: '15px', fontWeight: 'bold', cursor: 'pointer' }}
             >
-              Go to Log In / Sign Up
+              Go to Homepage
             </button>
           </div>
         </div>
@@ -66,11 +71,13 @@ class RootErrorBoundary extends React.Component<RootErrorBoundaryProps, RootErro
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <RootErrorBoundary>
-      <AuthProvider>
-        <AccessibilityProvider>
-          <App />
-        </AccessibilityProvider>
-      </AuthProvider>
+      <BrowserRouter>
+        <AuthProvider>
+          <AccessibilityProvider>
+            <App />
+          </AccessibilityProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </RootErrorBoundary>
   </React.StrictMode>
 );

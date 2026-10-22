@@ -153,8 +153,7 @@ export const AdminDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => {
-              navigate('/', { replace: true });
-              logout(false);
+              logout(false, '/');
             }}
             className="px-3.5 py-3 bg-red-600/80 hover:bg-red-600 text-white font-bold rounded-2xl border border-red-400/50 shadow-md flex items-center gap-1.5 text-xs transition"
             title="Sign Out to Landing Page"

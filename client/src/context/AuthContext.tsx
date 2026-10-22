@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export interface User {
   id: string;
@@ -21,7 +22,7 @@ interface AuthContextType {
   token: string | null;
   isLoading: boolean;
   login: (token: string, user: User, refreshToken?: string) => void;
-  logout: (allDevices?: boolean) => Promise<void>;
+  logout: (allDevices?: boolean, redirectTo?: string) => Promise<void>;
   updateUser: (updatedFields: Partial<User>) => void;
   refreshUser: () => Promise<void>;
 }
@@ -29,6 +30,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(() => {
     try {
       const saved = localStorage.getItem('bensican_user');
@@ -73,7 +75,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const logout = async (allDevices = false) => {
+  const logout = async (allDevices = false, redirectTo = '/') => {
     const currentToken = token;
     // 1. Clear all storage immediately so no stale tokens/users are retained
     try {
@@ -86,11 +88,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.warn('Failed to clear storage:', e);
     }
 
-    // 2. Clear state in memory
+    // 2. Clear state in memory immediately
+    setIsLoading(false);
     setToken(null);
     setUser(null);
 
-    // 3. Fire backend logout in background without blocking the UI redirection
+    // 3. Smooth SPA navigate to Landing Page (Home page) or requested route
+    try {
+      navigate(redirectTo, { replace: true });
+    } catch {
+      window.location.href = redirectTo;
+    }
+
+    // 4. Fire backend logout in background without blocking UI
     if (currentToken) {
       try {
         fetch('/api/auth/logout', {
@@ -104,13 +114,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           console.log('Logout notice:', err);
         });
       } catch {}
-    }
-
-    // 4. Immediately and unconditionally redirect to the landing page / home page
-    try {
-      window.location.href = '/';
-    } catch {
-      window.location.replace('/');
     }
   };
 

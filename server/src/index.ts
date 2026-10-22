@@ -146,8 +146,13 @@ app.get('/api/health', (req, res) => {
 // SPA fallback for frontend client routing (mounted AFTER all API endpoints)
 if (clientBuildPath) {
   app.get('*', (req, res, next) => {
-    if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) {
-      return next();
+    if (
+      req.path.startsWith('/api') ||
+      req.path.startsWith('/uploads') ||
+      req.path.startsWith('/assets') ||
+      /\.(js|css|json|png|jpg|jpeg|svg|ico|woff|woff2|ttf|map)$/i.test(req.path)
+    ) {
+      return res.status(404).send('Asset not found');
     }
     res.sendFile(path.join(clientBuildPath, 'index.html'));
   });
