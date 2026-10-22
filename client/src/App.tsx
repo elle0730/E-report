@@ -204,12 +204,16 @@ export const App: React.FC = () => {
             <Route path="/track/:refNumber" element={<ReportTrackingPage />} />
             <Route path="/bills" element={<BillsTransparencyPage />} />
             <Route path="/announcements" element={<AnnouncementsPage />} />
+            <Route path="/hearings" element={<RequireAuth><HearingsPage /></RequireAuth>} />
 
             {/* QUICK ROLE ALIASES & REDIRECTS */}
             <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="/superadmin" element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="/super-admin" element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="/super_admin" element={<Navigate to="/admin/dashboard" replace />} />
+            <Route path="/admin/hearing-scheduler" element={<Navigate to="/admin/hearings" replace />} />
+            <Route path="/admin/staff-payroll" element={<Navigate to="/admin/payroll" replace />} />
+            <Route path="/admin/accountability-report" element={<Navigate to="/admin/accountability" replace />} />
             <Route path="/resident" element={<Navigate to="/" replace />} />
             <Route path="/resident/dashboard" element={<Navigate to="/" replace />} />
             <Route

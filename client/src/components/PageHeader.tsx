@@ -34,6 +34,17 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
   const { speak, stopSpeaking, isSpeaking, t } = useAccessibility();
 
   const handleBack = () => {
+    // If the logged in user is an administrator or super administrator,
+    // guarantee that "Go Back" takes them directly back to the Admin Workstation (/admin/dashboard)
+    if (user && (user.role === 'admin' || user.role === 'super_admin')) {
+      if (backTo && backTo.startsWith('/admin') && backTo !== '/admin/dashboard') {
+        navigate(backTo);
+      } else {
+        navigate('/admin/dashboard');
+      }
+      return;
+    }
+
     if (backTo) {
       navigate(backTo);
       return;
@@ -42,8 +53,6 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
     if (user) {
       if (window.history.length > 2) {
         navigate(-1);
-      } else if (user.role === 'admin' || user.role === 'super_admin') {
-        navigate('/admin/dashboard');
       } else {
         navigate('/');
       }

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { FileSpreadsheet, CheckCircle2, Clock, AlertTriangle, FileText, Download } from 'lucide-react';
+import { useAuth } from '../context/AuthContext.js';
 import { useAccessibility } from '../context/AccessibilityContext.js';
 import { PageHeader } from '../components/PageHeader.js';
 import { VoucherModal, BillVoucherData } from '../components/VoucherModal.js';
 
 export const BillsTransparencyPage: React.FC = () => {
+  const { user } = useAuth();
   const { t } = useAccessibility();
   const [bills, setBills] = useState<any[]>([]);
   const [summary, setSummary] = useState<any>({
@@ -91,7 +93,7 @@ export const BillsTransparencyPage: React.FC = () => {
         subtitle="Open governance ledger of official utility bills, maintenance expenditures, and community allocations."
         icon={FileSpreadsheet}
         badges={[`${bills.length} Published Bills`, 'Public Audit Ready']}
-        backTo="/resident"
+        backTo={user && (user.role === 'admin' || user.role === 'super_admin') ? '/admin/dashboard' : '/'}
       />
 
       {/* Monthly Summary Cards */}

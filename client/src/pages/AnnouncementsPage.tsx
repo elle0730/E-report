@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Megaphone, Volume2, Calendar, AlertCircle, Pin, Tag } from 'lucide-react';
+import { useAuth } from '../context/AuthContext.js';
 import { useAccessibility } from '../context/AccessibilityContext.js';
 import { PageHeader } from '../components/PageHeader.js';
 import { getLocalizedAnnouncement } from '../utils/translations.js';
 
 export const AnnouncementsPage: React.FC = () => {
+  const { user } = useAuth();
   const { t, speak, isSpeaking, stopSpeaking, language } = useAccessibility();
   const [announcements, setAnnouncements] = useState<any[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<string>('All');
@@ -33,7 +35,7 @@ export const AnnouncementsPage: React.FC = () => {
         subtitle="Official community updates, emergency advisories, medical missions, and scheduled services."
         icon={Megaphone}
         badges={[`${announcements.length} Published Updates`, 'Official Bulletin']}
-        backTo="/resident"
+        backTo={user && (user.role === 'admin' || user.role === 'super_admin') ? '/admin/dashboard' : '/'}
       />
 
       {/* Target group filter tabs */}

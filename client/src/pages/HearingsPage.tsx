@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Scale, Calendar, FileText, Download, Clock, MapPin, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Scale, Calendar, FileText, Download, Clock, MapPin, AlertCircle } from 'lucide-react';
+import { useAuth } from '../context/AuthContext.js';
 import { useAccessibility } from '../context/AccessibilityContext.js';
 import { PageHeader } from '../components/PageHeader.js';
 import { generateSubpoenaPdf } from '../utils/pdfGenerators.js';
 
 export const HearingsPage: React.FC = () => {
+  const { user } = useAuth();
   const { t } = useAccessibility();
   const [hearings, setHearings] = useState<any[]>([]);
   const [subpoenas, setSubpoenas] = useState<any[]>([]);
@@ -41,7 +43,7 @@ export const HearingsPage: React.FC = () => {
         subtitle="Official conciliation schedules and summons from the Lupong Tagapamayapa."
         icon={Scale}
         badges={[`${hearings.length} Scheduled Hearings`, `${subpoenas.length} Subpoenas`]}
-        backTo="/resident"
+        backTo={user && (user.role === 'admin' || user.role === 'super_admin') ? '/admin/dashboard' : '/'}
       />
 
       {/* Tabs */}
