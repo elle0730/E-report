@@ -120,7 +120,7 @@ export const AdminAnnouncementsPage: React.FC = () => {
         subtitle="Publish broadcast advisories, pin critical emergency alerts, and broadcast to targeted puroks."
         icon={Megaphone}
         badges={[`${announcements.length} Total Announcements`, user?.role === 'super_admin' ? 'Super Admin' : 'Admin Staff']}
-        backTo={user?.role === 'super_admin' ? '/super-admin' : '/admin'}
+        backTo="/admin/dashboard"
         actions={
           <button
             onClick={openCreate}

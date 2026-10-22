@@ -64,7 +64,7 @@ export const AccountabilityReportPage: React.FC = () => {
         subtitle="Transparency audit of resolved citizen concerns, assigned handlers, outcomes, and response time metrics."
         icon={TrendingUp}
         badges={[`${items.length} Resolved Concerns`, isSuperAdmin ? 'Super Admin Audit' : 'Staff Transparency']}
-        backTo={isSuperAdmin ? '/super-admin' : '/admin'}
+        backTo="/admin/dashboard"
         actions={
           isSuperAdmin ? (
             <div className="flex flex-wrap items-center gap-2">

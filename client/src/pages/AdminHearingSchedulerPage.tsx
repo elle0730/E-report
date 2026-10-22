@@ -135,7 +135,7 @@ export const AdminHearingSchedulerPage: React.FC = () => {
         subtitle="Lupong Tagapamayapa case proceedings, conflict and double-booking detection, minutes, and history."
         icon={Calendar}
         badges={[`${hearings.length} Total Hearings`, 'Lupon Tagapamayapa']}
-        backTo={user?.role === 'super_admin' ? '/super-admin' : '/admin'}
+        backTo="/admin/dashboard"
         actions={
           <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-300 dark:border-slate-700">
             <button

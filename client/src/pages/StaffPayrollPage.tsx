@@ -154,7 +154,7 @@ export const StaffPayrollPage: React.FC = () => {
         subtitle="Attendance monitoring, cash advances, sick/vacation leave requests, and payroll disbursements."
         icon={Users}
         badges={isSuperAdmin ? ['Super Admin HR Management', 'Payroll Disbursal'] : ['Staff Attendance Portal', 'Official Service']}
-        backTo={isSuperAdmin ? '/super-admin' : '/admin'}
+        backTo="/admin/dashboard"
         actions={
           <div className="flex flex-wrap items-center gap-2">
             <button

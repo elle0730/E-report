@@ -208,6 +208,8 @@ export const App: React.FC = () => {
             {/* QUICK ROLE ALIASES & REDIRECTS */}
             <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="/superadmin" element={<Navigate to="/admin/dashboard" replace />} />
+            <Route path="/super-admin" element={<Navigate to="/admin/dashboard" replace />} />
+            <Route path="/super_admin" element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="/resident" element={<Navigate to="/" replace />} />
             <Route path="/resident/dashboard" element={<Navigate to="/" replace />} />
             <Route

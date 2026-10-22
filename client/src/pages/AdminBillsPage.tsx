@@ -170,7 +170,7 @@ export const AdminBillsPage: React.FC = () => {
           : 'Staff transparency view: Add bill records and inspect disbursement vouchers.'}
         icon={FileSpreadsheet}
         badges={[`${bills.length} Total Bills`, isSuperAdmin ? 'Super Admin' : 'Admin Staff']}
-        backTo={isSuperAdmin ? '/super-admin' : '/admin'}
+        backTo="/admin/dashboard"
         actions={
           <button
             onClick={() => setShowAddModal(true)}
