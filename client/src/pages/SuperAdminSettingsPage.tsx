@@ -21,7 +21,15 @@ export const SuperAdminSettingsPage: React.FC = () => {
 
   // Category modal
   const [showCatModal, setShowCatModal] = useState<boolean>(false);
-  const [catForm, setCatForm] = useState({ id: '', name: '', icon: 'HelpCircle', description: '', sortOrder: 1 });
+  const [catForm, setCatForm] = useState<{
+    id: string;
+    name: string;
+    icon: string;
+    description: string;
+    sortOrder: number;
+    isArchived: boolean;
+  }>({ id: '', name: '', icon: 'HelpCircle', description: '', sortOrder: 1, isArchived: false });
+  const [categoryFilter, setCategoryFilter] = useState<'all' | 'active' | 'archived'>('all');
 
   // Venues & Bill types state
   const [venues, setVenues] = useState<string[]>([]);
@@ -135,7 +143,8 @@ export const SuperAdminSettingsPage: React.FC = () => {
           name: catForm.name,
           icon: catForm.icon,
           description: catForm.description,
-          sortOrder: catForm.sortOrder
+          sortOrder: catForm.sortOrder,
+          isArchived: catForm.isArchived
         })
       });
 
@@ -144,13 +153,48 @@ export const SuperAdminSettingsPage: React.FC = () => {
         setErrorMsg(data.error || 'Failed to save category.');
       } else {
         setShowCatModal(false);
-        setCatForm({ id: '', name: '', icon: 'HelpCircle', description: '', sortOrder: 1 });
+        setCatForm({ id: '', name: '', icon: 'HelpCircle', description: '', sortOrder: 1, isArchived: false });
         setSuccessMsg(data.message);
         setTimeout(() => setSuccessMsg(''), 3000);
         loadSettings();
       }
     } catch {
       setErrorMsg('Network error while saving category.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleToggleArchiveCategory = async (cat: any) => {
+    setSaving(true);
+    try {
+      const nextArchived = cat.is_archived !== 1;
+      const res = await fetch('/api/settings/categories', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          id: cat.id,
+          name: cat.name,
+          icon: cat.icon || 'HelpCircle',
+          description: cat.description || '',
+          sortOrder: cat.sort_order,
+          isArchived: nextArchived
+        })
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setErrorMsg(data.error || 'Failed to update category.');
+      } else {
+        setSuccessMsg(nextArchived ? `Archived category "${cat.name}".` : `Restored category "${cat.name}".`);
+        setTimeout(() => setSuccessMsg(''), 3000);
+        loadSettings();
+      }
+    } catch {
+      setErrorMsg('Network error updating category archive state.');
     } finally {
       setSaving(false);
     }
@@ -298,51 +342,131 @@ export const SuperAdminSettingsPage: React.FC = () => {
         {/* 1. CATEGORIES TAB */}
         {activeTab === 'categories' && (
           <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h2 className="text-lg font-bold text-slate-900 dark:text-white">Resident Concern Categories</h2>
-                <p className="text-xs text-slate-500 mt-0.5">Define classifications for community reporting.</p>
+                <p className="text-xs text-slate-500 mt-0.5">Define classifications for community reporting and manage active/archived status.</p>
               </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCatForm({ id: '', name: '', icon: 'AlertTriangle', description: '', sortOrder: categories.length + 1, isArchived: false });
+                    setShowCatModal(true);
+                  }}
+                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-xs"
+                >
+                  <Plus className="w-4 h-4" /> Add Category
+                </button>
+              </div>
+            </div>
+
+            {/* Category Filter Pills */}
+            <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-700 pb-3">
               <button
-                onClick={() => {
-                  setCatForm({ id: '', name: '', icon: 'AlertTriangle', description: '', sortOrder: categories.length + 1 });
-                  setShowCatModal(true);
-                }}
-                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs flex items-center gap-1.5"
+                type="button"
+                onClick={() => setCategoryFilter('all')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${
+                  categoryFilter === 'all'
+                    ? 'bg-indigo-600 text-white shadow-xs'
+                    : 'bg-slate-100 dark:bg-slate-750 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
+                }`}
               >
-                <Plus className="w-4 h-4" /> Add Category
+                All Categories ({categories.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setCategoryFilter('active')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${
+                  categoryFilter === 'active'
+                    ? 'bg-emerald-600 text-white shadow-xs'
+                    : 'bg-slate-100 dark:bg-slate-750 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
+                }`}
+              >
+                Active ({categories.filter(c => c.is_archived !== 1).length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setCategoryFilter('archived')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${
+                  categoryFilter === 'archived'
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'bg-slate-100 dark:bg-slate-750 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
+                }`}
+              >
+                Archived ({categories.filter(c => c.is_archived === 1).length})
               </button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {categories.map(cat => (
-                <div key={cat.id} className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-750 flex flex-col justify-between">
+              {categories
+                .filter(cat => {
+                  if (categoryFilter === 'active') return cat.is_archived !== 1;
+                  if (categoryFilter === 'archived') return cat.is_archived === 1;
+                  return true;
+                })
+                .map(cat => (
+                <div key={cat.id} className={`p-4 rounded-xl border flex flex-col justify-between transition ${
+                  cat.is_archived === 1
+                    ? 'border-amber-300 dark:border-amber-800 bg-amber-50/40 dark:bg-amber-950/20'
+                    : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-750'
+                }`}>
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-xs font-bold text-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 px-2 py-0.5 rounded-lg">
                         Order #{cat.sort_order}
                       </span>
-                      {cat.is_archived === 1 && (
-                        <span className="text-[10px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full uppercase">Archived</span>
+                      {cat.is_archived === 1 ? (
+                        <span className="text-[10px] font-extrabold text-amber-700 bg-amber-100 dark:bg-amber-950 dark:text-amber-300 px-2 py-0.5 rounded-full uppercase flex items-center gap-1 border border-amber-300 dark:border-amber-700">
+                          <Archive className="w-2.5 h-2.5" /> Archived
+                        </span>
+                      ) : (
+                        <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-100 dark:bg-emerald-950 dark:text-emerald-300 px-2 py-0.5 rounded-full uppercase border border-emerald-300 dark:border-emerald-700">
+                          Active
+                        </span>
                       )}
                     </div>
                     <h3 className="font-bold text-slate-900 dark:text-white text-base">{cat.name}</h3>
                     <p className="text-xs text-slate-500 mt-1">{cat.description || 'No description provided.'}</p>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-200/60 mt-3 flex justify-end">
+                  <div className="pt-3 border-t border-slate-200/60 dark:border-slate-700/60 mt-3 flex items-center justify-between gap-2">
                     <button
+                      type="button"
+                      onClick={() => handleToggleArchiveCategory(cat)}
+                      className={`text-xs font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 transition ${
+                        cat.is_archived === 1
+                          ? 'text-emerald-700 hover:bg-emerald-100 dark:text-emerald-300 dark:hover:bg-emerald-950'
+                          : 'text-amber-700 hover:bg-amber-100 dark:text-amber-300 dark:hover:bg-amber-950'
+                      }`}
+                      title={cat.is_archived === 1 ? 'Restore Category to Active' : 'Archive this category'}
+                    >
+                      {cat.is_archived === 1 ? (
+                        <>
+                          <RotateCcw className="w-3 h-3" />
+                          <span>Restore</span>
+                        </>
+                      ) : (
+                        <>
+                          <Archive className="w-3 h-3" />
+                          <span>Archive</span>
+                        </>
+                      )}
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => {
                         setCatForm({
                           id: cat.id,
                           name: cat.name,
                           icon: cat.icon || 'HelpCircle',
                           description: cat.description || '',
-                          sortOrder: cat.sort_order
+                          sortOrder: cat.sort_order,
+                          isArchived: cat.is_archived === 1
                         });
                         setShowCatModal(true);
                       }}
-                      className="text-xs font-bold text-indigo-600 hover:text-indigo-800"
+                      className="text-xs font-bold text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
                     >
                       Edit Category
                     </button>
@@ -865,6 +989,34 @@ export const SuperAdminSettingsPage: React.FC = () => {
                   onChange={(e) => setCatForm({ ...catForm, sortOrder: parseInt(e.target.value) || 1 })}
                   className="w-full px-4 py-2.5 rounded-xl border text-sm"
                 />
+              </div>
+
+              {/* Archive in editing concern category */}
+              <div className="p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-750 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="pr-2">
+                    <label className="text-xs font-black text-slate-800 dark:text-white uppercase tracking-wider block">
+                      Archive Category
+                    </label>
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      {catForm.isArchived
+                        ? 'Archived: Hidden from residents filing new concerns. Historical records remain intact.'
+                        : 'Active: Visible and selectable by residents when reporting concerns.'}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setCatForm(prev => ({ ...prev, isArchived: !prev.isArchived }))}
+                    className={`px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 transition shrink-0 ${
+                      catForm.isArchived
+                        ? 'bg-amber-600 text-white shadow-xs'
+                        : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300'
+                    }`}
+                  >
+                    <Archive className="w-3.5 h-3.5" />
+                    <span>{catForm.isArchived ? 'Archived' : 'Active'}</span>
+                  </button>
+                </div>
               </div>
 
               <div className="flex gap-2 justify-end pt-2">

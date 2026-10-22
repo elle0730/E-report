@@ -39,9 +39,14 @@ export const LandingPage: React.FC = () => {
       .catch(() => {});
   }, []);
 
-  const heroTitle = cmsContent?.hero?.[`title_${language}`] || cmsContent?.hero?.title_en || 'Welcome to Barangay Bensican Online Services';
-  const heroSubtitle = cmsContent?.hero?.[`subtitle_${language}`] || cmsContent?.hero?.subtitle_en || 'Fast, transparent, and senior-friendly community reporting and official public service in San Nicolas, Pangasinan.';
-  const aboutText = cmsContent?.about?.[`text_${language}`] || cmsContent?.about?.text_en || 'Barangay Bensican is a peaceful, agrarian and united community located in the municipality of San Nicolas, Province of Pangasinan. With E-Report Barangay, we provide our residents—especially the elderly and those who cannot easily walk to the barangay hall—direct digital access to community services, hearing summons, transparent finances, and prompt barangay resolution.';
+  const heroTitle = cmsContent?.hero?.headline || cmsContent?.hero?.[`title_${language}`] || cmsContent?.hero?.title_en || 'Welcome to Barangay Bensican Online Services';
+  const heroSubtitle = cmsContent?.hero?.tagline || cmsContent?.hero?.[`subtitle_${language}`] || cmsContent?.hero?.subtitle_en || 'Fast, transparent, and senior-friendly community reporting and official public service in San Nicolas, Pangasinan.';
+  const emergencyAlert = cmsContent?.hero?.emergencyAlert;
+  const aboutTitle = cmsContent?.about?.title || 'About Barangay Bensican';
+  const aboutText = cmsContent?.about?.body || cmsContent?.about?.[`text_${language}`] || cmsContent?.about?.text_en || 'Barangay Bensican is a peaceful, agrarian and united community located in the municipality of San Nicolas, Province of Pangasinan. With E-Report Barangay, we provide our residents—especially the elderly and those who cannot easily walk to the barangay hall—direct digital access to community services, hearing summons, transparent finances, and prompt barangay resolution.';
+  const aboutMission = cmsContent?.about?.mission;
+  const aboutVision = cmsContent?.about?.vision;
+  const contact = cmsContent?.contact;
 
   const handleReadAloudHero = () => {
     if (isSpeaking) {
@@ -55,6 +60,17 @@ export const LandingPage: React.FC = () => {
     <div className="w-full py-6 sm:py-8">
       {/* Centered consistent max-width container with equal left & right margins */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-12 animate-fade-in">
+        
+        {/* Emergency Alert Marquee from CMS if set */}
+        {emergencyAlert && (
+          <div className="bg-gradient-to-r from-amber-600 to-amber-700 text-white px-5 py-3.5 rounded-2xl shadow-md flex items-center justify-between gap-3 text-sm font-bold border-2 border-amber-400 animate-pulse">
+            <div className="flex items-center gap-2.5">
+              <AlertCircle className="w-5 h-5 text-amber-200 shrink-0" />
+              <span>📢 {emergencyAlert}</span>
+            </div>
+            <span className="text-[10px] sm:text-xs bg-amber-950/70 uppercase tracking-wider px-2.5 py-1 rounded-full text-amber-200 font-extrabold shrink-0">Official Alert</span>
+          </div>
+        )}
         
         {/* 1. Hero / Announcement Banner */}
         <section className="relative overflow-hidden rounded-2xl sm:rounded-3xl shadow-lg border border-emerald-500/40 bg-emerald-950">
@@ -311,7 +327,7 @@ export const LandingPage: React.FC = () => {
             <img src="/logo.png" alt="Barangay Bensican Official Seal" className="w-12 h-12 object-contain drop-shadow" />
             <div>
               <h2 className="text-2xl font-black text-slate-900 dark:text-white">
-                About Barangay Bensican
+                {aboutTitle}
               </h2>
               <p className="text-xs sm:text-sm text-emerald-700 dark:text-emerald-400 font-semibold">
                 Municipality of San Nicolas, Province of Pangasinan
@@ -322,6 +338,24 @@ export const LandingPage: React.FC = () => {
           <p className="text-sm sm:text-base text-slate-700 dark:text-slate-300 leading-relaxed">
             {aboutText}
           </p>
+
+          {/* Mission and Vision from CMS if provided */}
+          {(aboutMission || aboutVision) && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+              {aboutMission && (
+                <div className="p-4 bg-emerald-50/80 dark:bg-emerald-950/30 rounded-xl border border-emerald-300 dark:border-emerald-800 space-y-1">
+                  <h4 className="text-xs font-black uppercase text-emerald-800 dark:text-emerald-300 tracking-wider">Official Mission</h4>
+                  <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{aboutMission}</p>
+                </div>
+              )}
+              {aboutVision && (
+                <div className="p-4 bg-blue-50/80 dark:bg-blue-950/30 rounded-xl border border-blue-300 dark:border-blue-800 space-y-1">
+                  <h4 className="text-xs font-black uppercase text-blue-800 dark:text-blue-300 tracking-wider">Official Vision</h4>
+                  <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{aboutVision}</p>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Leadership Cards: Balanced, evenly spaced & consistent padding */}
           <div className="pt-4 border-t border-slate-200 dark:border-slate-700/80">
@@ -426,6 +460,52 @@ export const LandingPage: React.FC = () => {
             </div>
           </div>
         </section>
+
+        {/* 6. Barangay Hall Official Contacts & Desk Hours */}
+        {contact && (contact.hotline || contact.email || contact.address || contact.officeHours) && (
+          <section className="bg-white dark:bg-slate-800/90 p-6 sm:p-8 rounded-2xl border-2 border-slate-200 dark:border-slate-700 shadow-xs space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-blue-600 text-white rounded-xl shadow-xs">
+                <Phone className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+                  Barangay Hall Official Contacts & Desk Hours
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-500">
+                  Direct communication channels for residents, public inquiries, and emergency services.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+              {contact.hotline && (
+                <div className="p-4 bg-slate-50 dark:bg-slate-750 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+                  <span className="text-xs font-bold text-slate-500 block uppercase">Emergency Hotline</span>
+                  <p className="text-sm font-black text-slate-900 dark:text-white">{contact.hotline}</p>
+                </div>
+              )}
+              {contact.email && (
+                <div className="p-4 bg-slate-50 dark:bg-slate-750 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+                  <span className="text-xs font-bold text-slate-500 block uppercase">Official Email</span>
+                  <p className="text-sm font-black text-slate-900 dark:text-white truncate">{contact.email}</p>
+                </div>
+              )}
+              {contact.address && (
+                <div className="p-4 bg-slate-50 dark:bg-slate-750 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+                  <span className="text-xs font-bold text-slate-500 block uppercase">Hall Address</span>
+                  <p className="text-xs font-bold text-slate-800 dark:text-slate-200">{contact.address}</p>
+                </div>
+              )}
+              {contact.officeHours && (
+                <div className="p-4 bg-slate-50 dark:bg-slate-750 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+                  <span className="text-xs font-bold text-slate-500 block uppercase">Office Hours</span>
+                  <p className="text-xs font-bold text-slate-800 dark:text-slate-200">{contact.officeHours}</p>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
 
       </div>
     </div>
