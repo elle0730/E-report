@@ -69,7 +69,8 @@ const PORT = process.env.PORT || 5001;
 // Security Headers & Middlewares
 app.use(helmet({
   crossOriginResourcePolicy: false,
-  contentSecurityPolicy: false // Allow inline scripts/styles for development & PWA
+  contentSecurityPolicy: false, // Allow inline scripts/styles for development & PWA
+  frameguard: false
 }));
 app.use(cors({
   origin: true,

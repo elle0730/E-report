@@ -3,7 +3,7 @@ import {
   Layout, Eye, Save, Send, RotateCcw, Lock,
   AlertTriangle, CheckCircle2, History, Palette,
   Sparkles, ArrowLeft, Volume2, Globe, FileText,
-  X, ExternalLink, RefreshCw
+  ExternalLink
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.js';
@@ -20,8 +20,6 @@ export const SuperAdminCmsPage: React.FC = () => {
   const [versions, setVersions] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [previewMode, setPreviewMode] = useState<boolean>(false);
-  const [showLiveWebsiteModal, setShowLiveWebsiteModal] = useState<boolean>(false);
-  const [iframeKey, setIframeKey] = useState<number>(0);
 
   // Content state for editing
   const [content, setContent] = useState<any>({
@@ -233,15 +231,20 @@ export const SuperAdminCmsPage: React.FC = () => {
             </button>
             <button
               type="button"
-              onClick={() => {
-                setIframeKey(Date.now());
-                setShowLiveWebsiteModal(true);
-              }}
+              onClick={() => navigate('/')}
               className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm flex items-center gap-1.5 transition-colors shadow-md"
-              title="Inspect the live public website"
+              title="Open and view the live website"
             >
               <Globe className="w-4 h-4" />
               <span>View Live Website</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => window.open('/', '_blank', 'noopener,noreferrer')}
+              className="p-2.5 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl text-sm flex items-center justify-center transition-colors shadow-md"
+              title="Open live website in a new browser tab"
+            >
+              <ExternalLink className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -683,79 +686,6 @@ export const SuperAdminCmsPage: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
-      {/* Live Website Modal */}
-      {showLiveWebsiteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-6xl h-[92vh] flex flex-col shadow-2xl border-2 border-slate-300 dark:border-slate-700 overflow-hidden">
-            {/* Modal Header */}
-            <div className="px-5 py-3.5 bg-slate-900 text-white flex items-center justify-between gap-3 border-b border-slate-800">
-              <div className="flex items-center gap-2.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 -ml-5"></span>
-                <div>
-                  <h3 className="text-sm font-extrabold flex items-center gap-2">
-                    <span>Live Public Website</span>
-                    <span className="text-[10px] bg-emerald-900/80 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-md font-mono">
-                      https://e-report-oysh.onrender.com/
-                    </span>
-                  </h3>
-                  <p className="text-[11px] text-slate-400">
-                    Live view of the citizen-facing landing page and community services
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIframeKey(Date.now())}
-                  className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition text-xs font-bold flex items-center gap-1.5"
-                  title="Reload Live Preview"
-                >
-                  <RefreshCw className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Refresh</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => window.open('/', '_blank', 'noopener,noreferrer')}
-                  className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white transition text-xs font-bold flex items-center gap-1.5"
-                  title="Open live website in a separate browser tab"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Open New Tab</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigate('/')}
-                  className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white transition text-xs font-bold hidden md:flex items-center gap-1.5"
-                  title="Navigate directly to landing page"
-                >
-                  <Globe className="w-3.5 h-3.5" />
-                  <span>Go to Site</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowLiveWebsiteModal(false)}
-                  className="p-2 rounded-xl bg-slate-800 hover:bg-red-600 hover:text-white text-slate-300 transition"
-                  title="Close preview"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Modal Body / Embedded Iframe */}
-            <div className="flex-1 w-full bg-slate-100 dark:bg-slate-950 p-1 sm:p-2">
-              <iframe
-                key={iframeKey}
-                src="/"
-                className="w-full h-full rounded-2xl border-0 bg-white shadow-inner"
-                title="Barangay Bensican Live Website"
-              />
-            </div>
           </div>
         </div>
       )}

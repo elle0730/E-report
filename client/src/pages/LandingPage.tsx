@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import {
   FileText, ShieldCheck, Clock, Users, ArrowRight, Volume2,
   Phone, MapPin, CheckCircle, Award, HeartHandshake, Building2,
-  Calendar, AlertCircle, Search, Megaphone, FileSpreadsheet
+  Calendar, AlertCircle, Search, Megaphone, FileSpreadsheet,
+  Edit3, Layers, Globe
 } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext.js';
 import { useAuth } from '../context/AuthContext.js';
@@ -61,6 +62,46 @@ export const LandingPage: React.FC = () => {
       {/* Centered consistent max-width container with equal left & right margins */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-12 animate-fade-in">
         
+        {/* Floating Top Banner for Admins/Super-Admins viewing the Live Website */}
+        {user && (user.role === 'admin' || user.role === 'super_admin') && (
+          <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-3 sm:p-4 rounded-2xl shadow-lg border-2 border-indigo-500/60 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+              <div>
+                <p className="text-xs sm:text-sm font-extrabold flex items-center gap-1.5">
+                  <Globe className="w-4 h-4 text-emerald-400" />
+                  <span>Viewing Live Website</span>
+                  <span className="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-md font-mono">
+                    Public Portal
+                  </span>
+                </p>
+                <p className="text-[11px] text-slate-300 hidden sm:block">
+                  Live citizen-facing portal view. All services, announcements, and forms are fully functional.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => navigate('/admin/cms')}
+                className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 transition shadow-sm"
+              >
+                <Edit3 className="w-3.5 h-3.5" />
+                <span>Return to CMS</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/admin/dashboard')}
+                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs flex items-center gap-1.5 transition border border-slate-700 shadow-sm"
+              >
+                <Layers className="w-3.5 h-3.5" />
+                <span>Admin Workstation</span>
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Emergency Alert Marquee from CMS if set */}
         {emergencyAlert && (
           <div className="bg-gradient-to-r from-amber-600 to-amber-700 text-white px-5 py-3.5 rounded-2xl shadow-md flex items-center justify-between gap-3 text-sm font-bold border-2 border-amber-400 animate-pulse">
