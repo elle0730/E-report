@@ -80,6 +80,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.removeItem('bensican_token');
       localStorage.removeItem('bensican_refresh_token');
       localStorage.removeItem('bensican_user');
+      localStorage.removeItem('bensican_staff_available');
       sessionStorage.clear();
     } catch (e) {
       console.warn('Failed to clear storage:', e);
@@ -105,8 +106,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } catch {}
     }
 
-    // 4. Immediately and unconditionally redirect to the landing page /
-    window.location.replace('/');
+    // 4. Immediately and unconditionally redirect to the landing page / home page
+    try {
+      window.location.href = '/';
+    } catch {
+      window.location.replace('/');
+    }
   };
 
   const updateUser = (updatedFields: Partial<User>) => {

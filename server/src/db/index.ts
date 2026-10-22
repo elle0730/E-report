@@ -6,15 +6,21 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-let dbPath = process.env.DB_PATH || path.join(process.cwd(), 'data', 'bensican.db');
+const possibleDbPaths = [
+  process.env.DB_PATH,
+  path.join(process.cwd(), 'data', 'bensican.db'),
+  path.join(process.cwd(), 'server', 'data', 'bensican.db'),
+  path.join(__dirname, '..', 'data', 'bensican.db'),
+  path.join(__dirname, '..', '..', 'data', 'bensican.db')
+].filter(Boolean) as string[];
+
+let dbPath = possibleDbPaths.find(p => fs.existsSync(p)) || path.join(process.cwd(), 'data', 'bensican.db');
 let dbDir = path.dirname(dbPath);
 try {
   if (!fs.existsSync(dbDir)) {
     fs.mkdirSync(dbDir, { recursive: true });
   }
 } catch (dirErr) {
-  // If custom DB_PATH / DATA_DIR directory isn't writable, fallback to local data dir
-  console.warn('[DB] Could not create directory for DB_PATH, falling back to ./data');
   dbPath = path.join(process.cwd(), 'data', 'bensican.db');
   dbDir = path.dirname(dbPath);
   if (!fs.existsSync(dbDir)) {

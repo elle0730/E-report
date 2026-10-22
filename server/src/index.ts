@@ -28,8 +28,15 @@ import settingsRoutes from './routes/settings.routes.js';
 import notificationsRoutes from './routes/notifications.routes.js';
 import uploadRoutes from './routes/upload.routes.js';
 
-// Initialize DB schema
-let dataDir = process.env.DATA_DIR || path.join(process.cwd(), 'data');
+// Initialize DB schema & persistent storage
+const possibleDataDirs = [
+  process.env.DATA_DIR,
+  path.join(process.cwd(), 'data'),
+  path.join(process.cwd(), 'server', 'data'),
+  path.join(__dirname, '..', 'data')
+].filter(Boolean) as string[];
+
+let dataDir = possibleDataDirs.find(d => fs.existsSync(d)) || path.join(process.cwd(), 'data');
 try {
   if (!fs.existsSync(dataDir)) {
     fs.mkdirSync(dataDir, { recursive: true });
@@ -40,7 +47,8 @@ try {
     fs.mkdirSync(dataDir, { recursive: true });
   }
 }
-process.env.DB_PATH = path.join(dataDir, 'database.sqlite');
+process.env.DATA_DIR = dataDir;
+process.env.DB_PATH = path.join(dataDir, 'bensican.db');
 initDb();
 
 // Auto-seed if database has no accounts yet (e.g. freshly deployed instance on Render)

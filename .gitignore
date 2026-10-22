@@ -14,11 +14,11 @@ server/dist/
 .env.local
 .env.production
 
-# Database
-*.sqlite
-*.db
-data/
-uploads/
+# Database (allow production database files to persist in repository)
+*.sqlite-wal
+*.sqlite-shm
+*.db-wal
+*.db-shm
 
 # IDE
 .vscode/

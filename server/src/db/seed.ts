@@ -1,9 +1,20 @@
 import bcrypt from 'bcryptjs';
 import { db, initDb, generateReferenceNumber } from './index.js';
 
-export function seed() {
+export function seed(force = false) {
   console.log('--- Initializing database tables ---');
   initDb();
+
+  // If force is not true, preserve all existing accounts, reports, and real-life data
+  if (!force) {
+    try {
+      const userCheck = db.prepare('SELECT count(*) as count FROM users').get() as { count: number };
+      if (userCheck && userCheck.count > 0) {
+        console.log(`[Seed] Database already contains ${userCheck.count} active accounts. Preserving all existing information, accounts, and records.`);
+        return;
+      }
+    } catch {}
+  }
 
   console.log('--- Seeding default data for Barangay Bensican ---');
   const now = new Date().toISOString();

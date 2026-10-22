@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   User, ShieldCheck, Phone, MapPin, Users, HeartHandshake,
   KeyRound, Sliders, Sun, Moon, Eye, Volume2, Save,
   AlertTriangle, CheckCircle2, Lock, ArrowLeft, Globe, Camera,
-  Trash2, Upload, Sparkles
+  Trash2, Upload, Sparkles, LogOut
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.js';
 import { useAccessibility } from '../context/AccessibilityContext.js';
 import { PageHeader } from '../components/PageHeader.js';
 
 export const UserProfilePage: React.FC = () => {
-  const { user, updateUser } = useAuth();
+  const navigate = useNavigate();
+  const { user, updateUser, logout } = useAuth();
   const {
     language, setLanguage, textScale, increaseTextSize, decreaseTextSize, resetTextSize,
     highContrast, toggleHighContrast, theme, toggleTheme, speak
@@ -569,6 +571,33 @@ export const UserProfilePage: React.FC = () => {
               </div>
             </form>
           )}
+        </div>
+
+        {/* 4. SIGN OUT SECTION */}
+        <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 md:p-8 border-2 border-red-200 dark:border-red-900/50 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="p-3 bg-red-100 dark:bg-red-950/60 rounded-2xl text-red-600 dark:text-red-400">
+              <LogOut className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 className="text-xl font-black text-slate-900 dark:text-white">Sign Out of Account</h2>
+              <p className="text-sm text-slate-500">
+                End your active session on this device and return to the public landing page.
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              navigate('/', { replace: true });
+              logout(false);
+            }}
+            className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-2 shrink-0 min-h-[44px]"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Sign Out to Home Page</span>
+          </button>
         </div>
       </div>
     </div>

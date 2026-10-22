@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   FileText, Search, Megaphone, Scale, MessageSquare,
   ArrowRight, CheckCircle, Clock, AlertCircle, Phone, FileSpreadsheet,
-  Award, QrCode
+  Award, QrCode, LogOut
 } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext.js';
 import { useAuth } from '../context/AuthContext.js';
@@ -12,7 +12,7 @@ import { VoucherModal, ResidentVoucherData } from '../components/VoucherModal.js
 export const ResidentDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { language, t } = useAccessibility();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   const [activeReportsCount, setActiveReportsCount] = useState<number>(0);
   const [resolvedReportsCount, setResolvedReportsCount] = useState<number>(0);
@@ -105,6 +105,19 @@ export const ResidentDashboard: React.FC = () => {
             <span className="block text-2xl font-black text-white">{resolvedReportsCount}</span>
             <span className="text-xs font-semibold text-emerald-200">{t('resolved')}</span>
           </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              navigate('/', { replace: true });
+              logout(false);
+            }}
+            className="p-3 bg-red-600/90 hover:bg-red-600 text-white rounded-2xl font-bold flex flex-col items-center justify-center min-w-[90px] shadow-sm transition border border-red-400/50"
+            title="Sign Out to Landing Page"
+          >
+            <LogOut className="w-6 h-6 text-white mb-0.5" />
+            <span className="text-xs font-black">Sign Out</span>
+          </button>
         </div>
       </div>
 

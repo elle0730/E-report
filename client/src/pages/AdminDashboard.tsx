@@ -5,14 +5,14 @@ import {
   Clock, ShieldAlert, ArrowRight, UserCheck, Plus, Sparkles,
   TrendingUp, FileSpreadsheet, Eye, ToggleLeft, ToggleRight,
   Settings, ShieldCheck, KeyRound, Archive, Globe, DollarSign,
-  Download, Lock, Crown, Bell, User, History, X
+  Download, Lock, Crown, Bell, User, History, X, LogOut
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.js';
 import { useAccessibility } from '../context/AccessibilityContext.js';
 
 export const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { t, speak } = useAccessibility();
   const isSuperAdmin = user?.role === 'super_admin';
 
@@ -149,6 +149,19 @@ export const AdminDashboard: React.FC = () => {
               {isStaffAvailable ? <ToggleRight className="w-6 h-6" /> : <ToggleLeft className="w-6 h-6" />}
             </button>
           </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              navigate('/', { replace: true });
+              logout(false);
+            }}
+            className="px-3.5 py-3 bg-red-600/80 hover:bg-red-600 text-white font-bold rounded-2xl border border-red-400/50 shadow-md flex items-center gap-1.5 text-xs transition"
+            title="Sign Out to Landing Page"
+          >
+            <LogOut className="w-4 h-4 text-white" />
+            <span className="hidden sm:inline">Sign Out</span>
+          </button>
         </div>
       </div>
 
