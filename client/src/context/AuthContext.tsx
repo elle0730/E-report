@@ -105,8 +105,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } catch {}
     }
 
-    // 4. Immediately and unconditionally redirect to /login
-    window.location.replace('/login');
+    // 4. Immediately and unconditionally redirect to the landing page /
+    window.location.replace('/');
   };
 
   const updateUser = (updatedFields: Partial<User>) => {

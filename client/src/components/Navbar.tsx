@@ -155,10 +155,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenHelp, pageTitle }) => {
         {/* Left Side: Official Brand & Logo */}
         <button
           type="button"
-          onClick={() => {
-            if (user?.role === 'super_admin' || user?.role === 'admin') navigate('/admin/dashboard');
-            else navigate('/');
-          }}
+          onClick={() => navigate('/')}
           className="flex items-center gap-3 text-left group focus:outline-hidden"
           aria-label="Go to Home"
         >
@@ -285,17 +282,30 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenHelp, pageTitle }) => {
                     )}
 
                     {(user.role === 'admin' || user.role === 'super_admin') && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          navigate('/admin/dashboard');
-                          setProfileMenuOpen(false);
-                        }}
-                        className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 text-sm font-semibold flex items-center gap-2.5 text-slate-800 dark:text-slate-200 transition"
-                      >
-                        <Layers className="w-4 h-4 text-blue-600" />
-                        <span>{t('adminWorkstation')}</span>
-                      </button>
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            navigate('/admin/dashboard');
+                            setProfileMenuOpen(false);
+                          }}
+                          className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 text-sm font-semibold flex items-center gap-2.5 text-slate-800 dark:text-slate-200 transition"
+                        >
+                          <Layers className="w-4 h-4 text-blue-600" />
+                          <span>{t('adminWorkstation')}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            navigate('/');
+                            setProfileMenuOpen(false);
+                          }}
+                          className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 text-sm font-semibold flex items-center gap-2.5 text-slate-800 dark:text-slate-200 transition"
+                        >
+                          <Layers className="w-4 h-4 text-emerald-600" />
+                          <span>{t('home')}</span>
+                        </button>
+                      </>
                     )}
 
                     {user.role === 'resident' && (
