@@ -459,14 +459,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenHelp, pageTitle }) => {
                       </button>
                       <button
                         type="button"
-                        onClick={resetTextSize}
-                        className="px-2 py-1 rounded-lg bg-white dark:bg-slate-700 text-[10px] font-semibold shadow-xs hover:bg-slate-100"
-                        title="Reset text size"
-                      >
-                        100%
-                      </button>
-                      <button
-                        type="button"
                         onClick={increaseTextSize}
                         className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs"
                         title="Increase text size"
